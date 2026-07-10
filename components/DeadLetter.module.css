@@ -1,0 +1,149 @@
+/* THE DEAD LETTER OFFICE — returned-envelope vignette (404 only). */
+
+.scene {
+  display: grid;
+  place-items: center;
+  padding-block: calc(var(--u) * 4);
+}
+
+.envelope {
+  position: relative;
+  width: min(600px, 100%);
+  aspect-ratio: 8 / 5;
+  background: var(--color-paper-deep);
+  border: 1px solid var(--color-line);
+  transform: rotate(-2.5deg);
+  box-shadow: 0 24px 48px -32px
+    color-mix(in srgb, var(--color-ink) 45%, transparent);
+  animation: env-drop 0.8s var(--ease) both;
+}
+
+/* back-flap creases */
+.flap {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  color: var(--color-line);
+}
+
+/* the postage stamp */
+.stamp {
+  position: absolute;
+  top: 7%;
+  right: 5%;
+  width: clamp(56px, 14%, 84px);
+  aspect-ratio: 4 / 5;
+  background: var(--color-paper);
+  border: 1px dashed var(--color-line);
+  padding: calc(var(--u) * 0.75);
+  transform: rotate(2deg);
+}
+.stampInner {
+  display: grid;
+  place-content: center;
+  gap: 2px;
+  height: 100%;
+  border: 1px solid var(--color-line);
+  text-align: center;
+  font-family: var(--font-display);
+  font-style: italic;
+  color: var(--color-ink-soft);
+}
+.stampGlyph {
+  font-size: 1.4rem;
+  line-height: 1;
+}
+.stampClass {
+  font-family: var(--font-mono);
+  font-style: normal;
+  font-size: 0.5rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-ink-faint);
+}
+
+/* circular cancellation mark + wavy killer bars, cancelling the stamp */
+.postmark {
+  position: absolute;
+  top: 4%;
+  right: 12%;
+  width: clamp(180px, 46%, 280px);
+  height: auto;
+  pointer-events: none;
+  color: var(--color-ink-soft);
+  opacity: 0.75;
+  transform: rotate(-4deg);
+}
+
+/* the address block */
+.addr {
+  position: absolute;
+  left: 8%;
+  bottom: 14%;
+  font-family: var(--font-mono);
+  font-size: clamp(0.6rem, 1.8vw, 0.78rem);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  line-height: 2.1;
+  color: var(--color-ink-soft);
+  text-align: left;
+}
+.addrTo {
+  color: var(--color-ink-faint);
+}
+.addrGone {
+  text-decoration: line-through;
+  text-decoration-color: var(--color-ink-faint);
+  text-decoration-thickness: 1px;
+}
+
+/* RETURN TO SENDER — the rubber stamp */
+.rts {
+  position: absolute;
+  left: 50%;
+  top: 42%;
+  transform: translate(-50%, -50%) rotate(-7deg);
+  border: 2px solid var(--color-accent);
+  color: var(--color-accent);
+  font-family: var(--font-mono);
+  font-weight: 600;
+  font-size: clamp(0.8rem, 2.6vw, 1.1rem);
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  padding: calc(var(--u) * 1) calc(var(--u) * 3) calc(var(--u) * 1)
+    calc(var(--u) * 3.5); /* extra left pad rebalances letter-spacing */
+  mix-blend-mode: multiply;
+  animation: rts-thump 0.45s var(--ease) 0.55s both;
+}
+
+@keyframes env-drop {
+  from {
+    opacity: 0;
+    transform: rotate(-1deg) translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: rotate(-2.5deg) translateY(0);
+  }
+}
+
+@keyframes rts-thump {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -50%) rotate(-3deg) scale(1.6);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) rotate(-7deg) scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .envelope,
+  .rts {
+    animation: none;
+  }
+}

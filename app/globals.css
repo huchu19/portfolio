@@ -1,0 +1,474 @@
+@import "tailwindcss";
+
+/* ------------------------------------------------------------------ */
+/*  Tokens — the whole palette. No raw hex anywhere else.             */
+/* ------------------------------------------------------------------ */
+@theme {
+  /* paper & ink */
+  --color-paper: #f4efe6;
+  --color-paper-deep: #ede4d2;
+  --color-line: #d9cfbe;
+  --color-ink: #201b14;
+  --color-ink-soft: #5c5344;
+  --color-ink-faint: #8d8271;
+  --color-accent: #bc4a18;
+  --color-accent-deep: #8f3610;
+  --color-panel: #262016;
+
+  /* type */
+  --font-display: var(--font-fraunces), "Iowan Old Style", Georgia, serif;
+  --font-sans: var(--font-grotesk), "Avenir Next", system-ui, sans-serif;
+  --font-mono: var(--font-plex-mono), ui-monospace, "SF Mono", monospace;
+
+  /* motion */
+  --ease-soft: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+:root {
+  --u: 8px; /* the unit — every bespoke gap is a multiple */
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --lh: 1.7;
+}
+
+@property --r {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 0%;
+}
+
+/* ------------------------------------------------------------------ */
+/*  Base                                                               */
+/* ------------------------------------------------------------------ */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background: var(--color-paper);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-weight: 380;
+    line-height: var(--lh);
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  /* film grain — paper, not screen */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 60;
+    pointer-events: none;
+    opacity: 0.05;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  /* soft vignette */
+  body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 59;
+    pointer-events: none;
+    background: radial-gradient(
+      130% 100% at 50% 0%,
+      transparent 60%,
+      rgb(32 27 20 / 0.07) 100%
+    );
+  }
+
+  ::selection {
+    background: var(--color-accent);
+    color: var(--color-paper);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-accent-deep);
+    outline-offset: 3px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/*  Shared components                                                  */
+/* ------------------------------------------------------------------ */
+@layer components {
+  .rule {
+    border-top: 1px solid var(--color-line);
+  }
+
+  /* the machine reports: dates, tags, reading time, routes */
+  .meta-mono {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-variant-numeric: tabular-nums;
+    color: var(--color-ink-soft);
+  }
+
+  /* № 04 — italic Fraunces entry numbers */
+  .entry-no {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-variation-settings: "opsz" 30;
+    color: var(--color-ink-faint);
+    letter-spacing: 0.04em;
+  }
+
+  .skip-link {
+    position: fixed;
+    top: calc(var(--u) * 2);
+    left: calc(var(--u) * 2);
+    z-index: 200;
+    padding: calc(var(--u) * 1) calc(var(--u) * 2);
+    background: var(--color-ink);
+    color: var(--color-paper);
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    transform: translateY(-300%);
+    transition: transform 0.3s var(--ease);
+  }
+  .skip-link:focus-visible {
+    transform: none;
+  }
+
+  /* scroll reveal (IntersectionObserver adds .in) */
+  .reveal {
+    opacity: 0;
+    transform: translateY(22px);
+    transition:
+      opacity 0.8s var(--ease),
+      transform 0.8s var(--ease);
+  }
+  .reveal.in {
+    opacity: 1;
+    transform: none;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .reveal {
+      opacity: 1;
+      transform: none;
+      transition: none;
+    }
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/*  Prose — hand-rolled, print-flavored                                */
+/* ------------------------------------------------------------------ */
+@layer components {
+  .prose-fn {
+    font-size: 1.0625rem;
+    line-height: var(--lh);
+    max-width: 66ch;
+  }
+  .prose-fn > * + * {
+    margin-top: calc(var(--lh) * 0.75em);
+  }
+  .prose-fn h2,
+  .prose-fn h3 {
+    font-family: var(--font-display);
+    font-weight: 520;
+    line-height: 1.18;
+    letter-spacing: -0.01em;
+    margin-top: calc(var(--lh) * 1.4em);
+  }
+  .prose-fn h2 {
+    font-size: 1.65em;
+  }
+  .prose-fn h3 {
+    font-size: 1.25em;
+  }
+  .prose-fn a {
+    color: var(--color-accent-deep);
+    text-decoration: underline;
+    text-decoration-color: var(--color-line);
+    text-underline-offset: 3px;
+    transition: text-decoration-color 0.3s var(--ease);
+  }
+  .prose-fn a:hover {
+    text-decoration-color: var(--color-accent);
+  }
+  .prose-fn strong {
+    font-weight: 600;
+  }
+  .prose-fn em {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 1.02em;
+  }
+  .prose-fn blockquote {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 1.3em;
+    line-height: 1.45;
+    color: var(--color-ink-soft);
+    padding-left: calc(var(--u) * 3);
+    border-left: 2px solid var(--color-accent);
+    margin-block: calc(var(--lh) * 1em);
+  }
+  .prose-fn code {
+    font-family: var(--font-mono);
+    font-size: 0.86em;
+    background: rgb(32 27 20 / 0.07);
+    padding: 0.1em 0.35em;
+    border-radius: 3px;
+  }
+  .prose-fn pre {
+    background: var(--color-panel);
+    color: #efe7d7;
+    padding: calc(var(--u) * 2.5) calc(var(--u) * 3);
+    border-radius: 6px;
+    overflow-x: auto;
+    font-size: 0.85rem;
+    line-height: 1.65;
+  }
+  .prose-fn pre code {
+    background: none;
+    padding: 0;
+    font-size: 1em;
+  }
+  .prose-fn ul,
+  .prose-fn ol {
+    padding-left: 1.4em;
+  }
+  .prose-fn li {
+    margin-top: 0.4em;
+  }
+  .prose-fn li::marker {
+    color: var(--color-accent-deep);
+  }
+  .prose-fn hr {
+    border: none;
+    margin-block: calc(var(--lh) * 1.4em);
+    text-align: center;
+  }
+  .prose-fn hr::after {
+    content: "· · ·";
+    color: var(--color-ink-faint);
+    letter-spacing: 0.6em;
+    font-family: var(--font-display);
+  }
+  .prose-fn img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 4px;
+  }
+
+  /* the editorial slip marking placeholder copy — delete with the draft */
+  .prose-fn .draft-note {
+    font-family: var(--font-sans);
+    font-size: 0.8125rem;
+    font-style: italic;
+    letter-spacing: 0.02em;
+    line-height: 1.6;
+    color: var(--color-ink-faint);
+    border: 1px dashed var(--color-line);
+    padding: calc(var(--u) * 1) calc(var(--u) * 1.75);
+    width: fit-content;
+    text-align: left;
+    hyphens: none;
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/*  Lamplight (dusk) — the same page, read after dark                  */
+/* ------------------------------------------------------------------ */
+:root[data-theme='dusk'] {
+  --color-paper: #1d1712;
+  --color-paper-deep: #251d15;
+  --color-line: #3b3326;
+  --color-ink: #ece2cf;
+  --color-ink-soft: #b5a78d;
+  --color-ink-faint: #7d715c;
+  --color-accent: #d65f27;
+  --color-accent-deep: #e2814f;
+  --color-panel: #121009;
+}
+:root[data-theme='dusk'] body::before {
+  filter: invert(1);
+  opacity: 0.045;
+}
+:root[data-theme='dusk'] body::after {
+  background: radial-gradient(
+    130% 100% at 50% 0%,
+    transparent 52%,
+    rgb(0 0 0 / 0.4) 100%
+  );
+}
+body {
+  transition:
+    background-color 0.5s var(--ease),
+    color 0.5s var(--ease);
+}
+
+/* ------------------------------------------------------------------ */
+/*  Micro-interactions                                                 */
+/* ------------------------------------------------------------------ */
+
+/* underline that draws itself on hover (inside a .group) */
+.link-draw {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-repeat: no-repeat;
+  background-size: 0% 1.5px;
+  background-position: 0 100%;
+  transition:
+    background-size 0.55s var(--ease),
+    color 0.3s var(--ease);
+  padding-bottom: 2px;
+}
+.group:hover .link-draw,
+.link-draw:focus-visible {
+  background-size: 100% 1.5px;
+}
+
+/* every route entrance: the page settles like a sheet laid on the desk */
+.page-enter {
+  animation: page-enter 0.55s var(--ease) both;
+}
+@keyframes page-enter {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+}
+
+/* the masthead swash — drawn after the ink settles */
+.swash-draw {
+  stroke-dashoffset: 1;
+  animation: swash 1.1s var(--ease) 2.4s forwards;
+}
+@keyframes swash {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .swash-draw {
+    stroke-dashoffset: 0;
+    animation: none;
+  }
+}
+
+/* the ink ghost — wet ink trailing the pointer */
+.ink-ghost {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--color-accent);
+  opacity: 0.45;
+  mix-blend-mode: multiply;
+  pointer-events: none;
+  z-index: 70;
+  will-change: transform;
+}
+:root[data-theme='dusk'] .ink-ghost {
+  mix-blend-mode: screen;
+  opacity: 0.38;
+}
+
+/* ------------------------------------------------------------------ */
+/*  Ink-bleed first-visit veil                                         */
+/* ------------------------------------------------------------------ */
+#ink-veil {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: var(--color-paper);
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+  animation: veil-out 0.7s var(--ease) 1.7s forwards;
+}
+#ink-veil.veil-skip {
+  display: none;
+}
+.veil-seal {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-variation-settings: "opsz" 144, "SOFT" 60;
+  font-weight: 420;
+  font-size: clamp(2.2rem, 6vw, 4.5rem);
+  letter-spacing: -0.02em;
+  color: var(--color-ink);
+  --r: 0%;
+  -webkit-mask-image: radial-gradient(
+    circle at 50% 55%,
+    #000 calc(var(--r) - 12%),
+    transparent var(--r)
+  );
+  mask-image: radial-gradient(
+    circle at 50% 55%,
+    #000 calc(var(--r) - 12%),
+    transparent var(--r)
+  );
+  animation: ink-bleed 1.25s var(--ease) 0.15s both;
+}
+.veil-dot {
+  color: var(--color-accent);
+}
+@keyframes ink-bleed {
+  to {
+    --r: 135%;
+  }
+}
+@keyframes veil-out {
+  to {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  #ink-veil {
+    display: none;
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/*  Print — a site about printed matter should print like one         */
+/* ------------------------------------------------------------------ */
+@media print {
+  body::before,
+  body::after,
+  #ink-veil,
+  .ink-ghost,
+  .skip-link,
+  header nav,
+  footer,
+  [role='dialog'] {
+    display: none !important;
+  }
+  body {
+    background: #fff;
+  }
+  .prose-fn {
+    max-width: 100%;
+  }
+  .prose-fn a {
+    color: inherit;
+    text-decoration: none;
+  }
+  .prose-fn pre {
+    background: #f2f2f2;
+    color: #222;
+    border: 1px solid #ddd;
+  }
+}

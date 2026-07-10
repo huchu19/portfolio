@@ -1,0 +1,61 @@
+/* Essay — a print feature. Justified with hyphens on wide screens,
+   drop cap on the opening paragraph, an end-mark fleuron. */
+
+.body {
+  font-size: 1.0625rem;
+  counter-reset: sec;
+}
+
+/* ghost marginalia — giant near-invisible section numerals (UNSAID) */
+.body :global(h2) {
+  counter-increment: sec;
+  position: relative;
+  z-index: 0;
+}
+.body :global(h2)::before {
+  content: counter(sec, decimal-leading-zero);
+  position: absolute;
+  left: -0.42em;
+  top: -0.62em;
+  z-index: -1;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-variation-settings: "opsz" 144;
+  font-weight: 500;
+  font-size: 3.4em;
+  line-height: 1;
+  color: var(--color-ink);
+  opacity: 0.07;
+  pointer-events: none;
+}
+
+@media (min-width: 768px) {
+  .body :global(p) {
+    text-align: justify;
+    hyphens: auto;
+    -webkit-hyphens: auto;
+  }
+}
+
+/* the drop cap — three lines deep, Fraunces at display optical size.
+   Never on the draft-note slip: only on the first real paragraph. */
+.body > :global(p:not(.draft-note):first-of-type)::first-letter,
+.body > :global(.draft-note + p)::first-letter {
+  font-family: var(--font-display);
+  font-variation-settings: "opsz" 144;
+  font-weight: 460;
+  font-size: 3.3em;
+  line-height: 0.82;
+  float: left;
+  padding-right: 0.14em;
+  padding-top: 0.06em;
+}
+
+/* footnote bodies must never justify (set in Footnote.module.css) */
+
+.endmark {
+  text-align: center;
+  margin-top: calc(var(--u) * 6);
+  color: var(--color-accent);
+  font-size: 1.25rem;
+}

@@ -1,0 +1,21 @@
+/* Adventure — a flight log. Sections carry mile-marker numbering. */
+
+.body {
+  counter-reset: mile;
+}
+
+.body :global(h2) {
+  counter-increment: mile;
+}
+
+.body :global(h2)::before {
+  content: "LEG " counter(mile, decimal-leading-zero);
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-accent-deep);
+  margin-bottom: calc(var(--u) * 0.75);
+}

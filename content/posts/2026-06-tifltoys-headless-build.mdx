@@ -1,0 +1,40 @@
+---
+title: "TiflToys: rebuilding a toy store headless"
+slug: tifltoys-headless-build
+date: 2026-06-18
+type: project
+excerpt: How I rebuilt TiflToys as a headless storefront with Next.js — what broke, what got faster, and why the cart taught me more than the checkout.
+tags:
+  - tifltoys
+  - nextjs
+  - commerce
+projectLinks:
+  live: "https://example.com/tifltoys"
+  repo: "https://github.com/your-handle/tifltoys"
+---
+
+*Draft — rewrite me. Placeholder build note; swap in the real architecture, numbers, and links.*
+
+TiflToys started as a favor and became a curriculum. The brief was simple — a toy storefront that didn't feel like a template — and the honest way to get there was to go headless: commerce platform at the back, Next.js at the front, and every pixel mine to answer for.
+
+## The shape of it
+
+The stack is deliberately boring where it should be and opinionated where it counts. Product data lives behind a typed client; pages are statically generated and revalidated on demand, so the catalogue is fast without being stale.
+
+```ts
+// lib/products.ts — the whole data contract in one place
+export async function getProduct(handle: string): Promise<Product> {
+  const res = await client.query(PRODUCT_QUERY, { handle })
+  return normalizeProduct(res.product) // one shape, everywhere
+}
+```
+
+The rule that saved me weeks: **normalize at the boundary**. Everything past that function believes in exactly one `Product` shape. When the backend changed its mind about variant images, one file changed with it.
+
+## What the cart taught me
+
+Checkout is a solved problem; carts are not. A cart is state that must survive refreshes, tab-hopping, and a toddler slamming the keyboard (target audience). Optimistic updates with server reconciliation looked fancy in the demo and lied in production — the fix was duller and better: mutate, await, render truth.
+
+## What got faster
+
+Largest Contentful Paint went from "eventually" to under a second on the product pages, mostly by treating images like the budget they are. The lesson I keep relearning: performance isn't a feature you add, it's the absence of ones you didn't need.
