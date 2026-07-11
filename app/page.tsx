@@ -33,7 +33,7 @@ export default function HomePage() {
             <br />
             <em>Naqvi</em>
           </h1>
-          <div style={{ marginTop: 'calc(var(--u) * 4)' }}>
+          <div style={{ marginTop: 'calc(var(--u) * 4)', maxWidth: 520 }}>
             <GhazalLine lines={GHAZAL_LINES} />
             <p style={{ marginTop: 'var(--u)', fontSize: 14, color: 'var(--color-ash)', maxWidth: '44ch' }}>
               {site.ghazalEn}

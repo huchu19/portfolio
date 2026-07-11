@@ -184,7 +184,7 @@ export default function CommandPalette({ items }: { items: FeedItem[] }) {
               onKeyDown={onInputKey}
               placeholder="Search the universe…"
               aria-label="Search all posts and fragments"
-              className="w-full bg-transparent outline-none"
+              className="palette-input w-full bg-transparent"
               style={{
                 padding: 'calc(var(--u) * 2) calc(var(--u) * 3)',
                 fontSize: 16,

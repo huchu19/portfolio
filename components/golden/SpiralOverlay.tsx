@@ -5,7 +5,7 @@ import { goldenSubdivision } from '@/lib/golden'
  * grid. Real subdivision of the 13×8 fibonacci rectangle — the same
  * geometry the CSS grid uses, so the lines land exactly on the gutters.
  */
-export default function SpiralOverlay({ steps = 7 }: { steps?: number }) {
+export default function SpiralOverlay({ steps = 6 }: { steps?: number }) {
   const { squares, spiralPath } = goldenSubdivision(13, 8, steps)
 
   return (
@@ -29,14 +29,14 @@ export default function SpiralOverlay({ steps = 7 }: { steps?: number }) {
           />
         ))}
       </g>
+      {/* no non-scaling-stroke here: it would put the dash pattern in screen
+          px and shred the draw animation into dashes */}
       <path
         className="spiral-path"
         d={spiralPath}
         stroke="var(--color-ember)"
-        strokeWidth="1.5"
-        vectorEffect="non-scaling-stroke"
-        opacity="0.5"
-        pathLength={1}
+        strokeWidth="0.016"
+        opacity="0.4"
       />
     </svg>
   )

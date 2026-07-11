@@ -95,6 +95,11 @@ a {
   border-radius: 2px;
 }
 
+/* the palette input lives in an obvious focused dialog — the ring is noise */
+.palette-input:focus-visible {
+  outline: none;
+}
+
 .skip-link {
   position: fixed;
   top: calc(var(--u) * -8);
@@ -292,15 +297,15 @@ a {
 .home-grid {
   position: relative;
   display: grid;
-  grid-template-columns: repeat(13, 1fr);
-  grid-template-rows: repeat(8, 1fr);
+  grid-template-columns: repeat(13, minmax(0, 1fr));
+  grid-template-rows: repeat(8, minmax(0, 1fr));
   gap: calc(var(--u) * 2);
   aspect-ratio: 13 / 8;
   width: min(100%, calc((100dvh - 96px) * 13 / 8));
   margin-inline: auto;
 }
 .cell-intro { grid-area: 1 / 1 / 9 / 9; }
-.cell-feed { grid-area: 1 / 9 / 6 / 14; min-height: 0; }
+.cell-feed { grid-area: 1 / 9 / 6 / 14; min-height: 0; overflow: hidden; }
 .cell-quick { grid-area: 6 / 9 / 7 / 11; }
 .cell-now { grid-area: 7 / 9 / 9 / 11; }
 .cell-featured { grid-area: 6 / 11 / 9 / 14; }
@@ -392,10 +397,11 @@ a {
   }
 }
 
-/* The spiral draws itself — always slightly ahead of you */
+/* The spiral draws itself — always slightly ahead of you.
+   34 ≈ the spiral's length in 13×8 viewBox units ((π/2)·Σ radii). */
 .spiral-path {
-  stroke-dasharray: 1;
-  stroke-dashoffset: 1;
+  stroke-dasharray: 34;
+  stroke-dashoffset: 34;
   animation: spiral-draw 2.4s var(--ease) 0.4s forwards;
 }
 @keyframes spiral-draw {
@@ -412,6 +418,7 @@ a {
 
 /* Panels breathe: lift + ember edge-glow on hover */
 .panel {
+  position: relative; /* paints above the absolutely-positioned spiral overlay */
   background: var(--color-void-raised);
   border: 1px solid var(--color-void-line);
   border-radius: 8px;
