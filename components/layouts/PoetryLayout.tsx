@@ -1,4 +1,6 @@
 import MDXContent from '@/components/MDXContent'
+import AudioPlayer from '@/components/ui/AudioPlayer'
+import { isAudioPath } from '@/lib/media'
 import PostMeta from './PostMeta'
 import PoetryReveal from './PoetryReveal'
 import type { Post } from '@/lib/posts'
@@ -34,6 +36,11 @@ export default function PoetryLayout({ post }: { post: Post }) {
           <MDXContent code={post.code} />
         </div>
       </PoetryReveal>
+      {post.media && isAudioPath(post.media) && (
+        <div style={{ marginTop: 'calc(var(--u) * 8)' }}>
+          <AudioPlayer src={post.media} label={post.title} />
+        </div>
+      )}
       <PostMeta entry={post} />
     </article>
   )

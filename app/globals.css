@@ -455,6 +455,29 @@ a {
   border-color: var(--color-ember-deep);
 }
 
+/* Recitation player seek line — a hairline with an ember thumb */
+.audio-seek {
+  appearance: none;
+  height: 2px;
+  background: var(--color-void-line);
+  border-radius: 1px;
+  cursor: pointer;
+}
+.audio-seek::-webkit-slider-thumb {
+  appearance: none;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--color-ember);
+}
+.audio-seek::-moz-range-thumb {
+  width: 10px;
+  height: 10px;
+  border: none;
+  border-radius: 50%;
+  background: var(--color-ember);
+}
+
 /* Route strip connector — draws left to right on load */
 .route-line {
   flex: 1;

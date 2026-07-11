@@ -2,6 +2,8 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import MDXContent from '@/components/MDXContent'
+import AudioPlayer from '@/components/ui/AudioPlayer'
+import { isAudioPath } from '@/lib/media'
 import PostMeta from '@/components/layouts/PostMeta'
 import { fragmentDot } from '@/components/feed/tagColors'
 import { getAllFragments, getFragmentBySlug } from '@/lib/posts'
@@ -58,15 +60,20 @@ export default async function FragmentPage({
         />
         Fragment
       </div>
-      {fragment.media && (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img
-          src={fragment.media}
-          alt=""
-          className="w-full rounded-lg"
-          style={{ marginBottom: 'calc(var(--u) * 3)', border: '1px solid var(--color-void-line)' }}
-        />
-      )}
+      {fragment.media &&
+        (isAudioPath(fragment.media) ? (
+          <div style={{ marginBottom: 'calc(var(--u) * 3)' }}>
+            <AudioPlayer src={fragment.media} label={fragment.title} />
+          </div>
+        ) : (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={fragment.media}
+            alt=""
+            className="w-full rounded-lg"
+            style={{ marginBottom: 'calc(var(--u) * 3)', border: '1px solid var(--color-void-line)' }}
+          />
+        ))}
       {fragment.link && (
         <a
           href={fragment.link}

@@ -15,6 +15,8 @@ const posts = defineCollection({
       tags: s.array(s.string()).default([]),
       lang,
       coverImage: s.string().optional(),
+      media: s.string().optional(), // audio path — poetry recitations
+
       // adventure posts: airport/city hops, e.g. ["LHE", "DXB", "LHR"]
       route: s.array(s.string()).optional(),
       // project posts only
