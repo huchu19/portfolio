@@ -423,6 +423,38 @@ a {
   }
 }
 
+/* Adventure route arc — sticky flight path that draws with the read */
+.route-arc {
+  margin-bottom: calc(var(--u) * 4);
+  padding-block: var(--u);
+}
+@media (min-width: 768px) {
+  .route-arc {
+    position: sticky;
+    top: calc(var(--u) * 5);
+    z-index: 20;
+    background: color-mix(in srgb, var(--color-void) 94%, transparent);
+    backdrop-filter: blur(12px);
+  }
+}
+.route-arc-node {
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  padding: 2px var(--u);
+  border: 1px solid var(--color-void-line);
+  border-radius: 4px;
+  background: var(--color-void-raised);
+  color: var(--color-ash);
+  transition: color 0.5s var(--ease), border-color 0.5s var(--ease);
+}
+.route-arc-node[data-passed] {
+  color: var(--color-ember-bright);
+  border-color: var(--color-ember-deep);
+}
+
 /* Route strip connector — draws left to right on load */
 .route-line {
   flex: 1;
