@@ -88,10 +88,40 @@ full-height, so contain-fit produced no travel (scale ≈ 0.94) — stops now
 support a hand-tuned scale (intro 1.3); and the chips originally sat
 below the fold — moved inside the grid's empty bottom-left corner.
 
+## Phase 6 — light mode + pseudo-scroll
+
+**Built:**
+- Light mode token overrides with a persisted header toggle. Dark remains
+  the default; the saved preference is applied before hydration to avoid
+  a flash of the wrong skin.
+- Wheel, touch-swipe, Arrow/Page, and Space traversal through the
+  Fibonacci zoom stops. The feed's internal scroll area is detected first,
+  so scrolling the feed still behaves like a normal scrollable panel.
+
+## Phase 7 — real GitHub work, with pictures
+
+**Built:**
+- Every real repo on github.com/huchu19 now has a project post with real
+  `projectLinks` and a cover picture: TiflToys (placeholder
+  `your-handle`/`example.com` links replaced), plus new posts for
+  EduNexus (FYP), Bamboo, and JobHunter. Bodies are grounded in each
+  repo's README and marked `draft-note` for voice.
+- Pictures live in `public/media/projects/`: live-deployment screenshots
+  (puppeteer via `tools/shot.mjs`, JPEG'd) for TiflToys, Bamboo, and
+  EduNexus; JobHunter has no deployment, so its repo's own
+  `opengraph-image.png` stands in.
+- `ProjectLayout` now renders `coverImage` (same framed idiom as
+  `AdventureLayout`). The featured cell self-updates — it picks the
+  newest project post, currently JobHunter.
+- Verified by build + screenshots of `/writing/edunexus-fyp`,
+  `/writing/jobhunter-uk-sponsor-finder`, and the home grid — console
+  `[]` everywhere.
+
 ## Remains for Hussain (content, not code)
 
 - Rewrite everything marked `draft: rewrite me` (About Urdu paragraph
-  especially — it should be yours, not mine).
+  especially — it should be yours, not mine). The four project posts
+  now carry real facts but my phrasing — put your voice on them.
 - Replace the placeholder wallpaper SVG with the real photo.
 - Set the real domain in `lib/site.ts`; rebuild OG cards (see DECISIONS).
 - Keep planting fragments — the model is 3 lines of frontmatter away.

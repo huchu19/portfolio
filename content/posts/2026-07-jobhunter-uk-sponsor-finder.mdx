@@ -1,0 +1,35 @@
+---
+title: "JobHunter: a visa-sponsor finder built out of necessity"
+slug: jobhunter-uk-sponsor-finder
+date: 2026-07-01
+type: project
+excerpt: 141k rows of gov.uk sponsor data, fuzzy search, and a kanban tracker — the job-hunt tool I needed as an international graduate, so I built it.
+tags:
+  - jobhunter
+  - data
+  - nextjs
+stack:
+  - Next.js
+  - TypeScript
+  - Prisma
+  - PostgreSQL
+  - Fuse.js
+status: in-progress
+coverImage: /media/projects/jobhunter.png
+projectLinks:
+  repo: "https://github.com/huchu19/JobHunter"
+---
+
+<p className="draft-note">Draft — rewrite me. The facts below are real; put your voice on them.</p>
+
+The most honest project brief I've ever written: I graduate in July 2026, I need a Skilled Worker visa, and the official Register of Licensed Sponsors is a 141,567-row CSV. So JobHunter is two tools that should always have been one — a sponsor search over the live gov.uk feed, and a kanban board that tracks every application from wishlist to offer.
+
+## The data pipeline
+
+The gov.uk register updates daily. JobHunter pulls the raw CSV, filters 141k rows down to ~34k unique London A-rated Skilled Worker sponsors, and caches the result for 24 hours behind an API route. Fuse.js handles the fuzzy search, and a heuristic classifier flags the tech companies, because scrolling past 30,000 care homes to find Wayve is not a search experience.
+
+## The tracker
+
+Applications move across a kanban board — wishlist, applied, interview, offer, rejected — with optimistic UI on every drag and delete. The feature I use most is auto-verification: add a company and it fuzzy-matches against the live sponsor register, so I know before I write the cover letter whether they can actually hire me.
+
+Prisma over SQLite locally and PostgreSQL in production, 22 unit tests passing, and a growing sense that the best portfolio project is the one you open every morning because you need it.

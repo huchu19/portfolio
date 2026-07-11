@@ -43,6 +43,25 @@ const nastaliq = Noto_Nastaliq_Urdu({
   preload: false,
 })
 
+const themeScript = `
+try {
+  const theme = localStorage.getItem('theme');
+  document.documentElement.dataset.theme = theme === 'light' ? 'light' : 'dark';
+  document.documentElement.style.backgroundColor = theme === 'light' ? '#f5f0e8' : '#0c0a08';
+} catch (_) {
+  document.documentElement.dataset.theme = 'dark';
+  document.documentElement.style.backgroundColor = '#0c0a08';
+}
+`
+
+const bodyThemeScript = `
+try {
+  const theme = document.documentElement.dataset.theme;
+  document.body.style.backgroundColor = theme === 'light' ? '#f5f0e8' : '#0c0a08';
+  document.body.style.color = theme === 'light' ? '#2a231d' : '#e8dfd0';
+} catch (_) {}
+`
+
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
   title: {
@@ -64,9 +83,15 @@ export default function RootLayout({
   return (
     <html
       lang="en"
+      data-theme="dark"
+      suppressHydrationWarning
       className={`${instrument.variable} ${inter.variable} ${geistMono.variable} ${nastaliq.variable}`}
     >
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+      </head>
       <body>
+        <script dangerouslySetInnerHTML={{ __html: bodyThemeScript }} />
         <a href="#main" className="skip-link">
           Skip to content
         </a>

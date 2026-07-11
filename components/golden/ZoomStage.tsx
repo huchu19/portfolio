@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { motion, useReducedMotion } from 'framer-motion'
 
 /**
@@ -32,6 +32,10 @@ const STOPS: Stop[] = [
 
 const GRID_W = 13
 const GRID_H = 8
+const WHEEL_THRESHOLD = 36
+const TOUCH_THRESHOLD = 42
+const TRAVEL_COOLDOWN = 620
+const STOP_ORDER: (string | null)[] = [null, ...STOPS.map((s) => s.key)]
 
 function transformFor(stop: Stop | null): string {
   if (!stop) return 'scale(1) translate(0%, 0%)'
@@ -45,10 +49,40 @@ function transformFor(stop: Stop | null): string {
   return `scale(${s}) translate(${tx}%, ${ty}%)`
 }
 
+function canScrollWithin(target: EventTarget | null, deltaY: number) {
+  if (!(target instanceof HTMLElement)) return false
+  let el: HTMLElement | null = target
+  while (el && el !== document.body) {
+    const style = window.getComputedStyle(el)
+    const scrollable = /(auto|scroll)/.test(style.overflowY)
+    if (scrollable && el.scrollHeight > el.clientHeight + 1) {
+      const atTop = el.scrollTop <= 0
+      const atBottom = el.scrollTop + el.clientHeight >= el.scrollHeight - 1
+      if ((deltaY < 0 && !atTop) || (deltaY > 0 && !atBottom)) return true
+    }
+    el = el.parentElement
+  }
+  return false
+}
+
 export default function ZoomStage({ children }: { children: React.ReactNode }) {
   const [active, setActive] = useState<string | null>(null)
   const [enabled, setEnabled] = useState(false)
   const reduced = useReducedMotion()
+  const stageRef = useRef<HTMLDivElement>(null)
+  const lastTravel = useRef(0)
+  const touchStartY = useRef<number | null>(null)
+
+  const travel = useCallback((direction: 1 | -1) => {
+    const now = window.performance.now()
+    if (now - lastTravel.current < TRAVEL_COOLDOWN) return
+    lastTravel.current = now
+    setActive((current) => {
+      const index = Math.max(0, STOP_ORDER.indexOf(current))
+      const next = Math.min(STOP_ORDER.length - 1, Math.max(0, index + direction))
+      return STOP_ORDER[next]
+    })
+  }, [])
 
   useEffect(() => {
     const mq = window.matchMedia('(min-width: 768px)')
@@ -65,6 +99,14 @@ export default function ZoomStage({ children }: { children: React.ReactNode }) {
       const target = e.target as HTMLElement | null
       if (target && ['INPUT', 'TEXTAREA'].includes(target.tagName)) return
       if (e.key === 'Escape' || e.key === '0') setActive(null)
+      if (['ArrowDown', 'PageDown', ' '].includes(e.key)) {
+        e.preventDefault()
+        travel(1)
+      }
+      if (['ArrowUp', 'PageUp'].includes(e.key)) {
+        e.preventDefault()
+        travel(-1)
+      }
       const i = Number.parseInt(e.key, 10)
       if (i >= 1 && i <= STOPS.length) setActive(STOPS[i - 1].key)
     }
@@ -72,11 +114,40 @@ export default function ZoomStage({ children }: { children: React.ReactNode }) {
     return () => window.removeEventListener('keydown', onKey)
   }, [enabled, reduced])
 
+  useEffect(() => {
+    const el = stageRef.current
+    if (!el || !enabled || reduced) return
+    const onWheel = (e: WheelEvent) => {
+      if (Math.abs(e.deltaY) < WHEEL_THRESHOLD) return
+      if (canScrollWithin(e.target, e.deltaY)) return
+      e.preventDefault()
+      travel(e.deltaY > 0 ? 1 : -1)
+    }
+    el.addEventListener('wheel', onWheel, { passive: false })
+    return () => el.removeEventListener('wheel', onWheel)
+  }, [enabled, reduced, travel])
+
   const zoomable = enabled && !reduced
   const stop = STOPS.find((s) => s.key === active) ?? null
 
   return (
-    <div className="relative">
+    <div
+      ref={stageRef}
+      className="relative"
+      onTouchStart={(e) => {
+        if (!zoomable) return
+        touchStartY.current = e.touches[0]?.clientY ?? null
+      }}
+      onTouchEnd={(e) => {
+        if (!zoomable || touchStartY.current === null) return
+        const endY = e.changedTouches[0]?.clientY ?? touchStartY.current
+        const delta = touchStartY.current - endY
+        touchStartY.current = null
+        if (Math.abs(delta) < TOUCH_THRESHOLD) return
+        if (canScrollWithin(e.target, delta)) return
+        travel(delta > 0 ? 1 : -1)
+      }}
+    >
       <motion.div
         className="home-grid"
         style={{ transformOrigin: '0 0' }}
@@ -115,6 +186,7 @@ export default function ZoomStage({ children }: { children: React.ReactNode }) {
             </button>
           ))}
           {active && <span style={{ color: 'var(--color-ash)' }}>esc — pull back</span>}
+          {!active && <span style={{ color: 'var(--color-ash)' }}>scroll — travel</span>}
         </nav>
       )}
     </div>

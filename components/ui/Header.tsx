@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { site } from '@/lib/site'
+import ThemeToggle from './ThemeToggle'
 
 /**
  * Minimal header (VISION.md Part 8): site name + palette trigger. No nav
@@ -50,15 +51,18 @@ export default function Header() {
           site.name
         )}
       </Link>
-      <button
-        type="button"
-        aria-label="Open command palette"
-        onClick={() => window.dispatchEvent(new CustomEvent('palette:open'))}
-        className="mono-label cursor-pointer rounded border px-2 py-1 transition-colors hover:text-(--color-bone)"
-        style={{ borderColor: 'var(--color-void-line)' }}
-      >
-        ⌘K
-      </button>
+      <div className="flex items-center" style={{ gap: 'var(--u)' }}>
+        <ThemeToggle />
+        <button
+          type="button"
+          aria-label="Open command palette"
+          onClick={() => window.dispatchEvent(new CustomEvent('palette:open'))}
+          className="mono-label cursor-pointer rounded border px-2 py-1 transition-colors hover:text-(--color-bone)"
+          style={{ borderColor: 'var(--color-void-line)' }}
+        >
+          ⌘K
+        </button>
+      </div>
     </header>
   )
 }

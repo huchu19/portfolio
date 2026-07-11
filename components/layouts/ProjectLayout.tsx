@@ -75,6 +75,15 @@ export default function ProjectLayout({ post }: { post: Post }) {
           </div>
         )}
       </header>
+      {post.coverImage && (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
+          src={post.coverImage}
+          alt={`${post.title} — screenshot`}
+          className="w-full rounded-lg"
+          style={{ marginBottom: 'calc(var(--u) * 5)', border: '1px solid var(--color-void-line)' }}
+        />
+      )}
       <div className="prose post-body">
         <MDXContent code={post.code} />
       </div>

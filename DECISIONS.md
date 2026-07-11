@@ -91,3 +91,16 @@ Each decision was made to be maximally consistent with VISION.md Part 10
 - The full scroll-driven Fibonacci Zoom (viewport zooms as you scroll,
   VISION Part 2 Option A verbatim) remains a **documented TODO** if the
   destination-zoom ever feels insufficient.
+
+## Light mode + pseudo-scroll traversal
+
+- Added **light mode as a secondary skin**, matching VISION Part 4:
+  dark remains the default identity, while the header toggle persists a
+  deliberate light choice in `localStorage`. The implementation overrides
+  the same color tokens (`--color-void`, `--color-bone`, etc.) instead of
+  branching component styles.
+- Upgraded Option A to **pseudo-scroll traversal**: wheel, touch swipes,
+  Arrow/Page keys, and Space advance through the fibonacci zoom stops
+  (`13×8 → 8² → 5² → 3² → 2²`). Internal feed scrolling still wins when
+  the feed panel has room to scroll, so traversal does not trap long
+  content.

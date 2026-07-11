@@ -1,0 +1,40 @@
+---
+title: "EduNexus: an adaptive learning platform as a final-year project"
+slug: edunexus-fyp
+date: 2026-06-06
+type: project
+excerpt: My QMUL final-year project — teachers generate lessons and quizzes from prompts; students take adaptive assessments, earn XP, and explore a knowledge graph of what they actually understand.
+tags:
+  - edunexus
+  - education
+  - ai
+stack:
+  - Next.js
+  - React
+  - FastAPI
+  - PostgreSQL
+  - Gemini 2.5 Flash
+status: live
+coverImage: /media/projects/edunexus.jpg
+projectLinks:
+  live: "https://fyp-nu-nine.vercel.app"
+  repo: "https://github.com/huchu19/FYP"
+---
+
+<p className="draft-note">Draft — rewrite me. The facts below are real; put your voice on them.</p>
+
+EduNexus is my final-year project at Queen Mary — an answer to the fragmentation problem in digital education. Teachers today live across a CMS, a quiz tool, and a grade spreadsheet with no data flowing between them; students get one-size-fits-all content and no picture of what they actually understand.
+
+## What it does
+
+A teacher types a prompt; Gemini 2.5 Flash generates lesson slides, flashcards, and quiz questions the teacher can review and edit before anything reaches a student. Quizzes adapt difficulty per student, and the metacognitive question types — explain your reasoning, analyse this error, transfer this idea — capture *how* someone thinks, not just whether they clicked the right radio button.
+
+On the other side, the AI extracts concepts and prerequisites from lessons into a force-directed knowledge graph that shows per-student mastery and flags blind spots. XP, streaks, badges, and an open learner model give students a dashboard of their own understanding — score trends, topic mastery, confidence calibration.
+
+## The part I care about
+
+The feature that reframed the project is **Teach Mode**: the student explains a concept to an AI playing a confused learner, and the system listens instead of lecturing. I wrote about what that did to my thinking in [the EduNexus essay](/writing/what-i-learned-building-edunexus).
+
+## Under the hood
+
+Next.js App Router frontend, FastAPI + SQLAlchemy backend on PostgreSQL, JWT auth, pytest and Playwright for tests. Gemini 2.5 Flash is the primary model with GPT-4o-mini as fallback — the abstraction that made model-swapping boring was worth every hour it cost.

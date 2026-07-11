@@ -52,6 +52,21 @@
   --tag-music: #7a6b9e;
 }
 
+[data-theme="light"] {
+  color-scheme: light;
+  --color-void: #f5f0e8;
+  --color-void-raised: #fffaf2;
+  --color-void-line: #d6c9b8;
+  --color-ash: #6f6254;
+  --color-bone: #2a231d;
+  --color-white: #1a1714;
+  --color-ember: #b85a1a;
+  --color-ember-bright: #d46a22;
+  --color-ember-deep: #8f4212;
+  --color-wave: #2f6488;
+  --color-ink: #1a1714;
+}
+
 /* ------------------------------------------------------------------ */
 /*  Base                                                               */
 /* ------------------------------------------------------------------ */
@@ -59,6 +74,16 @@ html {
   background: var(--color-void);
   color-scheme: dark;
   scroll-behavior: smooth;
+}
+
+html[data-theme="light"] {
+  color-scheme: light;
+}
+
+html[data-theme="light"],
+html[data-theme="light"] body {
+  background-color: #f5f0e8 !important;
+  color: #2a231d !important;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -76,6 +101,11 @@ body {
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
   min-height: 100dvh;
+}
+
+html,
+body {
+  transition: background-color 0.3s var(--ease), color 0.3s var(--ease);
 }
 
 ::selection {
@@ -111,6 +141,33 @@ a {
   font-family: var(--font-mono);
   font-size: 13px;
   transition: top 0.2s var(--ease);
+}
+
+.theme-toggle {
+  display: inline-grid;
+  place-items: center;
+  width: calc(var(--u) * 4);
+  height: calc(var(--u) * 4);
+  border: 1px solid var(--color-void-line);
+  border-radius: 4px;
+  color: var(--color-ash);
+  transition: color 0.2s var(--ease), border-color 0.2s var(--ease), background 0.2s var(--ease);
+}
+.theme-toggle:hover {
+  color: var(--color-bone);
+  border-color: color-mix(in srgb, var(--color-ember) 45%, var(--color-void-line));
+}
+.theme-toggle::before {
+  content: "";
+  width: 14px;
+  height: 14px;
+  border: 1.5px solid currentColor;
+  border-radius: 999px;
+  box-shadow: inset -4px -3px 0 0 currentColor;
+}
+[data-theme="light"] .theme-toggle::before {
+  box-shadow: inset 0 0 0 4px transparent, 0 -6px 0 -5px currentColor, 0 6px 0 -5px currentColor,
+    6px 0 0 -5px currentColor, -6px 0 0 -5px currentColor;
 }
 .skip-link:focus {
   top: calc(var(--u) * 2);
