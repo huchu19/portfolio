@@ -39,6 +39,7 @@ const QUICK_LINKS = [
   { label: 'Now', href: '/now' },
   { label: 'Archive', href: '/archive' },
   { label: 'Colophon', href: '/colophon' },
+  { label: 'Guide — the making of', href: '/guide' },
 ]
 
 type Result = { label: string; sub?: string; href: string; dot: string }

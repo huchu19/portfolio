@@ -19,6 +19,7 @@ export default function Footer() {
         <Link href="/now" className="transition-colors hover:text-(--color-bone)">Now</Link>
         <Link href="/archive" className="transition-colors hover:text-(--color-bone)">Archive</Link>
         <Link href="/colophon" className="transition-colors hover:text-(--color-bone)">Colophon</Link>
+        <Link href="/guide" className="transition-colors hover:text-(--color-bone)">Guide</Link>
         <a href={githubUrl} className="transition-colors hover:text-(--color-bone)">GitHub</a>
         <a href="/feed.xml" className="transition-colors hover:text-(--color-bone)">RSS</a>
       </nav>

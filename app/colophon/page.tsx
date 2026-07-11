@@ -53,7 +53,9 @@ export default function ColophonPage() {
           ratios, non-negotiable rules, and a standing instruction to critique every screen
           like a hostile art director. The previous version of this site was warm paper and
           postal stamps. It was lovely and it was not mine. This one is dark ground and
-          ember, precision and rawness — which is closer to the truth.
+          ember, precision and rawness — which is closer to the truth. The full story of the
+          build — the critique loop, the screenshots, what the pixels caught — lives in the{' '}
+          <Link href="/guide">guide</Link>.
         </p>
 
         <h2>The philosophy</h2>
