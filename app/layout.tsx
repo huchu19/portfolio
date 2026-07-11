@@ -8,7 +8,9 @@ import {
 import Header from '@/components/ui/Header'
 import Footer from '@/components/ui/Footer'
 import Cursor from '@/components/ui/Cursor'
+import CommandPalette from '@/components/ui/CommandPalette'
 import ConstructionLines from '@/components/golden/ConstructionLines'
+import { getFeed, toFeedItem } from '@/lib/posts'
 import { site } from '@/lib/site'
 import './globals.css'
 
@@ -58,6 +60,7 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
+  const paletteItems = getFeed().map(toFeedItem)
   return (
     <html
       lang="en"
@@ -73,6 +76,7 @@ export default function RootLayout({
           <main id="main">{children}</main>
           <Footer />
         </div>
+        <CommandPalette items={paletteItems} />
         <Cursor />
       </body>
     </html>
