@@ -72,10 +72,21 @@ Urdu/English lines in archive/feed panels.
 - DOM diagnostics (`tools/diag.mjs`): grid aspect 1307×804, spiral
   dashoffset lands at 0, construction layer at 0.035 opacity.
 
-## Phase 5 — Option A attempt
+## Phase 5 — Option A attempt (shipped)
 
-See the final commits + DECISIONS.md "Option A status" for how far this
-went and why.
+Implemented the Fibonacci Zoom as **destination zoom navigation**: the
+home grid is a stage; chips (φ 13×8 · 8² · 5² · 3² · 2²) and number keys
+1–4 zoom-pan the viewport into each golden rectangle (700ms, site
+easing), Esc pulls back out. Desktop-only; mobile and reduced-motion get
+Option C untouched. Verified by screenshot at rest, zoomed into 8² and
+5², and after Esc — console `[]` in all states, text stays sharp, the
+internally-scrollable feed still works while zoomed. Full rationale in
+DECISIONS.md.
+
+Critique of the zoomed states found and fixed: the intro square is
+full-height, so contain-fit produced no travel (scale ≈ 0.94) — stops now
+support a hand-tuned scale (intro 1.3); and the chips originally sat
+below the fold — moved inside the grid's empty bottom-left corner.
 
 ## Remains for Hussain (content, not code)
 

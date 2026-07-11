@@ -73,8 +73,21 @@ Each decision was made to be maximally consistent with VISION.md Part 10
 - 404 quote is a **rewritten paraphrase** of the Berserk line, per
   VISION's own note to avoid quoting it directly.
 
-## Option A status
+## Option A status — shipped, navigation-flavored
 
-- **Attempted after the full Option C build + critique pass** — see
-  BUILDLOG.md for the outcome and the revert policy (revert to last good
-  commit if messy, keep Option C as reduced-motion/mobile fallback).
+- Implemented as **zoom navigation** (`components/golden/ZoomStage.tsx`)
+  rather than scroll-hijacked zooming: chips at the grid's bottom-left
+  (φ 13×8 · 8² · 5² · 3² · 2²) and keys 1–4 travel the viewport into
+  that fibonacci rectangle with a 700ms zoom-pan on the site easing;
+  Esc/0 pulls back to the full construction. The zoom math derives the
+  transform from the same 13×8 unit space as the grid and spiral.
+- **Why not scroll-driven:** scroll-hijacking the homepage would have
+  fought the internally-scrollable feed cell, risked reduced-motion and
+  mobile regressions, and made content unreadable mid-transition. The
+  destination-based zoom delivers "travel the spiral" while Option C
+  remains the resting state — nothing moves unless asked.
+- Mobile and `prefers-reduced-motion` render Option C untouched (the
+  controller renders no chips and applies identity transform).
+- The full scroll-driven Fibonacci Zoom (viewport zooms as you scroll,
+  VISION Part 2 Option A verbatim) remains a **documented TODO** if the
+  destination-zoom ever feels insufficient.

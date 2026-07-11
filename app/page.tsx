@@ -3,6 +3,7 @@ import { Suspense } from 'react'
 import Feed from '@/components/feed/Feed'
 import GhazalLine from '@/components/golden/GhazalLine'
 import SpiralOverlay from '@/components/golden/SpiralOverlay'
+import ZoomStage from '@/components/golden/ZoomStage'
 import ScrollProgress from '@/components/ui/ScrollProgress'
 import { getFeed, getAllPosts, toFeedItem } from '@/lib/posts'
 import { now } from '@/lib/now'
@@ -20,7 +21,7 @@ export default function HomePage() {
   return (
     <div style={{ padding: 'calc(var(--u) * 3)' }}>
       <ScrollProgress />
-      <div className="home-grid">
+      <ZoomStage>
         <SpiralOverlay />
 
         {/* 8² — the intro rectangle */}
@@ -99,7 +100,7 @@ export default function HomePage() {
             </p>
           </Link>
         )}
-      </div>
+      </ZoomStage>
     </div>
   )
 }
