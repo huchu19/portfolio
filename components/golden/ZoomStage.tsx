@@ -1,15 +1,25 @@
 'use client'
 
-import { useCallback, useEffect, useRef, useState } from 'react'
-import { motion, useReducedMotion } from 'framer-motion'
+import { useCallback, useEffect, useState } from 'react'
+import { useRef } from 'react'
+import {
+  motion,
+  useMotionValueEvent,
+  useReducedMotion,
+  useScroll,
+  useSpring,
+  useTransform,
+} from 'framer-motion'
 
 /**
- * Option A (Fibonacci Zoom), navigation-flavored: the home grid is a
- * stage you can zoom into. Each fibonacci rectangle is a destination —
- * click its chip (or press 1–4) and the viewport travels into that
- * square along a smooth zoom-pan; Esc (or 0) pulls back to the full
- * 13×8 construction. Desktop + motion-friendly contexts only; the
- * Golden Grid (Option C) is the resting state and the full fallback.
+ * Option A (Fibonacci Zoom), verbatim this time: the homepage is a
+ * fixed viewport into the 13×8 construction and scrolling travels the
+ * spiral — one smoothed progress value drives a continuous zoom-pan
+ * through the fibonacci stops. The page keeps its native scrollbar (a
+ * tall track with a sticky stage), so the feed's internal scroll
+ * simply chains like any nested scroll area — no wheel hijacking.
+ * Chips and number keys jump between stops; Esc (or 0) pulls back.
+ * Mobile + reduced-motion render the resting Golden Grid (Option C).
  */
 
 type Stop = {
@@ -32,57 +42,29 @@ const STOPS: Stop[] = [
 
 const GRID_W = 13
 const GRID_H = 8
-const WHEEL_THRESHOLD = 36
-const TOUCH_THRESHOLD = 42
-const TRAVEL_COOLDOWN = 620
-const STOP_ORDER: (string | null)[] = [null, ...STOPS.map((s) => s.key)]
+/** scroll travel per stop-to-stop transition, in viewport heights */
+const SCREENS_PER_HOP = 0.9
+/** progress keyframes: rest + one per stop */
+const KEYS = [0, 0.25, 0.5, 0.75, 1]
 
-function transformFor(stop: Stop | null): string {
-  if (!stop) return 'scale(1) translate(0%, 0%)'
+function stopParams(stop: Stop | null): { s: number; cx: number; cy: number } {
+  if (!stop) return { s: 1, cx: 50, cy: 50 } // identity: 50/1 − 50 = 0
   const s = stop.s ?? Math.min(GRID_W / stop.w, GRID_H / stop.h) * 0.94 // a breath of margin
-  const cx = ((stop.x + stop.w / 2) / GRID_W) * 100
-  const cy = ((stop.y + stop.h / 2) / GRID_H) * 100
-  // origin 0 0: translate happens pre-scale (right-to-left), so
-  // t = center/s − c, in percentages of the element's own box
-  const tx = 50 / s - cx
-  const ty = 50 / s - cy
-  return `scale(${s}) translate(${tx}%, ${ty}%)`
+  return {
+    s,
+    cx: ((stop.x + stop.w / 2) / GRID_W) * 100,
+    cy: ((stop.y + stop.h / 2) / GRID_H) * 100,
+  }
 }
 
-function canScrollWithin(target: EventTarget | null, deltaY: number) {
-  if (!(target instanceof HTMLElement)) return false
-  let el: HTMLElement | null = target
-  while (el && el !== document.body) {
-    const style = window.getComputedStyle(el)
-    const scrollable = /(auto|scroll)/.test(style.overflowY)
-    if (scrollable && el.scrollHeight > el.clientHeight + 1) {
-      const atTop = el.scrollTop <= 0
-      const atBottom = el.scrollTop + el.clientHeight >= el.scrollHeight - 1
-      if ((deltaY < 0 && !atTop) || (deltaY > 0 && !atBottom)) return true
-    }
-    el = el.parentElement
-  }
-  return false
-}
+const PARAMS = [null, ...STOPS].map(stopParams)
 
 export default function ZoomStage({ children }: { children: React.ReactNode }) {
-  const [active, setActive] = useState<string | null>(null)
   const [enabled, setEnabled] = useState(false)
+  const [activeIdx, setActiveIdx] = useState(0)
   const reduced = useReducedMotion()
-  const stageRef = useRef<HTMLDivElement>(null)
-  const lastTravel = useRef(0)
-  const touchStartY = useRef<number | null>(null)
-
-  const travel = useCallback((direction: 1 | -1) => {
-    const now = window.performance.now()
-    if (now - lastTravel.current < TRAVEL_COOLDOWN) return
-    lastTravel.current = now
-    setActive((current) => {
-      const index = Math.max(0, STOP_ORDER.indexOf(current))
-      const next = Math.min(STOP_ORDER.length - 1, Math.max(0, index + direction))
-      return STOP_ORDER[next]
-    })
-  }, [])
+  const trackRef = useRef<HTMLDivElement>(null)
+  const zoomable = enabled && !reduced
 
   useEffect(() => {
     const mq = window.matchMedia('(min-width: 768px)')
@@ -92,103 +74,97 @@ export default function ZoomStage({ children }: { children: React.ReactNode }) {
     return () => mq.removeEventListener('change', update)
   }, [])
 
+  const { scrollYProgress } = useScroll({
+    target: trackRef,
+    offset: ['start start', 'end end'],
+  })
+  const smooth = useSpring(scrollYProgress, { stiffness: 110, damping: 28, mass: 0.5 })
+
+  // zoom feels constant when scale is interpolated in log space
+  const logS = useTransform(smooth, KEYS, PARAMS.map((p) => Math.log(p.s)))
+  const cx = useTransform(smooth, KEYS, PARAMS.map((p) => p.cx))
+  const cy = useTransform(smooth, KEYS, PARAMS.map((p) => p.cy))
+  const transform = useTransform([logS, cx, cy], (values) => {
+    const [l, x, y] = values as number[]
+    const s = Math.exp(l)
+    // origin 0 0: translate happens pre-scale, t = center/s − c, in %
+    return `scale(${s.toFixed(4)}) translate(${(50 / s - x).toFixed(4)}%, ${(50 / s - y).toFixed(4)}%)`
+  })
+
+  useMotionValueEvent(scrollYProgress, 'change', (p) => {
+    const idx = Math.min(STOPS.length, Math.max(0, Math.round(p * STOPS.length)))
+    setActiveIdx((current) => (current === idx ? current : idx))
+  })
+
+  /** scroll the page so the smoothed progress settles on stop idx (0 = rest) */
+  const goTo = useCallback((idx: number) => {
+    const el = trackRef.current
+    if (!el) return
+    const top = el.getBoundingClientRect().top + window.scrollY
+    const travel = el.offsetHeight - window.innerHeight
+    window.scrollTo(0, top + (idx / STOPS.length) * travel)
+  }, [])
+
   useEffect(() => {
-    if (!enabled || reduced) return
+    if (!zoomable) return
     const onKey = (e: KeyboardEvent) => {
       if (e.metaKey || e.ctrlKey || e.altKey) return
       const target = e.target as HTMLElement | null
       if (target && ['INPUT', 'TEXTAREA'].includes(target.tagName)) return
-      if (e.key === 'Escape' || e.key === '0') setActive(null)
-      if (['ArrowDown', 'PageDown', ' '].includes(e.key)) {
-        e.preventDefault()
-        travel(1)
-      }
-      if (['ArrowUp', 'PageUp'].includes(e.key)) {
-        e.preventDefault()
-        travel(-1)
-      }
+      if (e.key === 'Escape' || e.key === '0') goTo(0)
       const i = Number.parseInt(e.key, 10)
-      if (i >= 1 && i <= STOPS.length) setActive(STOPS[i - 1].key)
+      if (i >= 1 && i <= STOPS.length) goTo(i)
     }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
-  }, [enabled, reduced])
-
-  useEffect(() => {
-    const el = stageRef.current
-    if (!el || !enabled || reduced) return
-    const onWheel = (e: WheelEvent) => {
-      if (Math.abs(e.deltaY) < WHEEL_THRESHOLD) return
-      if (canScrollWithin(e.target, e.deltaY)) return
-      e.preventDefault()
-      travel(e.deltaY > 0 ? 1 : -1)
-    }
-    el.addEventListener('wheel', onWheel, { passive: false })
-    return () => el.removeEventListener('wheel', onWheel)
-  }, [enabled, reduced, travel])
-
-  const zoomable = enabled && !reduced
-  const stop = STOPS.find((s) => s.key === active) ?? null
+  }, [zoomable, goTo])
 
   return (
     <div
-      ref={stageRef}
-      className="relative"
-      onTouchStart={(e) => {
-        if (!zoomable) return
-        touchStartY.current = e.touches[0]?.clientY ?? null
-      }}
-      onTouchEnd={(e) => {
-        if (!zoomable || touchStartY.current === null) return
-        const endY = e.changedTouches[0]?.clientY ?? touchStartY.current
-        const delta = touchStartY.current - endY
-        touchStartY.current = null
-        if (Math.abs(delta) < TOUCH_THRESHOLD) return
-        if (canScrollWithin(e.target, delta)) return
-        travel(delta > 0 ? 1 : -1)
-      }}
+      ref={trackRef}
+      style={{ height: zoomable ? `calc(100vh + ${STOPS.length * SCREENS_PER_HOP * 100}vh)` : 'auto' }}
     >
-      <motion.div
-        className="home-grid"
-        style={{ transformOrigin: '0 0' }}
-        animate={{ transform: transformFor(zoomable ? stop : null) }}
-        transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-      >
-        {children}
-      </motion.div>
-
-      {zoomable && (
-        <nav
-          aria-label="Zoom into a rectangle"
-          className="mono-label absolute z-10 flex items-center max-md:hidden"
-          style={{ bottom: 'calc(var(--u) * 2)', left: 'calc(var(--u) * 4)', gap: 'calc(var(--u) * 2)', fontSize: 10.5 }}
+      <div className={zoomable ? 'zoom-sticky' : undefined}>
+        <motion.div
+          className="home-grid"
+          style={zoomable ? { transformOrigin: '0 0', transform, willChange: 'transform' } : undefined}
         >
-          <span style={{ color: 'var(--color-void-line)' }}>φ</span>
-          <button
-            type="button"
-            onClick={() => setActive(null)}
-            aria-pressed={active === null}
-            className="cursor-pointer transition-colors hover:text-(--color-bone)"
-            style={{ color: active === null ? 'var(--color-ember)' : undefined }}
+          {children}
+        </motion.div>
+
+        {zoomable && (
+          <nav
+            aria-label="Travel the spiral"
+            className="mono-label absolute z-10 flex items-center max-md:hidden"
+            style={{ bottom: 'calc(var(--u) * 2)', left: 'calc(var(--u) * 4)', gap: 'calc(var(--u) * 2)', fontSize: 10.5 }}
           >
-            13×8
-          </button>
-          {STOPS.map((s) => (
+            <span style={{ color: 'var(--color-void-line)' }}>φ</span>
             <button
-              key={s.key}
               type="button"
-              onClick={() => setActive((a) => (a === s.key ? null : s.key))}
-              aria-pressed={active === s.key}
+              onClick={() => goTo(0)}
+              aria-pressed={activeIdx === 0}
               className="cursor-pointer transition-colors hover:text-(--color-bone)"
-              style={{ color: active === s.key ? 'var(--color-ember)' : undefined }}
+              style={{ color: activeIdx === 0 ? 'var(--color-ember)' : undefined }}
             >
-              {s.label}
+              13×8
             </button>
-          ))}
-          {active && <span style={{ color: 'var(--color-ash)' }}>esc — pull back</span>}
-          {!active && <span style={{ color: 'var(--color-ash)' }}>scroll — travel</span>}
-        </nav>
-      )}
+            {STOPS.map((s, i) => (
+              <button
+                key={s.key}
+                type="button"
+                onClick={() => goTo(i + 1)}
+                aria-pressed={activeIdx === i + 1}
+                className="cursor-pointer transition-colors hover:text-(--color-bone)"
+                style={{ color: activeIdx === i + 1 ? 'var(--color-ember)' : undefined }}
+              >
+                {s.label}
+              </button>
+            ))}
+            {activeIdx > 0 && <span style={{ color: 'var(--color-ash)' }}>esc — pull back</span>}
+            {activeIdx === 0 && <span style={{ color: 'var(--color-ash)' }}>scroll — travel</span>}
+          </nav>
+        )}
+      </div>
     </div>
   )
 }

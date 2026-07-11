@@ -104,3 +104,24 @@ Each decision was made to be maximally consistent with VISION.md Part 10
   (`13×8 → 8² → 5² → 3² → 2²`). Internal feed scrolling still wins when
   the feed panel has room to scroll, so traversal does not trap long
   content.
+
+## Option A verbatim — scroll-driven zoom (fable-25 pass)
+
+- The homepage now ships **VISION Part 2 Option A as written**: a tall
+  scroll track (~460vh) with a sticky stage; one smoothed spring on
+  `scrollYProgress` interpolates the zoom-pan continuously through the
+  stops (`13×8 → 8² → 5² → 3² → 2²`). Scale interpolates in **log
+  space** so travel speed feels constant; the transform writes to a
+  MotionValue, so nothing re-renders per frame.
+- **The old objection dissolved, not overruled:** the pseudo-scroll
+  version hijacked wheel/touch and hand-rolled `canScrollWithin()` to
+  protect the feed. Native scroll + sticky needs none of that — the
+  feed's internal scroll chains into the document scroll like any
+  nested scroll area, so the hijacking code (wheel thresholds, touch
+  deltas, travel cooldown) was deleted rather than ported.
+- Chips and keys 1–4 became **scroll anchors** (they scroll the page to
+  the stop's offset); Esc/0 scrolls back to the top. Arrows, Space, and
+  Page keys work natively now. The chip row doubles as the progress
+  indicator (nearest stop lights ember).
+- Mobile and `prefers-reduced-motion` are unchanged: track height goes
+  `auto`, no sticky, no transform — Option C exactly as before.
