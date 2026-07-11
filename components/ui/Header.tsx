@@ -11,6 +11,7 @@ import { site } from '@/lib/site'
  */
 export default function Header() {
   const [compressed, setCompressed] = useState(false)
+  const [urduName, setUrduName] = useState(false)
 
   useEffect(() => {
     const onScroll = () => setCompressed(window.scrollY > 64)
@@ -33,12 +34,21 @@ export default function Header() {
         transitionTimingFunction: 'var(--ease)',
       }}
     >
+      {/* a small easter egg: the name remembers its mother tongue on hover */}
       <Link
         href="/"
         className="display transition-colors"
-        style={{ fontSize: compressed ? 18 : 22, fontStyle: 'italic' }}
+        style={{ fontSize: compressed ? 18 : 22, fontStyle: urduName ? 'normal' : 'italic' }}
+        onMouseEnter={() => setUrduName(true)}
+        onMouseLeave={() => setUrduName(false)}
       >
-        {site.name}
+        {urduName ? (
+          <span lang="ur" dir="rtl" className="urdu" style={{ fontSize: '0.85em' }}>
+            حسین نقوی
+          </span>
+        ) : (
+          site.name
+        )}
       </Link>
       <button
         type="button"
