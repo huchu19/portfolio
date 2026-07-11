@@ -69,6 +69,11 @@
   --color-ink: #1a1714;
 }
 
+/* generative cover art blocks share the coverImage rhythm */
+.cover-art-block {
+  margin-bottom: calc(var(--u) * 5);
+}
+
 /* ------------------------------------------------------------------ */
 /*  Base                                                               */
 /* ------------------------------------------------------------------ */

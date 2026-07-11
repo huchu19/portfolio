@@ -1,4 +1,5 @@
 import MDXContent from '@/components/MDXContent'
+import CoverArt from '@/components/generative/CoverArt'
 import PostMeta from './PostMeta'
 import RouteStrip from './RouteStrip'
 import { formatDate, type Post } from '@/lib/posts'
@@ -20,7 +21,7 @@ export default function AdventureLayout({ post }: { post: Post }) {
           {post.title}
         </h1>
       </header>
-      {post.coverImage && (
+      {post.coverImage ? (
         // eslint-disable-next-line @next/next/no-img-element
         <img
           src={post.coverImage}
@@ -28,6 +29,8 @@ export default function AdventureLayout({ post }: { post: Post }) {
           className="w-full rounded-lg"
           style={{ marginBottom: 'calc(var(--u) * 5)', border: '1px solid var(--color-void-line)' }}
         />
+      ) : (
+        <CoverArt seed={post.slug} type={post.type} height={200} className="cover-art-block" />
       )}
       <div className="prose post-body">
         <MDXContent code={post.code} />
