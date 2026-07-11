@@ -1,5 +1,6 @@
 import MDXContent from '@/components/MDXContent'
 import CoverArt from '@/components/generative/CoverArt'
+import ReadingGarden from '@/components/generative/ReadingGarden'
 import PostMeta from './PostMeta'
 import RouteArc from './RouteArc'
 import { formatDate, type Post } from '@/lib/posts'
@@ -33,6 +34,7 @@ export default function AdventureLayout({ post }: { post: Post }) {
         <MDXContent code={post.code} />
       </div>
       <PostMeta entry={post} />
+      <ReadingGarden seed={post.slug} />
     </article>
   )
 }

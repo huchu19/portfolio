@@ -1,4 +1,5 @@
 import MDXContent from '@/components/MDXContent'
+import ReadingGarden from '@/components/generative/ReadingGarden'
 import PostMeta from './PostMeta'
 import { formatStamp, type Post } from '@/lib/posts'
 
@@ -28,6 +29,7 @@ export default function JournalLayout({ post }: { post: Post }) {
         <MDXContent code={post.code} />
       </div>
       <PostMeta entry={post} />
+      <ReadingGarden seed={post.slug} />
     </article>
   )
 }
