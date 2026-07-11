@@ -15,6 +15,7 @@
   --color-ember-bright: #f09940;
   --color-ember-deep: #b85a1a;
   --color-wave: #3a6b8c;
+  --color-moss: #6b8c5a;
   --color-ink: #1a1714;
 
   /* type */
@@ -40,12 +41,12 @@
   --dot-poetry: var(--color-ember-bright);
   --dot-journal: var(--color-ash);
   --dot-adventure: var(--color-wave);
-  --dot-fragment: #6b8c5a; /* moss — fragments are the garden's small growth */
+  --dot-fragment: var(--color-moss); /* fragments are the garden's small growth */
   /* fragment tag dots — ember for philosophy/religion, wave for tech, green for football */
   --tag-philosophy: var(--color-ember);
   --tag-religion: var(--color-ember);
   --tag-tech: var(--color-wave);
-  --tag-football: #4f8f5b;
+  --tag-football: var(--color-moss);
   --tag-poetry: var(--color-ember-bright);
   --tag-comedy: #b08f3a;
   --tag-manga: var(--color-ash);
@@ -64,6 +65,7 @@
   --color-ember-bright: #d46a22;
   --color-ember-deep: #8f4212;
   --color-wave: #2f6488;
+  --color-moss: #4f7040;
   --color-ink: #1a1714;
 }
 
