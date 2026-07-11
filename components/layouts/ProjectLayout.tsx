@@ -1,86 +1,84 @@
-import type { Post } from '@/lib/posts'
-import { entryNumber, formatDate } from '@/lib/posts'
 import MDXContent from '@/components/MDXContent'
+import PostMeta from './PostMeta'
+import { formatDate, type Post } from '@/lib/posts'
 
-/**
- * Project — a build dossier. Mono spec table with tabular figures,
- * stamped Live/Repo buttons, denser measure, story-first body.
- */
+const STATUS_LABEL: Record<string, { label: string; color: string }> = {
+  live: { label: 'Live', color: 'var(--color-ember)' },
+  'in-progress': { label: 'In Progress', color: 'var(--color-ember-bright)' },
+  archived: { label: 'Archived', color: 'var(--color-ash)' },
+}
+
+/** Dense dossier energy: title, stack chips, status badge, live/repo links. */
 export default function ProjectLayout({ post }: { post: Post }) {
-  const specs: [string, string][] = [
-    ['Stack', post.tags.map((t) => t.toUpperCase()).join(' · ') || '—'],
-    ['Year', post.date.slice(0, 4)],
-    ['Status', 'Shipped'],
-    ['Read', `${Math.ceil(post.metadata.readingTime)} min`],
-  ]
-
+  const status = post.status ? STATUS_LABEL[post.status] : undefined
   return (
-    <article className="mx-auto max-w-4xl px-6 pb-24 pt-14 md:pt-20">
-      <header className="mb-12">
-        <p className="meta-mono flex flex-wrap items-baseline gap-x-3">
-          <span className="entry-no normal-case tracking-normal">
-            № {entryNumber(post)}
-          </span>
-          <span>⌗ Project dossier</span>
-          <span>·</span>
-          <span>{formatDate(post.date)}</span>
-        </p>
-
-        <div className="mt-5 gap-x-12 lg:grid lg:grid-cols-[1fr_260px]">
-          <div>
-            <h1
-              className="font-display text-[clamp(2.2rem,5vw,3.4rem)] leading-[1.06] tracking-tight"
-              style={{ fontVariationSettings: '"opsz" 144' }}
-            >
-              {post.title}
-            </h1>
-            <p className="mt-5 max-w-[52ch] text-lg leading-relaxed text-ink-soft">
-              {post.excerpt}
-            </p>
-
-            {post.projectLinks && (
-              <p className="mt-8 flex flex-wrap gap-3">
-                {post.projectLinks.live && (
-                  <a
-                    href={post.projectLinks.live}
-                    className="meta-mono border border-ink px-4 py-2 text-ink transition-colors duration-300 ease-soft hover:bg-ink hover:text-paper"
-                  >
-                    Live site <span className="text-accent">↗</span>
-                  </a>
-                )}
-                {post.projectLinks.repo && (
-                  <a
-                    href={post.projectLinks.repo}
-                    className="meta-mono border border-line px-4 py-2 transition-colors duration-300 ease-soft hover:border-ink hover:text-ink"
-                  >
-                    Repository ↗
-                  </a>
-                )}
-              </p>
+    <article className="mx-auto w-full" style={{ maxWidth: 760, padding: 'calc(var(--u) * 3)', paddingTop: 'calc(var(--u) * 8)' }}>
+      <header style={{ marginBottom: 'calc(var(--u) * 6)', borderBottom: '1px solid var(--color-void-line)', paddingBottom: 'calc(var(--u) * 4)' }}>
+        <div className="mono-label flex flex-wrap items-center gap-x-4 gap-y-2" style={{ marginBottom: 'calc(var(--u) * 2)' }}>
+          <span style={{ color: 'var(--color-ember)' }}>Project</span>
+          <time dateTime={post.date}>{formatDate(post.date)}</time>
+          {status && (
+            <span className="flex items-center gap-1.5" style={{ color: status.color }}>
+              <span aria-hidden className="inline-block rounded-full" style={{ width: 6, height: 6, background: status.color }} />
+              {status.label}
+            </span>
+          )}
+        </div>
+        <h1 className="display" style={{ fontSize: 'clamp(34px, 5vw, 56px)' }}>{post.title}</h1>
+        {post.stack && (
+          <div className="flex flex-wrap" style={{ gap: 'var(--u)', marginTop: 'calc(var(--u) * 3)' }}>
+            {post.stack.map((s) => (
+              <span
+                key={s}
+                className="mono-label"
+                style={{
+                  fontSize: 11,
+                  padding: '2px calc(var(--u) * 1.5)',
+                  border: '1px solid var(--color-void-line)',
+                  borderRadius: 4,
+                  background: 'var(--color-void-raised)',
+                  color: 'var(--color-bone)',
+                }}
+              >
+                {s}
+              </span>
+            ))}
+          </div>
+        )}
+        {(post.projectLinks?.live || post.projectLinks?.repo) && (
+          <div className="flex flex-wrap" style={{ gap: 'calc(var(--u) * 2)', marginTop: 'calc(var(--u) * 3)' }}>
+            {post.projectLinks.live && (
+              <a
+                href={post.projectLinks.live}
+                rel="noopener"
+                className="mono-label transition-colors hover:text-(--color-void)"
+                style={{
+                  padding: 'var(--u) calc(var(--u) * 2)',
+                  border: '1px solid var(--color-ember-deep)',
+                  borderRadius: 4,
+                  color: 'var(--color-ember-bright)',
+                }}
+              >
+                Live ↗
+              </a>
+            )}
+            {post.projectLinks.repo && (
+              <a
+                href={post.projectLinks.repo}
+                rel="noopener"
+                className="mono-label transition-colors hover:text-(--color-bone)"
+                style={{ padding: 'var(--u) calc(var(--u) * 2)', border: '1px solid var(--color-void-line)', borderRadius: 4 }}
+              >
+                Repository ↗
+              </a>
             )}
           </div>
-
-          <dl className="mt-10 h-fit border-t-2 border-ink lg:mt-2">
-            {specs.map(([term, value]) => (
-              <div
-                key={term}
-                className="flex items-baseline justify-between gap-4 border-b border-line py-3"
-              >
-                <dt className="meta-mono text-ink-faint">{term}</dt>
-                <dd className="meta-mono text-right text-ink">{value}</dd>
-              </div>
-            ))}
-          </dl>
-        </div>
+        )}
       </header>
-
-      <div className="prose-fn text-[1rem]">
+      <div className="prose post-body">
         <MDXContent code={post.code} />
       </div>
-
-      <p className="meta-mono mt-16 border-t border-line pt-4 text-ink-faint">
-        End of dossier · № {entryNumber(post)}
-      </p>
+      <PostMeta entry={post} />
     </article>
   )
 }

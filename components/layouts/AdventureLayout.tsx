@@ -1,55 +1,38 @@
-import type { Post } from '@/lib/posts'
-import { entryNumber, formatDate } from '@/lib/posts'
 import MDXContent from '@/components/MDXContent'
-import RouteStrip from '@/components/RouteStrip'
-import styles from './AdventureLayout.module.css'
+import PostMeta from './PostMeta'
+import RouteStrip from './RouteStrip'
+import { formatDate, type Post } from '@/lib/posts'
 
-/**
- * Adventure — a flight log. Route strip that draws itself under the
- * title, mile-marker section numbering, optional cover image.
- */
+/** Route strip header, full-bleed cover support, travelogue body. */
 export default function AdventureLayout({ post }: { post: Post }) {
   return (
-    <article className="mx-auto max-w-3xl px-6 pb-24 pt-14 md:pt-20">
-      <header className="mb-12">
-        <p className="meta-mono flex flex-wrap items-baseline gap-x-3">
-          <span className="entry-no normal-case tracking-normal">
-            № {entryNumber(post)}
-          </span>
-          <span>⁂ Adventure</span>
-          <span>·</span>
-          <span>{formatDate(post.date)}</span>
-        </p>
-        <h1
-          className="mt-5 font-display text-[clamp(2.4rem,5.5vw,3.6rem)] leading-[1.06] tracking-tight"
-          style={{ fontVariationSettings: '"opsz" 144' }}
-        >
-          {post.title}
-        </h1>
-
+    <article className="mx-auto w-full" style={{ maxWidth: 720, padding: 'calc(var(--u) * 3)', paddingTop: 'calc(var(--u) * 8)' }}>
+      <header style={{ marginBottom: 'calc(var(--u) * 6)' }}>
+        <div className="mono-label" style={{ marginBottom: 'calc(var(--u) * 3)', color: 'var(--color-wave)' }}>
+          Adventure · <time dateTime={post.date}>{formatDate(post.date)}</time>
+        </div>
         {post.route && post.route.length > 1 && (
-          <div className="mt-8 max-w-md">
+          <div style={{ marginBottom: 'calc(var(--u) * 4)' }}>
             <RouteStrip route={post.route} />
           </div>
         )}
-
-        {post.coverImage && (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
-            src={post.coverImage}
-            alt=""
-            className="mt-10 w-full rounded-sm border border-line"
-          />
-        )}
+        <h1 className="display" style={{ fontSize: 'clamp(32px, 4.5vw, 52px)', lineHeight: 1.1 }}>
+          {post.title}
+        </h1>
       </header>
-
-      <div className={`prose-fn ${styles.body}`}>
+      {post.coverImage && (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
+          src={post.coverImage}
+          alt=""
+          className="w-full rounded-lg"
+          style={{ marginBottom: 'calc(var(--u) * 5)', border: '1px solid var(--color-void-line)' }}
+        />
+      )}
+      <div className="prose post-body">
         <MDXContent code={post.code} />
       </div>
-
-      <p className="meta-mono mt-16 border-t border-line pt-4 text-ink-faint">
-        Logged · {post.route ? post.route.join(' → ') : formatDate(post.date)}
-      </p>
+      <PostMeta entry={post} />
     </article>
   )
 }

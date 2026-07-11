@@ -1,7 +1,11 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-import { getAllPosts, getPostBySlug } from '@/lib/posts'
-import PostLayout from '@/components/PostLayout'
+import { getAllPosts, getPostBySlug, type Post } from '@/lib/posts'
+import PoetryLayout from '@/components/layouts/PoetryLayout'
+import ProjectLayout from '@/components/layouts/ProjectLayout'
+import EssayLayout from '@/components/layouts/EssayLayout'
+import JournalLayout from '@/components/layouts/JournalLayout'
+import AdventureLayout from '@/components/layouts/AdventureLayout'
 
 export function generateStaticParams() {
   return getAllPosts().map((post) => ({ slug: post.slug }))
@@ -27,6 +31,14 @@ export async function generateMetadata({
   }
 }
 
+const LAYOUTS: Record<Post['type'], React.ComponentType<{ post: Post }>> = {
+  poetry: PoetryLayout,
+  project: ProjectLayout,
+  essay: EssayLayout,
+  journal: JournalLayout,
+  adventure: AdventureLayout,
+}
+
 export default async function PostPage({
   params,
 }: {
@@ -35,5 +47,6 @@ export default async function PostPage({
   const { slug } = await params
   const post = getPostBySlug(slug)
   if (!post) notFound()
-  return <PostLayout post={post} />
+  const Layout = LAYOUTS[post.type]
+  return <Layout post={post} />
 }

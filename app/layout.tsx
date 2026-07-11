@@ -1,42 +1,51 @@
 import type { Metadata } from 'next'
-import { Fraunces, Space_Grotesk, IBM_Plex_Mono } from 'next/font/google'
-import Script from 'next/script'
-import Header from '@/components/Header'
-import Footer from '@/components/Footer'
-import InkReveal from '@/components/InkReveal'
-import InkGhost from '@/components/InkGhost'
-import Terminal, { type TermPost } from '@/components/Terminal'
-import { getAllPosts, entryNumber, formatStamp } from '@/lib/posts'
+import {
+  Instrument_Serif,
+  Inter,
+  Geist_Mono,
+  Noto_Nastaliq_Urdu,
+} from 'next/font/google'
+import Header from '@/components/ui/Header'
+import Footer from '@/components/ui/Footer'
+import Cursor from '@/components/ui/Cursor'
+import ConstructionLines from '@/components/golden/ConstructionLines'
 import { site } from '@/lib/site'
 import './globals.css'
 
-const fraunces = Fraunces({
-  subsets: ['latin'],
-  variable: '--font-fraunces',
+const instrument = Instrument_Serif({
+  weight: '400',
   style: ['normal', 'italic'],
-  axes: ['opsz', 'SOFT', 'WONK'],
+  subsets: ['latin'],
+  variable: '--font-instrument',
   display: 'swap',
 })
 
-const grotesk = Space_Grotesk({
+const inter = Inter({
   subsets: ['latin'],
-  variable: '--font-grotesk',
+  variable: '--font-inter',
   display: 'swap',
 })
 
-const plexMono = IBM_Plex_Mono({
+const geistMono = Geist_Mono({
   subsets: ['latin'],
-  weight: ['400', '500', '600'],
-  style: ['normal', 'italic'],
-  variable: '--font-plex-mono',
+  variable: '--font-geist-mono',
   display: 'swap',
+})
+
+// Loaded lazily (no preload) — the browser only fetches it when Urdu text
+// actually renders on the page. Nastaliq is structural, not decorative.
+const nastaliq = Noto_Nastaliq_Urdu({
+  subsets: ['arabic'],
+  variable: '--font-noto-nastaliq',
+  display: 'swap',
+  preload: false,
 })
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
   title: {
     default: site.title,
-    template: '%s · Field Notes',
+    template: `%s · ${site.name}`,
   },
   description: site.description,
   alternates: {
@@ -49,34 +58,22 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
-  const termPosts: TermPost[] = getAllPosts().map((p) => ({
-    n: entryNumber(p),
-    slug: p.slug,
-    permalink: p.permalink,
-    type: p.type,
-    date: formatStamp(p.date),
-    title: p.title,
-  }))
-
   return (
     <html
       lang="en"
-      className={`${fraunces.variable} ${grotesk.variable} ${plexMono.variable}`}
-      suppressHydrationWarning
+      className={`${instrument.variable} ${inter.variable} ${geistMono.variable} ${nastaliq.variable}`}
     >
       <body>
-        <Script id="fn-theme-init" strategy="beforeInteractive">
-          {`try{if(localStorage.getItem('fn-theme')==='dusk')document.documentElement.dataset.theme='dusk'}catch(e){}`}
-        </Script>
-        <InkReveal />
         <a href="#main" className="skip-link">
           Skip to content
         </a>
-        <Header />
-        <main id="main">{children}</main>
-        <Footer />
-        <InkGhost />
-        <Terminal posts={termPosts} />
+        <ConstructionLines />
+        <div className="relative" style={{ zIndex: 2 }}>
+          <Header />
+          <main id="main">{children}</main>
+          <Footer />
+        </div>
+        <Cursor />
       </body>
     </html>
   )

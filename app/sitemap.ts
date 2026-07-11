@@ -1,5 +1,5 @@
 import type { MetadataRoute } from 'next'
-import { getAllPosts } from '@/lib/posts'
+import { getFeed } from '@/lib/posts'
 import { site } from '@/lib/site'
 
 export default function sitemap(): MetadataRoute.Sitemap {
@@ -7,9 +7,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
     url: `${site.url}${p}`,
     lastModified: new Date(),
   }))
-  const posts = getAllPosts().map((post) => ({
-    url: `${site.url}${post.permalink}`,
-    lastModified: new Date(post.date),
+  const entries = getFeed().map((entry) => ({
+    url: `${site.url}${entry.permalink}`,
+    lastModified: new Date(entry.date),
   }))
-  return [...pages, ...posts]
+  return [...pages, ...entries]
 }

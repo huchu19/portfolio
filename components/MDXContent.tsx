@@ -1,28 +1,25 @@
 import * as runtime from 'react/jsx-runtime'
-import type { ComponentProps, ReactNode } from 'react'
-import Footnote from '@/components/Footnote'
-
-/**
- * Renders Velite-compiled MDX (function-body code) with a shared
- * component map. Layout variants may extend the map via `components`.
- */
+import Link from 'next/link'
+import Footnote from '@/components/typography/Footnote'
+import Urdu from '@/components/typography/Urdu'
 
 const sharedComponents = {
   Footnote,
+  Urdu,
+  a: ({ href = '', ...props }: React.AnchorHTMLAttributes<HTMLAnchorElement>) =>
+    href.startsWith('/') ? (
+      <Link href={href} {...props} />
+    ) : (
+      <a href={href} rel="noopener" {...props} />
+    ),
 }
 
-function getMDXComponent(code: string) {
+function useMDXComponent(code: string) {
   const fn = new Function(code)
   return fn({ ...runtime }).default
 }
 
-export default function MDXContent({
-  code,
-  components,
-}: {
-  code: string
-  components?: Record<string, (props: ComponentProps<'div'>) => ReactNode>
-}) {
-  const Component = getMDXComponent(code)
-  return <Component components={{ ...sharedComponents, ...components }} />
+export default function MDXContent({ code }: { code: string }) {
+  const Component = useMDXComponent(code)
+  return <Component components={sharedComponents} />
 }

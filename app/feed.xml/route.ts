@@ -1,4 +1,4 @@
-import { getAllPosts, POST_TYPES } from '@/lib/posts'
+import { getFeed, ENTRY_TYPES, isFragment } from '@/lib/posts'
 import { site } from '@/lib/site'
 
 export const dynamic = 'force-static'
@@ -12,17 +12,20 @@ function esc(s: string): string {
 }
 
 export function GET() {
-  const items = getAllPosts()
-    .map(
-      (post) => `    <item>
-      <title>${esc(post.title)}</title>
-      <link>${site.url}${post.permalink}</link>
-      <guid isPermaLink="true">${site.url}${post.permalink}</guid>
-      <pubDate>${new Date(post.date).toUTCString()}</pubDate>
-      <category>${esc(POST_TYPES[post.type].label)}</category>
-      <description>${esc(post.excerpt)}</description>
-    </item>`,
-    )
+  const items = getFeed()
+    .map((entry) => {
+      const title =
+        entry.title ??
+        (isFragment(entry) ? `Fragment · ${entry.date.slice(0, 10)}` : entry.permalink)
+      return `    <item>
+      <title>${esc(title)}</title>
+      <link>${site.url}${entry.permalink}</link>
+      <guid isPermaLink="true">${site.url}${entry.permalink}</guid>
+      <pubDate>${new Date(entry.date).toUTCString()}</pubDate>
+      <category>${esc(ENTRY_TYPES[entry.type].label)}</category>
+      <description>${esc(entry.excerpt)}</description>
+    </item>`
+    })
     .join('\n')
 
   const xml = `<?xml version="1.0" encoding="UTF-8"?>

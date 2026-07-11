@@ -1,72 +1,105 @@
-import fs from 'node:fs'
-import path from 'node:path'
-import Masthead from '@/components/Masthead'
-import Feed from '@/components/Feed'
-import { getAllPosts, POST_TYPE_ORDER, type PostType } from '@/lib/posts'
+import Link from 'next/link'
+import { Suspense } from 'react'
+import Feed from '@/components/feed/Feed'
+import GhazalLine from '@/components/golden/GhazalLine'
+import SpiralOverlay from '@/components/golden/SpiralOverlay'
+import ScrollProgress from '@/components/ui/ScrollProgress'
+import { getFeed, getAllPosts, toFeedItem } from '@/lib/posts'
+import { now } from '@/lib/now'
+import { site } from '@/lib/site'
 
-/**
- * Poetry entries whisper their first verse line in the feed.
- * Velite only exposes compiled MDX, so we lift the opening line
- * straight from the source files at render time (server only).
- */
-function poetryFirstLines(): Record<string, string> {
-  const dir = path.join(process.cwd(), 'content', 'posts')
-  const verses: Record<string, string> = {}
-  let files: string[] = []
-  try {
-    files = fs.readdirSync(dir)
-  } catch {
-    return verses
-  }
-  for (const file of files) {
-    if (!file.endsWith('.mdx')) continue
-    const raw = fs.readFileSync(path.join(dir, file), 'utf8')
-    const match = raw.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n?([\s\S]*)$/)
-    if (!match) continue
-    const [, fm, body] = match
-    if (!/^type:\s*poetry\s*$/m.test(fm)) continue
-    const slug = /^slug:\s*(.+?)\s*$/m.exec(fm)?.[1]
-    if (!slug) continue
-    const line = body
-      .split(/\r?\n/)
-      .map((l) => l.trim())
-      .find(
-        (l) =>
-          l &&
-          !l.startsWith('*') &&
-          !l.startsWith('<') &&
-          !l.startsWith('#') &&
-          !l.startsWith('import '),
-      )
-    if (line) verses[slug] = line.replace(/\\$/, '')
-  }
-  return verses
-}
+const GHAZAL_LINES = [
+  'خوابوں کا یہ باغ جلتا بھی رہے تو کیا',
+  'راکھ سے بھی ایک نیا انقلاب پیدا ہوتا ہے',
+]
 
-type Search = { type?: string | string[] }
-
-export default async function HomePage({
-  searchParams,
-}: {
-  searchParams: Promise<Search>
-}) {
-  const params = await searchParams
-  const rawType = Array.isArray(params.type) ? params.type[0] : params.type
-  const initialType = POST_TYPE_ORDER.includes(rawType as PostType)
-    ? (rawType as PostType)
-    : null
-
-  const posts = getAllPosts()
-  const verses = poetryFirstLines()
-  const last = String(posts.length).padStart(2, '0')
+export default function HomePage() {
+  const items = getFeed().map(toFeedItem)
+  const featured = getAllPosts().find((p) => p.type === 'project')
 
   return (
-    <>
-      {/* ---- masthead: the front page of a personal broadsheet ---- */}
-      <Masthead last={last} />
+    <div style={{ padding: 'calc(var(--u) * 3)' }}>
+      <ScrollProgress />
+      <div className="home-grid">
+        <SpiralOverlay />
 
-      {/* ---- the stream ---- */}
-      <Feed posts={posts} initialType={initialType} verses={verses} />
-    </>
+        {/* 8² — the intro rectangle */}
+        <section className="cell-intro flex flex-col justify-center" style={{ padding: 'calc(var(--u) * 4)' }}>
+          <p className="mono-label" style={{ marginBottom: 'calc(var(--u) * 2)' }}>
+            Khwabon ka Bagh — a universe, not a portfolio
+          </p>
+          <h1 className="display" style={{ fontSize: 'clamp(52px, 7.5vw, 112px)', lineHeight: 1 }}>
+            Hussain
+            <br />
+            <em>Naqvi</em>
+          </h1>
+          <div style={{ marginTop: 'calc(var(--u) * 4)' }}>
+            <GhazalLine lines={GHAZAL_LINES} />
+            <p style={{ marginTop: 'var(--u)', fontSize: 14, color: 'var(--color-ash)', maxWidth: '44ch' }}>
+              {site.ghazalEn}
+            </p>
+          </div>
+          <p
+            className="mono-label"
+            style={{ marginTop: 'calc(var(--u) * 5)', color: 'var(--color-bone)', fontSize: 13 }}
+          >
+            Software engineer<span style={{ color: 'var(--color-ember)' }}> · </span>
+            Urdu poet<span style={{ color: 'var(--color-ember)' }}> · </span>
+            Delusional optimist
+          </p>
+        </section>
+
+        {/* 5² — the feed */}
+        <section className="cell-feed flex flex-col" aria-label="Feed" style={{ padding: 'calc(var(--u) * 2)' }}>
+          <Suspense fallback={null}>
+            <Feed items={items} />
+          </Suspense>
+        </section>
+
+        {/* 2×1 — quick links */}
+        <nav className="cell-quick flex flex-wrap items-center" aria-label="Quick links" style={{ gap: 'calc(var(--u) * 2)', padding: 'calc(var(--u) * 2)' }}>
+          {[
+            ['About', '/about'],
+            ['Archive', '/archive'],
+            ['Colophon', '/colophon'],
+          ].map(([label, href]) => (
+            <Link key={href} href={href} className="mono-label transition-colors hover:text-(--color-bone)">
+              {label}
+            </Link>
+          ))}
+        </nav>
+
+        {/* 2² — /now telemetry */}
+        <Link href="/now" className="cell-now panel flex flex-col justify-between overflow-hidden" style={{ padding: 'calc(var(--u) * 2)' }}>
+          <div className="mono-label" style={{ color: 'var(--color-ember)' }}>Now</div>
+          <div className="flex flex-col gap-1" style={{ fontSize: 12.5, color: 'var(--color-ash)' }}>
+            <span className="line-clamp-1">
+              <span style={{ color: 'var(--color-bone)' }}>Building</span> {now.building[0].name}
+            </span>
+            <span className="line-clamp-1">
+              <span style={{ color: 'var(--color-bone)' }}>Reading</span> {now.reading.title}
+            </span>
+            <span className="line-clamp-1">{now.location}</span>
+          </div>
+        </Link>
+
+        {/* 3² — featured */}
+        {featured && (
+          <Link href={featured.permalink} className="cell-featured panel flex flex-col justify-between overflow-hidden" style={{ padding: 'calc(var(--u) * 3)', borderLeft: '2px solid var(--color-ember)' }}>
+            <div>
+              <div className="mono-label" style={{ color: 'var(--color-ember)', marginBottom: 'var(--u)' }}>
+                Featured
+              </div>
+              <h2 className="display line-clamp-3" style={{ fontSize: 'clamp(20px, 1.8vw, 28px)' }}>
+                {featured.title}
+              </h2>
+            </div>
+            <p className="line-clamp-2" style={{ fontSize: 13.5, color: 'var(--color-ash)' }}>
+              {featured.excerpt}
+            </p>
+          </Link>
+        )}
+      </div>
+    </div>
   )
 }
