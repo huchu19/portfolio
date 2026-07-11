@@ -13,10 +13,10 @@ export default function ConstructionLines() {
   return (
     <svg
       aria-hidden
-      className="pointer-events-none fixed inset-0 h-full w-full"
+      className="construction-layer pointer-events-none fixed inset-0 h-full w-full"
       viewBox={`0 0 ${W} ${H}`}
       preserveAspectRatio="xMidYMid slice"
-      style={{ opacity: 0.035, zIndex: 1 }}
+      style={{ zIndex: 1 }}
     >
       <g stroke="var(--color-bone)" strokeWidth="1" fill="none">
         {squares.map((r, i) => (

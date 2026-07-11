@@ -13,12 +13,19 @@ import ThemeToggle from './ThemeToggle'
 export default function Header() {
   const [compressed, setCompressed] = useState(false)
   const [urduName, setUrduName] = useState(false)
+  const [urduPinned, setUrduPinned] = useState(false)
 
   useEffect(() => {
     const onScroll = () => setCompressed(window.scrollY > 64)
     onScroll()
     window.addEventListener('scroll', onScroll, { passive: true })
-    return () => window.removeEventListener('scroll', onScroll)
+    // >urdu in the palette pins the name to its mother tongue
+    const onPin = () => setUrduPinned((p) => !p)
+    window.addEventListener('egg:urdu', onPin)
+    return () => {
+      window.removeEventListener('scroll', onScroll)
+      window.removeEventListener('egg:urdu', onPin)
+    }
   }, [])
 
   return (
@@ -39,11 +46,11 @@ export default function Header() {
       <Link
         href="/"
         className="display transition-colors"
-        style={{ fontSize: compressed ? 18 : 22, fontStyle: urduName ? 'normal' : 'italic' }}
+        style={{ fontSize: compressed ? 18 : 22, fontStyle: urduName || urduPinned ? 'normal' : 'italic' }}
         onMouseEnter={() => setUrduName(true)}
         onMouseLeave={() => setUrduName(false)}
       >
-        {urduName ? (
+        {urduName || urduPinned ? (
           <span lang="ur" dir="rtl" className="urdu" style={{ fontSize: '0.85em' }}>
             حسین نقوی
           </span>

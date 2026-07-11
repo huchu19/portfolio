@@ -9,6 +9,7 @@ import Header from '@/components/ui/Header'
 import Footer from '@/components/ui/Footer'
 import Cursor from '@/components/ui/Cursor'
 import CommandPalette from '@/components/ui/CommandPalette'
+import EasterEggs from '@/components/ui/EasterEggs'
 import ConstructionLines from '@/components/golden/ConstructionLines'
 import { getFeed, toFeedItem } from '@/lib/posts'
 import { site } from '@/lib/site'
@@ -103,6 +104,7 @@ export default function RootLayout({
         </div>
         <CommandPalette items={paletteItems} />
         <Cursor />
+        <EasterEggs />
       </body>
     </html>
   )

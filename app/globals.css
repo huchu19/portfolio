@@ -545,6 +545,27 @@ a {
   }
 }
 
+/* Construction draft-lines: near-invisible until the dream state */
+.construction-layer {
+  opacity: 0.035;
+  transition: opacity 1.2s var(--ease);
+}
+body[data-dream] .construction-layer {
+  opacity: 0.16;
+}
+
+/* >spiral — the golden spiral redraws itself, bright, once */
+body[data-egg-spiral] .spiral-path {
+  opacity: 1;
+  animation: spiral-draw 3.2s var(--ease) both;
+}
+
+/* the dream state dims the waking page beneath the floating line */
+body[data-dream] main {
+  filter: brightness(0.55);
+  transition: filter 1.2s var(--ease);
+}
+
 /* Panels breathe: lift + ember edge-glow on hover */
 .panel {
   position: relative; /* paints above the absolutely-positioned spiral overlay */

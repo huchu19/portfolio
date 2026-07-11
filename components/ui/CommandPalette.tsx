@@ -42,7 +42,42 @@ const QUICK_LINKS = [
   { label: 'Guide — the making of', href: '/guide' },
 ]
 
-type Result = { label: string; sub?: string; href: string; dot: string }
+type Result = {
+  label: string
+  sub?: string
+  href: string
+  dot: string
+  /** terminal commands run instead of routing */
+  action?: () => void
+  /** help/whoami print in place — the palette stays open */
+  keepOpen?: boolean
+}
+
+/* The terminal — typed with `>`. Exactly five commands; no sudo, no
+   fake filesystem. Effects fire the egg events EasterEggs.tsx hears. */
+const TERMINAL: { cmd: string; sub: string; run?: () => void; keepOpen?: boolean }[] = [
+  { cmd: 'help', sub: 'spiral · garden · urdu · whoami — the garden listens', keepOpen: true },
+  {
+    cmd: 'whoami',
+    sub: 'Software engineer · Urdu poet · Delusional optimist — حسین نقوی',
+    keepOpen: true,
+  },
+  {
+    cmd: 'spiral',
+    sub: 'redraw the golden spiral, bright, once (home)',
+    run: () => window.dispatchEvent(new CustomEvent('egg:spiral')),
+  },
+  {
+    cmd: 'garden',
+    sub: 'six seconds of the dream state',
+    run: () => window.dispatchEvent(new CustomEvent('egg:dream')),
+  },
+  {
+    cmd: 'urdu',
+    sub: 'the name remembers its mother tongue',
+    run: () => window.dispatchEvent(new CustomEvent('egg:urdu')),
+  },
+]
 
 /**
  * The command palette — primary navigation (VISION Part 8). ⌘K opens it;
@@ -85,6 +120,22 @@ export default function CommandPalette({ items }: { items: FeedItem[] }) {
 
   const groups = useMemo((): { label: string; results: Result[] }[] => {
     const q = query.trim().toLowerCase()
+    if (q.startsWith('>')) {
+      const cmd = q.slice(1).trim()
+      return [
+        {
+          label: 'Terminal',
+          results: TERMINAL.filter((t) => t.cmd.startsWith(cmd)).map((t) => ({
+            label: `>${t.cmd}`,
+            sub: t.sub,
+            href: '',
+            dot: 'var(--color-moss)',
+            action: t.run,
+            keepOpen: t.keepOpen,
+          })),
+        },
+      ]
+    }
     if (!q) {
       return [
         { label: 'Go to', results: QUICK_LINKS.map((l) => ({ label: l.label, href: l.href, dot: 'var(--color-ember)' })) },
@@ -114,9 +165,11 @@ export default function CommandPalette({ items }: { items: FeedItem[] }) {
   const flat = useMemo(() => groups.flatMap((g) => g.results), [groups])
 
   const go = useCallback(
-    (href: string) => {
+    (r: Result) => {
+      r.action?.()
+      if (r.keepOpen) return
       setOpen(false)
-      router.push(href)
+      if (!r.action && r.href) router.push(r.href)
     },
     [router],
   )
@@ -130,7 +183,7 @@ export default function CommandPalette({ items }: { items: FeedItem[] }) {
       setActive((a) => Math.max(a - 1, 0))
     } else if (e.key === 'Enter' && flat[active]) {
       e.preventDefault()
-      go(flat[active].href)
+      go(flat[active])
     }
   }
 
@@ -213,7 +266,7 @@ export default function CommandPalette({ items }: { items: FeedItem[] }) {
                         key={`${r.href}-${i}`}
                         type="button"
                         data-index={i}
-                        onClick={() => go(r.href)}
+                        onClick={() => go(r)}
                         onMouseMove={() => setActive(i)}
                         className="flex w-full cursor-pointer items-baseline gap-3 text-left"
                         style={{
@@ -240,6 +293,7 @@ export default function CommandPalette({ items }: { items: FeedItem[] }) {
               <span>↑↓ navigate</span>
               <span>↵ open</span>
               <span>esc close</span>
+              <span style={{ marginLeft: 'auto', color: 'var(--color-void-line)' }}>&gt; terminal</span>
             </div>
           </motion.div>
         </motion.div>
