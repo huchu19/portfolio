@@ -117,11 +117,65 @@ below the fold — moved inside the grid's empty bottom-left corner.
   `/writing/jobhunter-uk-sponsor-finder`, and the home grid — console
   `[]` everywhere.
 
+## Phase 8 — the fable-25 pass (eight features, one night)
+
+**Built**, borrowing techniques from the FABLE 25 showcase:
+- **Option A verbatim**: continuous scroll-driven fibonacci zoom on a
+  sticky ~460vh track; one smoothed spring interpolates the camera in
+  log-scale space through 8² → 5² → 3² → 2². All wheel/touch hijacking
+  deleted — native scroll chaining protects the feed now. Chips became
+  scroll anchors + progress indicator.
+- **Seeded generative art** (`lib/generative.ts`): slug-hashed PRNG →
+  golden-angle phyllotaxis, flow fields, garden stems. Powers per-post
+  cover art (server SVG, token colors), the rebuilt OG cards
+  (1200×630, void/ember, Instrument Serif — closes the DECISIONS
+  TODO), and the generated wallpaper at `/generated/wallpaper.svg`
+  (placeholder SVG deleted).
+- **Adventure route arc**: reading progress draws ember along the
+  wave-toned flight path; airports light as passed; sticky under the
+  header on md+. (The Phase-3 dasharray bug class tried to return via
+  vector-effect — caught in one screenshot pass.)
+- **Reading garden**: seeded moss stalks grow in the left gutter with
+  reading progress on essay/project/journal/adventure pages (≥1280px);
+  one ember bloom opens at 100%. Poetry stays bare — the darkness IS
+  the design.
+- **Kinetic ghazal**: word-by-word Nastaliq reveal (whitespace splits
+  only, no overflow masks), blur-settle on the site easing.
+- **Recitation player**: lazy WebAudio graph, 21-bar ember visualizer,
+  golden-split seek line. Ships dormant until real audio exists.
+- **/guide**: the making-of page — critique-loop story with before/after
+  shots, live stats from velite, curated decisions.
+- **Terminal + eggs**: `>` in ⌘K opens a five-command terminal (help,
+  whoami, spiral, garden, urdu); typing "khwab" anywhere summons six
+  seconds of the dream state.
+
+**Verified**: build all-static (OG images included, `force-static`);
+screenshot matrix at 1440×900 + 390×844 with console `[]`; `--reduced`
+and `--light` flags added to `tools/shot.mjs` so the reduced-motion and
+light-mode contracts are screenshot-proven, not promised.
+
+**Caught by the loop this phase:**
+1. OG dot field crowded the title column — disc moved right of the
+   golden line.
+2. Route arc rendered repeating dashes — Chrome ignores `pathLength`
+   under `vector-effect: non-scaling-stroke` (Phase 3's bug, new coat).
+3. Hydration mismatch in the reduced-motion ghazal — the reduced branch
+   rendered different DOM; fixed by keeping one structure and swapping
+   variants only.
+4. Framer's `useReducedMotion` reported false on post pages while
+   `matchMedia` said reduce — replaced with our own
+   `hooks/usePrefersReducedMotion` everywhere the contract matters.
+
 ## Remains for Hussain (content, not code)
 
 - Rewrite everything marked `draft: rewrite me` (About Urdu paragraph
   especially — it should be yours, not mine). The four project posts
   now carry real facts but my phrasing — put your voice on them.
-- Replace the placeholder wallpaper SVG with the real photo.
-- Set the real domain in `lib/site.ts`; rebuild OG cards (see DECISIONS).
+- The wallpaper is now generated (`/generated/wallpaper.svg`) — swap in
+  the real photo whenever you like.
+- Set the real domain in `lib/site.ts` — OG cards are rebuilt and will
+  use it the moment it lands.
+- Record the ghazals: drop an mp3 path in any poetry post or fragment
+  `media:` field and the recitation player wakes up.
+- Rewrite the /guide prose — it is about you, in my words.
 - Keep planting fragments — the model is 3 lines of frontmatter away.

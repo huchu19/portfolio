@@ -1,7 +1,8 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
+import { AnimatePresence, motion } from 'framer-motion'
+import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion'
 import { site } from '@/lib/site'
 
 /**
@@ -19,7 +20,7 @@ import { site } from '@/lib/site'
  */
 export default function EasterEggs() {
   const [dreaming, setDreaming] = useState(false)
-  const reduced = useReducedMotion()
+  const reduced = usePrefersReducedMotion()
 
   useEffect(() => {
     let buffer = ''

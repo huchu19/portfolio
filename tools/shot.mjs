@@ -1,11 +1,15 @@
 // Screenshot critique harness (FABLE 25 pattern).
-// usage: node tools/shot.js <url> <out.png> [WxH=1440x900] [scrollY=0] [waitMs=2500]
+// usage: node tools/shot.js <url> <out.png> [WxH=1440x900] [scrollY=0] [waitMs=2500] [--reduced] [--light]
+//   --reduced  emulate prefers-reduced-motion: reduce
+//   --light    load with the light-theme localStorage preference
 // prints: {"out":"...","docHeight":N,"errors":[...]}
 import puppeteer from 'puppeteer'
 
-const [url, out, size = '1440x900', scrollY = '0', waitMs = '2500'] = process.argv.slice(2)
+const flags = process.argv.slice(2).filter((a) => a.startsWith('--'))
+const args = process.argv.slice(2).filter((a) => !a.startsWith('--'))
+const [url, out, size = '1440x900', scrollY = '0', waitMs = '2500'] = args
 if (!url || !out) {
-  console.error('usage: node tools/shot.js <url> <out.png> [WxH] [scrollY] [waitMs]')
+  console.error('usage: node tools/shot.js <url> <out.png> [WxH] [scrollY] [waitMs] [--reduced] [--light]')
   process.exit(1)
 }
 const [width, height] = size.split('x').map(Number)
@@ -13,6 +17,12 @@ const [width, height] = size.split('x').map(Number)
 const browser = await puppeteer.launch({ headless: 'shell' })
 const page = await browser.newPage()
 await page.setViewport({ width, height, deviceScaleFactor: 2 })
+if (flags.includes('--reduced')) {
+  await page.emulateMediaFeatures([{ name: 'prefers-reduced-motion', value: 'reduce' }])
+}
+if (flags.includes('--light')) {
+  await page.evaluateOnNewDocument(() => localStorage.setItem('theme', 'light'))
+}
 const errors = []
 page.on('console', (m) => m.type() === 'error' && errors.push(m.text()))
 page.on('pageerror', (e) => errors.push(String(e)))

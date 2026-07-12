@@ -1,7 +1,7 @@
 'use client'
 
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { useReducedMotion } from 'framer-motion'
+import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion'
 import { goldenSplit } from '@/lib/golden'
 
 /**
@@ -33,7 +33,7 @@ export default function AudioPlayer({ src, label }: { src: string; label?: strin
   const [playing, setPlaying] = useState(false)
   const [time, setTime] = useState(0)
   const [duration, setDuration] = useState(0)
-  const reduced = useReducedMotion() ?? false
+  const reduced = usePrefersReducedMotion()
 
   const stopDrawing = useCallback(() => {
     cancelAnimationFrame(rafRef.current)

@@ -5,11 +5,11 @@ import { useRef } from 'react'
 import {
   motion,
   useMotionValueEvent,
-  useReducedMotion,
   useScroll,
   useSpring,
   useTransform,
 } from 'framer-motion'
+import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion'
 
 /**
  * Option A (Fibonacci Zoom), verbatim this time: the homepage is a
@@ -62,7 +62,7 @@ const PARAMS = [null, ...STOPS].map(stopParams)
 export default function ZoomStage({ children }: { children: React.ReactNode }) {
   const [enabled, setEnabled] = useState(false)
   const [activeIdx, setActiveIdx] = useState(0)
-  const reduced = useReducedMotion()
+  const reduced = usePrefersReducedMotion()
   const trackRef = useRef<HTMLDivElement>(null)
   const zoomable = enabled && !reduced
 

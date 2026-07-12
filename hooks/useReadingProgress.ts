@@ -1,7 +1,8 @@
 'use client'
 
 import type { RefObject } from 'react'
-import { useReducedMotion, useScroll, useSpring } from 'framer-motion'
+import { useScroll, useSpring } from 'framer-motion'
+import { usePrefersReducedMotion } from './usePrefersReducedMotion'
 
 /**
  * One smoothed progress value per read — the site's scroll heartbeat.
@@ -15,7 +16,7 @@ import { useReducedMotion, useScroll, useSpring } from 'framer-motion'
  * they don't each re-derive it.
  */
 export function useReadingProgress(target: RefObject<HTMLElement | null>) {
-  const reduced = useReducedMotion() ?? false
+  const reduced = usePrefersReducedMotion()
   const { scrollYProgress } = useScroll({
     target,
     offset: ['start start', 'end end'],
