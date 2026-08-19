@@ -32,7 +32,7 @@ export default function ArchivePage() {
             className="display"
             style={{
               fontSize: 'clamp(48px, 7vw, 84px)',
-              color: 'var(--color-void-line)',
+              color: 'var(--color-line)',
               lineHeight: 1,
               marginBottom: 'calc(var(--u) * 3)',
             }}
@@ -50,7 +50,7 @@ export default function ArchivePage() {
                     href={entry.permalink}
                     className="group flex items-baseline gap-x-4 border-b transition-colors"
                     style={{
-                      borderColor: 'var(--color-void-line)',
+                      borderColor: 'var(--color-line)',
                       paddingBlock: 'calc(var(--u) * 1.5)',
                     }}
                   >
@@ -70,14 +70,14 @@ export default function ArchivePage() {
                     {isFragment(entry) ? (
                       <span
                         className="line-clamp-1 min-w-0"
-                        style={{ fontSize: 14.5, color: 'var(--color-ash)' }}
+                        style={{ fontSize: 14.5, color: 'var(--color-fg-soft)' }}
                       >
                         {entry.title ?? entry.excerpt}
                       </span>
                     ) : (
                       <span
-                        className="display min-w-0 transition-colors group-hover:text-(--color-ember-bright)"
-                        style={{ fontSize: 'clamp(17px, 2vw, 21px)', color: 'var(--color-white)' }}
+                        className="display min-w-0 transition-colors group-hover:text-(--color-accent-bright)"
+                        style={{ fontSize: 'clamp(17px, 2vw, 21px)', color: 'var(--color-fg-bright)' }}
                       >
                         {entry.title}
                       </span>

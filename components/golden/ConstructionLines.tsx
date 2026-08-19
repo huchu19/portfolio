@@ -18,11 +18,11 @@ export default function ConstructionLines() {
       preserveAspectRatio="xMidYMid slice"
       style={{ zIndex: 1 }}
     >
-      <g stroke="var(--color-bone)" strokeWidth="1" fill="none">
+      <g stroke="var(--color-fg)" strokeWidth="1" fill="none">
         {squares.map((r, i) => (
           <rect key={i} x={r.x} y={r.y} width={r.w} height={r.h} />
         ))}
-        <path d={spiralPath} stroke="var(--color-ember)" />
+        <path d={spiralPath} stroke="var(--color-accent)" />
       </g>
     </svg>
   )

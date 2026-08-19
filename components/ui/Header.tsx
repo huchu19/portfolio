@@ -34,9 +34,9 @@ export default function Header() {
       style={{
         paddingInline: 'calc(var(--u) * 3)',
         paddingBlock: compressed ? 'var(--u)' : 'calc(var(--u) * 2)',
-        borderColor: compressed ? 'var(--color-void-line)' : 'transparent',
+        borderColor: compressed ? 'var(--color-line)' : 'transparent',
         background: compressed
-          ? 'color-mix(in srgb, var(--color-void) 88%, transparent)'
+          ? 'color-mix(in srgb, var(--color-bg) 88%, transparent)'
           : 'transparent',
         backdropFilter: compressed ? 'blur(12px)' : 'none',
         transitionTimingFunction: 'var(--ease)',
@@ -64,8 +64,8 @@ export default function Header() {
           type="button"
           aria-label="Open command palette"
           onClick={() => window.dispatchEvent(new CustomEvent('palette:open'))}
-          className="mono-label cursor-pointer rounded border px-2 py-1 transition-colors hover:text-(--color-bone)"
-          style={{ borderColor: 'var(--color-void-line)' }}
+          className="mono-label cursor-pointer rounded border px-2 py-1 transition-colors hover:text-(--color-fg)"
+          style={{ borderColor: 'var(--color-line)' }}
         >
           ⌘K
         </button>

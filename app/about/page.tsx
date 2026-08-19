@@ -74,7 +74,7 @@ export default function AboutPage() {
         style={{
           marginTop: 'calc(var(--u) * 8)',
           paddingTop: 'calc(var(--u) * 6)',
-          borderTop: '1px solid var(--color-void-line)',
+          borderTop: '1px solid var(--color-line)',
         }}
       >
         {/* draft: rewrite me — a paragraph in your own Urdu, not a translation exercise */}
@@ -83,7 +83,7 @@ export default function AboutPage() {
           کوڈ دن کو لکھتا ہوں، شعر رات کو، اور دونوں میں ایک ہی تمنا ہے —
           کہ کچھ ایسا بن جائے جو پہلے نہیں تھا۔
         </Urdu>
-        <p style={{ marginTop: 'calc(var(--u) * 3)', fontSize: 14, color: 'var(--color-ash)', maxWidth: '58ch' }}>
+        <p style={{ marginTop: 'calc(var(--u) * 3)', fontSize: 14, color: 'var(--color-fg-soft)', maxWidth: '58ch' }}>
           Urdu is my mother&apos;s tongue — the dreams arrive in it; the accounting happens
           in English. I write code by day and couplets by night, and both carry the same
           desire: that something should come to exist which didn&apos;t before.
@@ -91,7 +91,7 @@ export default function AboutPage() {
       </section>
 
       <p className="mono-label" style={{ marginTop: 'calc(var(--u) * 8)' }}>
-        <Link href="/now" className="transition-colors hover:text-(--color-bone)">
+        <Link href="/now" className="transition-colors hover:text-(--color-fg)">
           What I&apos;m doing now →
         </Link>
       </p>

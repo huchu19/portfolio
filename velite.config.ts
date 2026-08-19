@@ -10,18 +10,20 @@ const posts = defineCollection({
       title: s.string().max(120),
       slug: s.slug('posts'),
       date: s.isodate(),
-      type: s.enum(['project', 'essay', 'poetry', 'journal', 'adventure']),
+      type: s.enum(['project', 'note', 'journal']),
       excerpt: s.string().max(300),
       tags: s.array(s.string()).default([]),
       lang,
       coverImage: s.string().optional(),
       media: s.string().optional(), // audio path — poetry recitations
 
-      // adventure posts: airport/city hops, e.g. ["LHE", "DXB", "LHR"]
+      // travel notes: airport/city hops, e.g. ["LHE", "DXB", "LHR"]
       route: s.array(s.string()).optional(),
       // project posts only
       stack: s.array(s.string()).optional(), // mono chips: Next.js · TypeScript · …
       status: s.enum(['live', 'in-progress', 'archived']).optional(),
+      repo: s.string().optional(), // "huchu19/tifltoys" — live GitHub facts
+
       projectLinks: s
         .object({
           live: s.string().url().optional(),

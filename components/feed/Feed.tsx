@@ -3,17 +3,15 @@
 import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
-import FeedPanel, { PANEL_SHAPE, fragmentDot } from './FeedPanel'
+import FeedPanel, { panelShape, fragmentDot } from './FeedPanel'
 import type { FeedItem, FeedItemType } from './types'
 
 const FILTERS: { value: FeedItemType | 'all'; label: string }[] = [
   { value: 'all', label: 'All' },
   { value: 'project', label: 'Projects' },
-  { value: 'essay', label: 'Essays' },
-  { value: 'poetry', label: 'Poetry' },
-  { value: 'fragment', label: 'Fragments' },
+  { value: 'note', label: 'Notes' },
   { value: 'journal', label: 'Journal' },
-  { value: 'adventure', label: 'Adventures' },
+  { value: 'fragment', label: 'Fragments' },
 ]
 
 /**
@@ -49,8 +47,8 @@ export default function Feed({ items }: { items: FeedItem[] }) {
               className="mono-label transition-colors"
               aria-current={active ? 'true' : undefined}
               style={{
-                color: active ? 'var(--color-bone)' : undefined,
-                borderBottom: active ? '1px solid var(--color-ember)' : '1px solid transparent',
+                color: active ? 'var(--color-fg)' : undefined,
+                borderBottom: active ? '1px solid var(--color-accent)' : '1px solid transparent',
                 paddingBottom: 2,
               }}
             >
@@ -70,7 +68,7 @@ export default function Feed({ items }: { items: FeedItem[] }) {
                 href={active ? '?type=fragment' : `?type=fragment&tag=${t}`}
                 scroll={false}
                 className="mono-label flex items-center gap-1.5 transition-colors"
-                style={{ fontSize: 11, color: active ? 'var(--color-bone)' : undefined }}
+                style={{ fontSize: 11, color: active ? 'var(--color-fg)' : undefined }}
               >
                 <span aria-hidden className="rounded-full" style={{ width: 5, height: 5, background: fragmentDot([t]) }} />
                 {t}
@@ -93,7 +91,7 @@ export default function Feed({ items }: { items: FeedItem[] }) {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={reduced ? undefined : { opacity: 0, scale: 0.98 }}
               transition={{ duration: 0.4, delay: i * 0.03, ease: [0.22, 1, 0.36, 1] }}
-              className={`${PANEL_SHAPE[item.type]} max-sm:col-span-1`}
+              className={`${panelShape(item)} max-sm:col-span-1`}
             >
               <FeedPanel item={item} />
             </motion.div>

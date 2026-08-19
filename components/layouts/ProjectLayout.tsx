@@ -5,9 +5,9 @@ import PostMeta from './PostMeta'
 import { formatDate, type Post } from '@/lib/posts'
 
 const STATUS_LABEL: Record<string, { label: string; color: string }> = {
-  live: { label: 'Live', color: 'var(--color-ember)' },
-  'in-progress': { label: 'In Progress', color: 'var(--color-ember-bright)' },
-  archived: { label: 'Archived', color: 'var(--color-ash)' },
+  live: { label: 'Live', color: 'var(--color-accent)' },
+  'in-progress': { label: 'In Progress', color: 'var(--color-accent-bright)' },
+  archived: { label: 'Archived', color: 'var(--color-fg-soft)' },
 }
 
 /** Dense dossier energy: title, stack chips, status badge, live/repo links. */
@@ -15,9 +15,9 @@ export default function ProjectLayout({ post }: { post: Post }) {
   const status = post.status ? STATUS_LABEL[post.status] : undefined
   return (
     <article className="mx-auto w-full" style={{ maxWidth: 760, padding: 'calc(var(--u) * 3)', paddingTop: 'calc(var(--u) * 8)' }}>
-      <header style={{ marginBottom: 'calc(var(--u) * 6)', borderBottom: '1px solid var(--color-void-line)', paddingBottom: 'calc(var(--u) * 4)' }}>
+      <header style={{ marginBottom: 'calc(var(--u) * 6)', borderBottom: '1px solid var(--color-line)', paddingBottom: 'calc(var(--u) * 4)' }}>
         <div className="mono-label flex flex-wrap items-center gap-x-4 gap-y-2" style={{ marginBottom: 'calc(var(--u) * 2)' }}>
-          <span style={{ color: 'var(--color-ember)' }}>Project</span>
+          <span style={{ color: 'var(--color-accent)' }}>Project</span>
           <time dateTime={post.date}>{formatDate(post.date)}</time>
           {status && (
             <span className="flex items-center gap-1.5" style={{ color: status.color }}>
@@ -36,10 +36,10 @@ export default function ProjectLayout({ post }: { post: Post }) {
                 style={{
                   fontSize: 11,
                   padding: '2px calc(var(--u) * 1.5)',
-                  border: '1px solid var(--color-void-line)',
+                  border: '1px solid var(--color-line)',
                   borderRadius: 4,
-                  background: 'var(--color-void-raised)',
-                  color: 'var(--color-bone)',
+                  background: 'var(--color-surface)',
+                  color: 'var(--color-fg)',
                 }}
               >
                 {s}
@@ -53,12 +53,12 @@ export default function ProjectLayout({ post }: { post: Post }) {
               <a
                 href={post.projectLinks.live}
                 rel="noopener"
-                className="mono-label transition-colors hover:text-(--color-void)"
+                className="mono-label transition-colors hover:text-(--color-bg)"
                 style={{
                   padding: 'var(--u) calc(var(--u) * 2)',
-                  border: '1px solid var(--color-ember-deep)',
+                  border: '1px solid var(--color-accent-deep)',
                   borderRadius: 4,
-                  color: 'var(--color-ember-bright)',
+                  color: 'var(--color-accent-bright)',
                 }}
               >
                 Live ↗
@@ -68,8 +68,8 @@ export default function ProjectLayout({ post }: { post: Post }) {
               <a
                 href={post.projectLinks.repo}
                 rel="noopener"
-                className="mono-label transition-colors hover:text-(--color-bone)"
-                style={{ padding: 'var(--u) calc(var(--u) * 2)', border: '1px solid var(--color-void-line)', borderRadius: 4 }}
+                className="mono-label transition-colors hover:text-(--color-fg)"
+                style={{ padding: 'var(--u) calc(var(--u) * 2)', border: '1px solid var(--color-line)', borderRadius: 4 }}
               >
                 Repository ↗
               </a>
@@ -83,7 +83,7 @@ export default function ProjectLayout({ post }: { post: Post }) {
           src={post.coverImage}
           alt={`${post.title} — screenshot`}
           className="w-full rounded-lg"
-          style={{ marginBottom: 'calc(var(--u) * 5)', border: '1px solid var(--color-void-line)' }}
+          style={{ marginBottom: 'calc(var(--u) * 5)', border: '1px solid var(--color-line)' }}
         />
       ) : (
         <CoverArt seed={post.slug} type={post.type} height={240} className="cover-art-block" />

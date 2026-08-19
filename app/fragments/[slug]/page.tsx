@@ -71,7 +71,7 @@ export default async function FragmentPage({
             src={fragment.media}
             alt=""
             className="w-full rounded-lg"
-            style={{ marginBottom: 'calc(var(--u) * 3)', border: '1px solid var(--color-void-line)' }}
+            style={{ marginBottom: 'calc(var(--u) * 3)', border: '1px solid var(--color-line)' }}
           />
         ))}
       {fragment.link && (
@@ -79,7 +79,7 @@ export default async function FragmentPage({
           href={fragment.link}
           rel="noopener"
           className="mono-label"
-          style={{ color: 'var(--color-wave)', marginBottom: 'calc(var(--u) * 2)' }}
+          style={{ color: 'var(--color-fg-soft)', marginBottom: 'calc(var(--u) * 2)' }}
         >
           {new URL(fragment.link).hostname.replace(/^www\./, '')} ↗
         </a>
@@ -91,17 +91,17 @@ export default async function FragmentPage({
       <nav
         className="mono-label flex justify-between"
         aria-label="Fragment navigation"
-        style={{ marginTop: 'calc(var(--u) * 6)', paddingTop: 'calc(var(--u) * 2)', borderTop: '1px solid var(--color-void-line)' }}
+        style={{ marginTop: 'calc(var(--u) * 6)', paddingTop: 'calc(var(--u) * 2)', borderTop: '1px solid var(--color-line)' }}
       >
         {older ? (
-          <Link href={older.permalink} className="transition-colors hover:text-(--color-bone)">
+          <Link href={older.permalink} className="transition-colors hover:text-(--color-fg)">
             ← Older
           </Link>
         ) : (
           <span />
         )}
         {newer ? (
-          <Link href={newer.permalink} className="transition-colors hover:text-(--color-bone)">
+          <Link href={newer.permalink} className="transition-colors hover:text-(--color-fg)">
             Newer →
           </Link>
         ) : (

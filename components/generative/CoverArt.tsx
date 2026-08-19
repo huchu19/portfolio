@@ -8,8 +8,8 @@ import { flowStrokes, phyllotaxis, seededRng } from '@/lib/generative'
  * home grid. Colors are tokens, so light mode is free.
  */
 
-const BANDS = ['var(--color-ash)', 'var(--color-wave)', 'var(--color-ember)']
-const FRAGMENT_BANDS = ['var(--color-ash)', 'var(--color-moss)', 'var(--color-ember)']
+const BANDS = ['var(--color-fg-soft)', 'var(--color-fg-faint)', 'var(--color-accent)']
+const FRAGMENT_BANDS = ['var(--color-fg-soft)', 'var(--color-fg-faint)', 'var(--color-accent)']
 
 type Props = {
   seed: string
@@ -22,7 +22,7 @@ type Props = {
 export default function CoverArt({ seed, type, height = 220, className }: Props) {
   const rng = seededRng(seed)
   const bands = type === 'fragment' ? FRAGMENT_BANDS : BANDS
-  const dotty = type === 'project' || type === 'poetry' || type === 'fragment'
+  const dotty = type === 'project' || type === 'fragment'
 
   return (
     <div
@@ -32,8 +32,8 @@ export default function CoverArt({ seed, type, height = 220, className }: Props)
         height,
         overflow: 'hidden',
         borderRadius: 8,
-        border: '1px solid var(--color-void-line)',
-        background: 'var(--color-void-raised)',
+        border: '1px solid var(--color-line)',
+        background: 'var(--color-surface)',
       }}
     >
       <svg
@@ -42,7 +42,7 @@ export default function CoverArt({ seed, type, height = 220, className }: Props)
         style={{ width: '100%', height: '100%', display: 'block' }}
       >
         {dotty
-          ? phyllotaxis(rng, type === 'poetry' ? 89 : 233).map((d, i) => (
+          ? phyllotaxis(rng, 233).map((d, i) => (
               <circle
                 key={i}
                 cx={13 * INV_PHI + d.x * 3.4}

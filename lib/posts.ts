@@ -1,5 +1,3 @@
-import fs from 'node:fs'
-import path from 'node:path'
 import { posts, fragments } from '@/.velite'
 
 export type Post = (typeof posts)[number]
@@ -52,66 +50,37 @@ export function getFeedGroupedByYear(): [string, Entry[]][] {
 
 export const ENTRY_TYPES: Record<
   EntryType,
-  { label: string; plural: string; dot: string }
+  { label: string; plural: string; glyph: string; dot: string }
 > = {
-  project: { label: 'Project', plural: 'Projects', dot: 'var(--dot-project)' },
-  essay: { label: 'Essay', plural: 'Essays', dot: 'var(--dot-essay)' },
-  poetry: { label: 'Poetry', plural: 'Poetry', dot: 'var(--dot-poetry)' },
-  journal: { label: 'Journal', plural: 'Journal', dot: 'var(--dot-journal)' },
-  adventure: {
-    label: 'Adventure',
-    plural: 'Adventures',
-    dot: 'var(--dot-adventure)',
+  project: {
+    label: 'Project',
+    plural: 'Projects',
+    glyph: '⌗',
+    dot: 'var(--dot-project)',
+  },
+  note: { label: 'Note', plural: 'Notes', glyph: '§', dot: 'var(--dot-note)' },
+  journal: {
+    label: 'Journal',
+    plural: 'Journal',
+    glyph: '¶',
+    dot: 'var(--dot-journal)',
   },
   fragment: {
     label: 'Fragment',
     plural: 'Fragments',
+    glyph: '·',
     dot: 'var(--dot-fragment)',
   },
 }
 
 export const ENTRY_TYPE_ORDER: EntryType[] = [
   'project',
-  'essay',
-  'poetry',
+  'note',
   'journal',
-  'adventure',
   'fragment',
 ]
 
 import type { FeedItem } from '@/components/feed/types'
-
-/**
- * Poetry panels whisper the poem's opening line, not the excerpt.
- * Velite only exposes compiled MDX, so we lift it from source (server only).
- */
-let poetryLines: Map<string, string> | null = null
-function poetryFirstLine(slug: string): string | undefined {
-  if (!poetryLines) {
-    poetryLines = new Map()
-    const dir = path.join(process.cwd(), 'content', 'posts')
-    let files: string[] = []
-    try {
-      files = fs.readdirSync(dir).filter((f) => f.endsWith('.mdx'))
-    } catch {
-      return undefined
-    }
-    for (const file of files) {
-      const raw = fs.readFileSync(path.join(dir, file), 'utf8')
-      const fm = raw.match(/^---\n([\s\S]*?)\n---\n([\s\S]*)$/)
-      if (!fm) continue
-      if (!/^type:\s*poetry\s*$/m.test(fm[1])) continue
-      const s = fm[1].match(/^slug:\s*(\S+)\s*$/m)?.[1]
-      if (!s) continue
-      const line = fm[2]
-        .split('\n')
-        .map((l) => l.trim())
-        .find((l) => l && !l.startsWith('<') && !/^[*_].*[*_]$/.test(l))
-      if (line) poetryLines.set(s, line.replace(/\\$/, '').trim())
-    }
-  }
-  return poetryLines.get(slug)
-}
 
 /** Map an Entry to the lean shape the client feed grid renders. */
 export function toFeedItem(entry: Entry): FeedItem {
@@ -122,10 +91,7 @@ export function toFeedItem(entry: Entry): FeedItem {
     dateLabel: formatDate(entry.date),
     tags: entry.tags,
     lang: entry.lang,
-    excerpt:
-      entry.type === 'poetry'
-        ? (poetryFirstLine(entry.slug) ?? entry.excerpt)
-        : entry.excerpt,
+    excerpt: entry.excerpt,
   }
   if (isFragment(entry)) {
     return { ...base, title: entry.title, media: entry.media, link: entry.link }

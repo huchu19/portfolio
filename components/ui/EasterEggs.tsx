@@ -84,8 +84,8 @@ export default function EasterEggs() {
             className="urdu"
             style={{
               fontSize: 'clamp(24px, 4vw, 44px)',
-              color: 'var(--color-bone)',
-              textShadow: '0 0 48px color-mix(in srgb, var(--color-ember) 55%, transparent)',
+              color: 'var(--color-fg)',
+              textShadow: '0 0 48px color-mix(in srgb, var(--color-accent) 55%, transparent)',
               padding: 'calc(var(--u) * 3)',
               textAlign: 'center',
             }}

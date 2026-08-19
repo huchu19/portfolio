@@ -18,7 +18,7 @@ function Stat({ value, label }: { value: string; label: string }) {
       className="panel flex flex-col justify-between"
       style={{ padding: 'calc(var(--u) * 2)', minHeight: 96 }}
     >
-      <span className="display" style={{ fontSize: 'clamp(26px, 3vw, 40px)', color: 'var(--color-bone)' }}>
+      <span className="display" style={{ fontSize: 'clamp(26px, 3vw, 40px)', color: 'var(--color-fg)' }}>
         {value}
       </span>
       <span className="mono-label" style={{ fontSize: 10.5 }}>{label}</span>
@@ -45,7 +45,7 @@ function Shot({
         width={width}
         height={height}
         className="w-full rounded-lg"
-        style={{ border: '1px solid var(--color-void-line)' }}
+        style={{ border: '1px solid var(--color-line)' }}
       />
       <figcaption className="mono-label" style={{ fontSize: 10.5, marginTop: 'var(--u)' }}>
         {caption}
@@ -73,7 +73,7 @@ export default function GuidePage() {
 
       <div style={{ marginTop: 'calc(var(--u) * 4)', maxWidth: 520 }}>
         <Urdu size={22}>{site.ghazalUr}</Urdu>
-        <p style={{ marginTop: 'var(--u)', fontSize: 14, color: 'var(--color-ash)' }}>{site.ghazalEn}</p>
+        <p style={{ marginTop: 'var(--u)', fontSize: 14, color: 'var(--color-fg-soft)' }}>{site.ghazalEn}</p>
       </div>
 
       {/* the numbers, on fibonacci-proportioned panels */}

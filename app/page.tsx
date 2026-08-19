@@ -36,16 +36,16 @@ export default function HomePage() {
           </h1>
           <div style={{ marginTop: 'calc(var(--u) * 4)', maxWidth: 520 }}>
             <GhazalLine lines={GHAZAL_LINES} />
-            <p style={{ marginTop: 'var(--u)', fontSize: 14, color: 'var(--color-ash)', maxWidth: '44ch' }}>
+            <p style={{ marginTop: 'var(--u)', fontSize: 14, color: 'var(--color-fg-soft)', maxWidth: '44ch' }}>
               {site.ghazalEn}
             </p>
           </div>
           <p
             className="mono-label"
-            style={{ marginTop: 'calc(var(--u) * 5)', color: 'var(--color-bone)', fontSize: 13 }}
+            style={{ marginTop: 'calc(var(--u) * 5)', color: 'var(--color-fg)', fontSize: 13 }}
           >
-            Software engineer<span style={{ color: 'var(--color-ember)' }}> · </span>
-            Urdu poet<span style={{ color: 'var(--color-ember)' }}> · </span>
+            Software engineer<span style={{ color: 'var(--color-accent)' }}> · </span>
+            Urdu poet<span style={{ color: 'var(--color-accent)' }}> · </span>
             Delusional optimist
           </p>
         </section>
@@ -64,7 +64,7 @@ export default function HomePage() {
             ['Archive', '/archive'],
             ['Colophon', '/colophon'],
           ].map(([label, href]) => (
-            <Link key={href} href={href} className="mono-label transition-colors hover:text-(--color-bone)">
+            <Link key={href} href={href} className="mono-label transition-colors hover:text-(--color-fg)">
               {label}
             </Link>
           ))}
@@ -72,13 +72,13 @@ export default function HomePage() {
 
         {/* 2² — /now telemetry */}
         <Link href="/now" className="cell-now panel flex flex-col justify-between overflow-hidden" style={{ padding: 'calc(var(--u) * 2)' }}>
-          <div className="mono-label" style={{ color: 'var(--color-ember)' }}>Now</div>
-          <div className="flex flex-col gap-1" style={{ fontSize: 12.5, color: 'var(--color-ash)' }}>
+          <div className="mono-label" style={{ color: 'var(--color-accent)' }}>Now</div>
+          <div className="flex flex-col gap-1" style={{ fontSize: 12.5, color: 'var(--color-fg-soft)' }}>
             <span className="line-clamp-1">
-              <span style={{ color: 'var(--color-bone)' }}>Building</span> {now.building[0].name}
+              <span style={{ color: 'var(--color-fg)' }}>Building</span> {now.building[0].name}
             </span>
             <span className="line-clamp-1">
-              <span style={{ color: 'var(--color-bone)' }}>Reading</span> {now.reading.title}
+              <span style={{ color: 'var(--color-fg)' }}>Reading</span> {now.reading.title}
             </span>
             <span className="line-clamp-1">{now.location}</span>
           </div>
@@ -86,16 +86,16 @@ export default function HomePage() {
 
         {/* 3² — featured */}
         {featured && (
-          <Link href={featured.permalink} className="cell-featured panel flex flex-col justify-between overflow-hidden" style={{ padding: 'calc(var(--u) * 3)', borderLeft: '2px solid var(--color-ember)' }}>
+          <Link href={featured.permalink} className="cell-featured panel flex flex-col justify-between overflow-hidden" style={{ padding: 'calc(var(--u) * 3)', borderLeft: '2px solid var(--color-accent)' }}>
             <div>
-              <div className="mono-label" style={{ color: 'var(--color-ember)', marginBottom: 'var(--u)' }}>
+              <div className="mono-label" style={{ color: 'var(--color-accent)', marginBottom: 'var(--u)' }}>
                 Featured
               </div>
               <h2 className="display line-clamp-3" style={{ fontSize: 'clamp(20px, 1.8vw, 28px)' }}>
                 {featured.title}
               </h2>
             </div>
-            <p className="line-clamp-2" style={{ fontSize: 13.5, color: 'var(--color-ash)' }}>
+            <p className="line-clamp-2" style={{ fontSize: 13.5, color: 'var(--color-fg-soft)' }}>
               {featured.excerpt}
             </p>
           </Link>

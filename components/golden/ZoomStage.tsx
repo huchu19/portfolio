@@ -138,13 +138,13 @@ export default function ZoomStage({ children }: { children: React.ReactNode }) {
             className="mono-label absolute z-10 flex items-center max-md:hidden"
             style={{ bottom: 'calc(var(--u) * 2)', left: 'calc(var(--u) * 4)', gap: 'calc(var(--u) * 2)', fontSize: 10.5 }}
           >
-            <span style={{ color: 'var(--color-void-line)' }}>φ</span>
+            <span style={{ color: 'var(--color-line)' }}>φ</span>
             <button
               type="button"
               onClick={() => goTo(0)}
               aria-pressed={activeIdx === 0}
-              className="cursor-pointer transition-colors hover:text-(--color-bone)"
-              style={{ color: activeIdx === 0 ? 'var(--color-ember)' : undefined }}
+              className="cursor-pointer transition-colors hover:text-(--color-fg)"
+              style={{ color: activeIdx === 0 ? 'var(--color-accent)' : undefined }}
             >
               13×8
             </button>
@@ -154,14 +154,14 @@ export default function ZoomStage({ children }: { children: React.ReactNode }) {
                 type="button"
                 onClick={() => goTo(i + 1)}
                 aria-pressed={activeIdx === i + 1}
-                className="cursor-pointer transition-colors hover:text-(--color-bone)"
-                style={{ color: activeIdx === i + 1 ? 'var(--color-ember)' : undefined }}
+                className="cursor-pointer transition-colors hover:text-(--color-fg)"
+                style={{ color: activeIdx === i + 1 ? 'var(--color-accent)' : undefined }}
               >
                 {s.label}
               </button>
             ))}
-            {activeIdx > 0 && <span style={{ color: 'var(--color-ash)' }}>esc — pull back</span>}
-            {activeIdx === 0 && <span style={{ color: 'var(--color-ash)' }}>scroll — travel</span>}
+            {activeIdx > 0 && <span style={{ color: 'var(--color-fg-soft)' }}>esc — pull back</span>}
+            {activeIdx === 0 && <span style={{ color: 'var(--color-fg-soft)' }}>scroll — travel</span>}
           </nav>
         )}
       </div>

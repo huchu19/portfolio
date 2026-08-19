@@ -17,11 +17,17 @@ function domainOf(url: string): string {
 /** Grid spans per type — the shapes that keep the feed from collapsing into uniform cards. */
 export const PANEL_SHAPE: Record<FeedItem['type'], string> = {
   project: 'col-span-2 row-span-2',
-  essay: 'col-span-2 row-span-1',
-  poetry: 'col-span-1 row-span-2',
+  note: 'col-span-2 row-span-1',
   journal: 'col-span-1 row-span-1',
-  adventure: 'col-span-2 row-span-1',
   fragment: 'col-span-1 row-span-1',
+}
+
+/** Verse keeps its tall column — the shape is earned by the tag, not a type. */
+export function panelShape(item: FeedItem): string {
+  if (item.type === 'note' && item.tags.includes('poetry')) {
+    return 'col-span-1 row-span-2'
+  }
+  return PANEL_SHAPE[item.type]
 }
 
 const pad = { padding: 'calc(var(--u) * 2)' } as const
@@ -30,14 +36,14 @@ export default function FeedPanel({ item }: { item: FeedItem }) {
   switch (item.type) {
     case 'project':
       return (
-        <Link href={item.permalink} className="panel flex h-full flex-col justify-between overflow-hidden" style={{ ...pad, borderLeft: '2px solid var(--color-ember)' }}>
+        <Link href={item.permalink} className="panel flex h-full flex-col justify-between overflow-hidden" style={{ ...pad, borderLeft: '2px solid var(--color-accent)' }}>
           <div>
             <div className="mono-label flex items-center gap-2" style={{ marginBottom: 'var(--u)' }}>
-              <span style={{ color: 'var(--color-ember)' }}>Project</span>
+              <span style={{ color: 'var(--color-accent)' }}>Project</span>
               <span>{item.stamp}</span>
             </div>
             <h3 className="display" style={{ fontSize: 24 }}>{item.title}</h3>
-            <p className="line-clamp-3" style={{ marginTop: 'var(--u)', fontSize: 14, color: 'var(--color-ash)' }}>
+            <p className="line-clamp-3" style={{ marginTop: 'var(--u)', fontSize: 14, color: 'var(--color-fg-soft)' }}>
               {item.excerpt}
             </p>
           </div>
@@ -49,64 +55,65 @@ export default function FeedPanel({ item }: { item: FeedItem }) {
         </Link>
       )
 
-    case 'essay':
+    case 'note': {
+      // One panel, three moods — verse keeps its negative space, travel
+      // keeps its hops, and everything else reads as a headline + line.
+      const isVerse = item.tags.includes('poetry')
+
+      if (isVerse) {
+        return (
+          <Link href={item.permalink} className="panel flex h-full flex-col justify-between overflow-hidden" style={pad}>
+            <div className="mono-label">§ Note</div>
+            {item.lang !== 'en' ? (
+              <p lang="ur" dir="rtl" className="urdu line-clamp-4" style={{ fontSize: 18, opacity: 0.55 }}>
+                {item.excerpt}
+              </p>
+            ) : (
+              <p className="display line-clamp-5 italic" style={{ fontSize: 19, opacity: 0.45, lineHeight: 1.4 }}>
+                {item.excerpt}
+              </p>
+            )}
+            <div className="display" style={{ fontSize: 15, color: 'var(--color-fg)' }}>{item.title}</div>
+          </Link>
+        )
+      }
+
       return (
         <Link href={item.permalink} className="panel flex h-full flex-col justify-center overflow-hidden" style={pad}>
-          <div className="mono-label" style={{ marginBottom: 'var(--u)' }}>
-            Essay · {item.readingTime} min
+          <div className="mono-label flex items-center gap-2" style={{ marginBottom: 'var(--u)' }}>
+            <span style={{ color: 'var(--color-accent)' }}>§</span>
+            <span>Note · {item.readingTime} min</span>
           </div>
-          <h3 className="display line-clamp-2" style={{ fontSize: 21 }}>{item.title}</h3>
-          <p className="line-clamp-2" style={{ marginTop: 'var(--u)', fontSize: 13.5, color: 'var(--color-ash)' }}>
-            {item.excerpt}
-          </p>
-        </Link>
-      )
-
-    case 'poetry':
-      // tall + narrow, maximum negative space; first words ghosted in display face
-      return (
-        <Link href={item.permalink} className="panel flex h-full flex-col justify-between overflow-hidden" style={pad}>
-          <div className="mono-label" style={{ color: 'var(--color-ember-bright)' }}>Poetry</div>
-          {item.lang !== 'en' ? (
-            <p lang="ur" dir="rtl" className="urdu line-clamp-4" style={{ fontSize: 18, opacity: 0.55 }}>
-              {item.excerpt}
-            </p>
-          ) : (
-            <p className="display line-clamp-5 italic" style={{ fontSize: 19, opacity: 0.45, lineHeight: 1.4 }}>
-              {item.excerpt}
-            </p>
-          )}
-          <div className="display" style={{ fontSize: 15, color: 'var(--color-bone)' }}>{item.title}</div>
-        </Link>
-      )
-
-    case 'journal':
-      return (
-        <Link href={item.permalink} className="panel flex h-full flex-col justify-between overflow-hidden" style={pad}>
-          <div className="font-(family-name:--font-mono)" style={{ fontSize: 20, color: 'var(--color-ash)', fontVariantNumeric: 'tabular-nums' }}>
-            {item.stamp}
-          </div>
-          <div style={{ fontSize: 13.5, color: 'var(--color-bone)' }} className="line-clamp-2">
-            {item.title}
-          </div>
-        </Link>
-      )
-
-    case 'adventure':
-      return (
-        <Link href={item.permalink} className="panel flex h-full flex-col justify-center gap-2 overflow-hidden" style={pad}>
-          <div className="mono-label" style={{ color: 'var(--color-wave)' }}>Adventure · {item.stamp}</div>
-          {item.route && (
-            <div className="flex items-center gap-2 font-(family-name:--font-mono)" style={{ fontSize: 15, color: 'var(--color-bone)' }}>
+          {item.route && item.route.length > 0 && (
+            <div className="flex items-center gap-2 font-(family-name:--font-mono)" style={{ fontSize: 13, color: 'var(--color-fg-soft)', marginBottom: 'var(--u)' }}>
               {item.route.map((stop, i) => (
-                <span key={stop} className="flex items-center gap-2">
-                  {i > 0 && <span aria-hidden style={{ color: 'var(--color-wave)' }}>→</span>}
+                <span key={`${stop}-${i}`} className="flex items-center gap-2">
+                  {i > 0 && <span aria-hidden style={{ color: 'var(--color-accent)' }}>→</span>}
                   {stop}
                 </span>
               ))}
             </div>
           )}
-          <div className="line-clamp-1" style={{ fontSize: 13.5, color: 'var(--color-ash)' }}>{item.title}</div>
+          <h3 className="display line-clamp-2" style={{ fontSize: 21 }}>{item.title}</h3>
+          <p className="line-clamp-2" style={{ marginTop: 'var(--u)', fontSize: 13.5, color: 'var(--color-fg-soft)' }}>
+            {item.excerpt}
+          </p>
+        </Link>
+      )
+    }
+
+    case 'journal':
+      return (
+        <Link href={item.permalink} className="panel flex h-full flex-col justify-between overflow-hidden" style={pad}>
+          <div className="flex items-baseline gap-2">
+            <span className="mono-label" style={{ color: 'var(--color-accent)' }} aria-hidden>¶</span>
+            <span className="font-(family-name:--font-mono)" style={{ fontSize: 20, color: 'var(--color-fg-soft)', fontVariantNumeric: 'tabular-nums' }}>
+              {item.stamp}
+            </span>
+          </div>
+          <div style={{ fontSize: 13.5, color: 'var(--color-fg)' }} className="line-clamp-2">
+            {item.title}
+          </div>
         </Link>
       )
 
@@ -123,16 +130,16 @@ export default function FeedPanel({ item }: { item: FeedItem }) {
             <span className="flex h-full flex-col gap-2">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={item.media} alt="" className="min-h-0 flex-1 rounded object-cover" loading="lazy" />
-              <span className="line-clamp-2" style={{ fontSize: 12.5, color: 'var(--color-ash)' }}>{item.excerpt}</span>
+              <span className="line-clamp-2" style={{ fontSize: 12.5, color: 'var(--color-fg-soft)' }}>{item.excerpt}</span>
             </span>
           ) : (
             <span className="my-auto flex flex-col gap-1">
               {item.link && (
-                <span className="mono-label" style={{ fontSize: 10.5, color: 'var(--color-wave)' }}>
+                <span className="mono-label" style={{ fontSize: 10.5, color: 'var(--color-accent)' }}>
                   {domainOf(item.link)}
                 </span>
               )}
-              <span className="line-clamp-4" style={{ fontSize: 13, color: 'var(--color-bone)', lineHeight: 1.55 }}>
+              <span className="line-clamp-4" style={{ fontSize: 13, color: 'var(--color-fg)', lineHeight: 1.55 }}>
                 {item.excerpt}
               </span>
             </span>

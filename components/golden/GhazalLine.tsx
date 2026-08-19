@@ -64,7 +64,7 @@ export default function GhazalLine({ lines }: { lines: string[] }) {
         className="urdu"
         style={{
           fontSize: 'clamp(20px, 2.2vw, 28px)',
-          color: 'var(--color-bone)',
+          color: 'var(--color-fg)',
           minHeight: '2.4em',
         }}
         variants={line}

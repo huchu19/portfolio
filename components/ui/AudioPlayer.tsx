@@ -48,7 +48,7 @@ export default function AudioPlayer({ src, label }: { src: string; label?: strin
     const g = canvas.getContext('2d')
     if (!g) return
     // token, not hex — re-read per play so theme flips are honored
-    const ember = getComputedStyle(canvas).getPropertyValue('--color-ember').trim()
+    const ember = getComputedStyle(canvas).getPropertyValue('--color-accent').trim()
     const data = new Uint8Array(graph.analyser.frequencyBinCount)
     const step = () => {
       if (document.hidden) {
@@ -100,9 +100,9 @@ export default function AudioPlayer({ src, label }: { src: string; label?: strin
       style={{
         gap: 'calc(var(--u) * 2)',
         padding: 'calc(var(--u) * 2)',
-        border: '1px solid var(--color-void-line)',
+        border: '1px solid var(--color-line)',
         borderRadius: 8,
-        background: 'var(--color-void-raised)',
+        background: 'var(--color-surface)',
       }}
     >
       {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
@@ -133,8 +133,8 @@ export default function AudioPlayer({ src, label }: { src: string; label?: strin
         style={{
           width: 40,
           height: 40,
-          border: '1.5px solid var(--color-ember)',
-          color: 'var(--color-ember-bright)',
+          border: '1.5px solid var(--color-accent)',
+          color: 'var(--color-accent-bright)',
         }}
       >
         {playing ? (

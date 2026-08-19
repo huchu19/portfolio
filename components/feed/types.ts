@@ -1,11 +1,5 @@
 /** Lean, serializable shape the feed grid renders — mapped from Entry on the server. */
-export type FeedItemType =
-  | 'project'
-  | 'essay'
-  | 'poetry'
-  | 'journal'
-  | 'adventure'
-  | 'fragment'
+export type FeedItemType = 'project' | 'note' | 'journal' | 'fragment'
 
 export type FeedItem = {
   type: FeedItemType

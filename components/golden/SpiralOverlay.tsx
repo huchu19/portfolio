@@ -16,7 +16,7 @@ export default function SpiralOverlay({ steps = 6 }: { steps?: number }) {
       preserveAspectRatio="none"
       fill="none"
     >
-      <g stroke="var(--color-void-line)" vectorEffect="non-scaling-stroke">
+      <g stroke="var(--color-line)" vectorEffect="non-scaling-stroke">
         {squares.map((r, i) => (
           <rect
             key={i}
@@ -34,7 +34,7 @@ export default function SpiralOverlay({ steps = 6 }: { steps?: number }) {
       <path
         className="spiral-path"
         d={spiralPath}
-        stroke="var(--color-ember)"
+        stroke="var(--color-accent)"
         strokeWidth="0.016"
         opacity="0.4"
       />

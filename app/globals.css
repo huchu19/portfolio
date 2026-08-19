@@ -524,7 +524,7 @@ a {
   }
 }
 
-/* Poetry body — the poem is light emerging from void */
+/* Verse body — a note tagged `poetry` still gets its own air */
 .poetry-body p {
   font-family: var(--font-display);
   font-size: clamp(19px, 2.2vw, 25px);
@@ -547,13 +547,8 @@ a {
   color: var(--color-fg);
 }
 
-/* Essay — justified with hyphens on desktop, ragged on mobile */
-@media (min-width: 768px) {
-  .essay-body p {
-    text-align: justify;
-    hyphens: auto;
-  }
-}
+/* Notes read ragged-right. Justification belonged to the print metaphor
+   and sets stiff on a dark ground, so it is deliberately not set here. */
 
 /* The spiral draws itself — always slightly ahead of you.
    34 ≈ the spiral's length in 13×8 viewBox units ((π/2)·Σ radii). */

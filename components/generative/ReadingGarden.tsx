@@ -38,7 +38,7 @@ function GardenLeaf({
         cy={leaf.y}
         rx={leaf.size}
         ry={leaf.size * 0.42}
-        fill="var(--color-moss)"
+        fill="var(--color-fg-faint)"
         opacity={0.75}
         style={reduced ? undefined : { scale: grow, transformOrigin: `${leaf.x}px ${leaf.y}px` }}
       />
@@ -70,7 +70,7 @@ function GardenStem({
       <motion.path
         d={stem.d}
         fill="none"
-        stroke="var(--color-moss)"
+        stroke="var(--color-fg-faint)"
         strokeWidth={0.012}
         strokeLinecap="round"
         opacity={0.8}
@@ -86,7 +86,7 @@ function GardenStem({
           cx={stem.tip.x}
           cy={stem.tip.y}
           r={0.024}
-          fill="var(--color-ember)"
+          fill="var(--color-accent)"
           style={
             reduced
               ? { opacity: 0.9 }

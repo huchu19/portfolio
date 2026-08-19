@@ -6,35 +6,24 @@ import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
 import { fragmentDot } from '@/components/feed/tagColors'
 import type { FeedItem, FeedItemType } from '@/components/feed/types'
 
-const TYPE_ORDER: FeedItemType[] = [
-  'project',
-  'essay',
-  'poetry',
-  'journal',
-  'adventure',
-  'fragment',
-]
+const TYPE_ORDER: FeedItemType[] = ['project', 'note', 'journal', 'fragment']
 
 const TYPE_LABEL: Record<FeedItemType, string> = {
   project: 'Projects',
-  essay: 'Essays',
-  poetry: 'Poetry',
+  note: 'Notes',
   journal: 'Journal',
-  adventure: 'Adventures',
   fragment: 'Fragments',
 }
 
 const TYPE_DOT: Record<FeedItemType, string> = {
   project: 'var(--dot-project)',
-  essay: 'var(--dot-essay)',
-  poetry: 'var(--dot-poetry)',
+  note: 'var(--dot-note)',
   journal: 'var(--dot-journal)',
-  adventure: 'var(--dot-adventure)',
   fragment: 'var(--dot-fragment)',
 }
 
 const QUICK_LINKS = [
-  { label: 'Home — the golden grid', href: '/' },
+  { label: 'Home — the desk', href: '/' },
   { label: 'About', href: '/about' },
   { label: 'Now', href: '/now' },
   { label: 'Archive', href: '/archive' },
@@ -129,7 +118,7 @@ export default function CommandPalette({ items }: { items: FeedItem[] }) {
             label: `>${t.cmd}`,
             sub: t.sub,
             href: '',
-            dot: 'var(--color-moss)',
+            dot: 'var(--color-fg-faint)',
             action: t.run,
             keepOpen: t.keepOpen,
           })),
@@ -138,7 +127,7 @@ export default function CommandPalette({ items }: { items: FeedItem[] }) {
     }
     if (!q) {
       return [
-        { label: 'Go to', results: QUICK_LINKS.map((l) => ({ label: l.label, href: l.href, dot: 'var(--color-ember)' })) },
+        { label: 'Go to', results: QUICK_LINKS.map((l) => ({ label: l.label, href: l.href, dot: 'var(--color-accent)' })) },
         {
           label: 'Recent',
           results: items.slice(0, 5).map((i) => toResult(i)),
@@ -156,7 +145,7 @@ export default function CommandPalette({ items }: { items: FeedItem[] }) {
     if (pageMatches.length > 0) {
       byType.unshift({
         label: 'Pages',
-        results: pageMatches.map((l) => ({ label: l.label, href: l.href, dot: 'var(--color-ember)' })),
+        results: pageMatches.map((l) => ({ label: l.label, href: l.href, dot: 'var(--color-accent)' })),
       })
     }
     return byType
@@ -204,7 +193,7 @@ export default function CommandPalette({ items }: { items: FeedItem[] }) {
       {open && (
         <motion.div
           className="fixed inset-0 z-100 flex items-start justify-center"
-          style={{ background: 'color-mix(in srgb, var(--color-void) 72%, transparent)', paddingTop: '14vh' }}
+          style={{ background: 'color-mix(in srgb, var(--color-bg) 72%, transparent)', paddingTop: '14vh' }}
           initial={reduced ? false : { opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={reduced ? undefined : { opacity: 0 }}
@@ -222,8 +211,8 @@ export default function CommandPalette({ items }: { items: FeedItem[] }) {
               maxWidth: 600,
               maxHeight: '62vh',
               margin: '0 calc(var(--u) * 2)',
-              background: 'var(--color-void-raised)',
-              border: '1px solid var(--color-void-line)',
+              background: 'var(--color-surface)',
+              border: '1px solid var(--color-line)',
               boxShadow: '0 24px 80px -24px rgba(0,0,0,0.8)',
             }}
             initial={reduced ? false : { opacity: 0, y: 12, scale: 0.98 }}
@@ -242,8 +231,8 @@ export default function CommandPalette({ items }: { items: FeedItem[] }) {
               style={{
                 padding: 'calc(var(--u) * 2) calc(var(--u) * 3)',
                 fontSize: 16,
-                color: 'var(--color-white)',
-                borderBottom: '1px solid var(--color-void-line)',
+                color: 'var(--color-fg-bright)',
+                borderBottom: '1px solid var(--color-line)',
                 fontFamily: 'var(--font-body)',
               }}
             />
@@ -271,12 +260,12 @@ export default function CommandPalette({ items }: { items: FeedItem[] }) {
                         className="flex w-full cursor-pointer items-baseline gap-3 text-left"
                         style={{
                           padding: 'var(--u) calc(var(--u) * 3)',
-                          background: i === active ? 'color-mix(in srgb, var(--color-ember) 12%, transparent)' : 'transparent',
-                          borderLeft: i === active ? '2px solid var(--color-ember)' : '2px solid transparent',
+                          background: i === active ? 'color-mix(in srgb, var(--color-accent) 12%, transparent)' : 'transparent',
+                          borderLeft: i === active ? '2px solid var(--color-accent)' : '2px solid transparent',
                         }}
                       >
                         <span aria-hidden className="shrink-0 self-center rounded-full" style={{ width: 6, height: 6, background: r.dot }} />
-                        <span className="line-clamp-1" style={{ fontSize: 14.5, color: 'var(--color-bone)' }}>{r.label}</span>
+                        <span className="line-clamp-1" style={{ fontSize: 14.5, color: 'var(--color-fg)' }}>{r.label}</span>
                         {r.sub && (
                           <span className="mono-label ml-auto shrink-0" style={{ fontSize: 10 }}>{r.sub}</span>
                         )}
@@ -288,12 +277,12 @@ export default function CommandPalette({ items }: { items: FeedItem[] }) {
             </div>
             <div
               className="mono-label flex gap-4"
-              style={{ padding: 'var(--u) calc(var(--u) * 3)', borderTop: '1px solid var(--color-void-line)', fontSize: 10 }}
+              style={{ padding: 'var(--u) calc(var(--u) * 3)', borderTop: '1px solid var(--color-line)', fontSize: 10 }}
             >
               <span>↑↓ navigate</span>
               <span>↵ open</span>
               <span>esc close</span>
-              <span style={{ marginLeft: 'auto', color: 'var(--color-void-line)' }}>&gt; terminal</span>
+              <span style={{ marginLeft: 'auto', color: 'var(--color-line)' }}>&gt; terminal</span>
             </div>
           </motion.div>
         </motion.div>

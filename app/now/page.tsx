@@ -22,10 +22,10 @@ function Card({
       className="panel flex flex-col"
       style={{ padding: 'calc(var(--u) * 3)', gap: 'calc(var(--u) * 2)' }}
     >
-      <h2 className="mono-label" style={{ color: accent ?? 'var(--color-ember)' }}>
+      <h2 className="mono-label" style={{ color: accent ?? 'var(--color-accent)' }}>
         {label}
       </h2>
-      <div style={{ fontSize: 15, color: 'var(--color-bone)' }}>{children}</div>
+      <div style={{ fontSize: 15, color: 'var(--color-fg)' }}>{children}</div>
     </section>
   )
 }
@@ -58,7 +58,7 @@ export default async function NowPage() {
                   style={{
                     width: 7,
                     height: 7,
-                    background: b.status === 'active' ? 'var(--color-ember)' : 'var(--color-ash)',
+                    background: b.status === 'active' ? 'var(--color-accent)' : 'var(--color-fg-soft)',
                   }}
                 />
                 <span>
@@ -72,20 +72,20 @@ export default async function NowPage() {
           </ul>
         </Card>
 
-        <Card label="Reading" accent="var(--color-wave)">
+        <Card label="Reading" accent="var(--color-fg-soft)">
           <p>
             <em className="display italic" style={{ fontSize: 18 }}>{now.reading.title}</em>
             {' — '}
             {now.reading.author}
           </p>
-          <p style={{ fontSize: 13, color: 'var(--color-ash)', marginTop: 4 }}>{now.reading.note}</p>
+          <p style={{ fontSize: 13, color: 'var(--color-fg-soft)', marginTop: 4 }}>{now.reading.note}</p>
         </Card>
 
-        <Card label="Watching" accent="var(--color-wave)">
+        <Card label="Watching" accent="var(--color-fg-soft)">
           <p>{now.watching}</p>
         </Card>
 
-        <Card label="Listening" accent="var(--color-wave)">
+        <Card label="Listening" accent="var(--color-fg-soft)">
           <p>{now.listening}</p>
         </Card>
 
@@ -102,20 +102,20 @@ export default async function NowPage() {
           <p className="display italic" style={{ fontSize: 17, lineHeight: 1.5 }}>{now.thinking}</p>
         </Card>
 
-        <Card label="Location" accent="var(--color-ash)">
+        <Card label="Location" accent="var(--color-fg-soft)">
           <p>{now.location}</p>
         </Card>
 
         {shipping && shipping.pushes.length > 0 && (
-          <Card label="Recently shipped" accent="var(--color-ash)">
+          <Card label="Recently shipped" accent="var(--color-fg-soft)">
             <ul className="flex flex-col" style={{ gap: 'var(--u)', fontSize: 13 }}>
               {shipping.pushes.map((p) => (
                 <li key={`${p.repo}-${p.when}`}>
-                  <span className="mono-label" style={{ fontSize: 10.5, color: 'var(--color-wave)' }}>
+                  <span className="mono-label" style={{ fontSize: 10.5, color: 'var(--color-signal)' }}>
                     {p.repo}
                   </span>{' '}
                   {p.message}
-                  <span style={{ color: 'var(--color-ash)' }}> · {p.when}</span>
+                  <span style={{ color: 'var(--color-fg-soft)' }}> · {p.when}</span>
                 </li>
               ))}
             </ul>

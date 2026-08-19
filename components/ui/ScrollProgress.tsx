@@ -37,12 +37,12 @@ export default function ScrollProgress() {
     <div
       aria-hidden
       className="fixed top-0 bottom-0 z-40 md:hidden"
-      style={{ right: 0, width: 2, background: 'var(--color-void-line)' }}
+      style={{ right: 0, width: 2, background: 'var(--color-line)' }}
     >
       <div
         ref={ref}
         className="h-full w-full origin-top"
-        style={{ background: 'var(--color-ember)', transform: 'scaleY(0)' }}
+        style={{ background: 'var(--color-accent)', transform: 'scaleY(0)' }}
       />
     </div>
   )

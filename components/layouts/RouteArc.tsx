@@ -56,11 +56,11 @@ export default function RouteArc({ route }: { route: string[] }) {
           className="absolute inset-x-0"
           style={{ top: 8, height: 40, width: '100%', overflow: 'visible' }}
         >
-          <path d={arcPath} fill="none" stroke="var(--color-wave)" strokeWidth={0.22} opacity={0.35} />
+          <path d={arcPath} fill="none" stroke="var(--color-fg-faint)" strokeWidth={0.22} opacity={0.35} />
           <motion.path
             d={arcPath}
             fill="none"
-            stroke="var(--color-ember)"
+            stroke="var(--color-accent)"
             strokeWidth={0.3}
             pathLength={1}
             strokeDasharray="1"
