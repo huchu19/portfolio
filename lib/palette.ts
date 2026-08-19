@@ -11,15 +11,14 @@
  * only — never from a component that renders into the page.
  */
 export const ogPalette = {
-  void: '#0c0a08',
-  voidRaised: '#161210',
-  voidLine: '#2a2420',
-  ash: '#8c7e6e',
-  bone: '#e8dfd0',
-  white: '#f5f0e8',
-  ember: '#e07a2f',
-  emberBright: '#f09940',
-  emberDeep: '#b85a1a',
-  wave: '#3a6b8c',
-  moss: '#6b8c5a',
+  bg: '#0b0e1f',
+  surface: '#131834',
+  raised: '#1d2447',
+  line: '#2e3763',
+  fg: '#f2ede3',
+  fgSoft: '#a8afc9',
+  fgFaint: '#6f779a',
+  accent: '#ffb020',
+  accentDeep: '#c77e00',
+  signal: '#2ee6c0',
 } as const

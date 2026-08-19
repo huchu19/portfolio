@@ -41,8 +41,8 @@ export default function ColophonPage() {
           <code>prefers-reduced-motion</code>. Deployed on Vercel.
         </p>
         <p>
-          Type: Instrument Serif for display, Inter for body, Geist Mono for the machines,
-          and Noto Nastaliq Urdu for the mother tongue — loaded lazily, rendered
+          Type: Bricolage Grotesque announces, Inter reads, JetBrains Mono reports, and
+          Noto Nastaliq Urdu carries the mother tongue — loaded lazily, rendered
           right-to-left, and never, under any circumstances, substituted with a Latin face.
         </p>
 
@@ -51,9 +51,12 @@ export default function ColophonPage() {
           The site was rebuilt in one long night by me and Claude (Fable 5, via Claude
           Code), working from a design constitution called <code>VISION.md</code> — palette,
           ratios, non-negotiable rules, and a standing instruction to critique every screen
-          like a hostile art director. The previous version of this site was warm paper and
-          postal stamps. It was lovely and it was not mine. This one is dark ground and
-          ember, precision and rawness — which is closer to the truth. The full story of the
+          like a hostile art director. An earlier version of this site was warm paper and
+          postal stamps; it was lovely and it was not mine. What replaced it was a dark,
+          golden-ratio universe, and what replaced <em>that</em> is this — indigo ground,
+          marigold for my own voice, teal reserved for whatever is true right now. The
+          metaphor is no longer a printed artefact but a desk mid-work, with someone
+          standing at it. The full story of the
           build — the critique loop, the screenshots, what the pixels caught — lives in the{' '}
           <Link href="/guide">guide</Link>.
         </p>

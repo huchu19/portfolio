@@ -17,7 +17,7 @@ export default async function Image({ params }: { params: Promise<{ slug: string
     <OgCard kicker="fragment" title={title} seed={slug} siteName={site.name} />,
     {
       ...size,
-      fonts: [{ name: 'Instrument Serif', data: await ogFont(), weight: 400, style: 'normal' }],
+      fonts: [{ name: 'Bricolage Grotesque', data: await ogFont(), weight: 400, style: 'normal' }],
     },
   )
 }

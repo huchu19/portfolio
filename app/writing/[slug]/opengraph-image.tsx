@@ -23,7 +23,7 @@ export default async function Image({ params }: { params: Promise<{ slug: string
     ),
     {
       ...size,
-      fonts: [{ name: 'Instrument Serif', data: await ogFont(), weight: 400, style: 'normal' }],
+      fonts: [{ name: 'Bricolage Grotesque', data: await ogFont(), weight: 400, style: 'normal' }],
     },
   )
 }

@@ -36,21 +36,21 @@ function buildWallpaper(): string {
   const rng = seededRng('nastaliq-over-mountains')
   const parts: string[] = []
 
-  parts.push(`<rect width="${W}" height="${H}" fill="${c.void}"/>`)
+  parts.push(`<rect width="${W}" height="${H}" fill="${c.bg}"/>`)
 
   // sparse stars
   for (let i = 0; i < 70; i++) {
     const x = rng() * W
     const y = rng() * H * 0.55
     parts.push(
-      `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${(0.6 + rng() * 1.1).toFixed(2)}" fill="${c.ash}" opacity="${(0.15 + rng() * 0.3).toFixed(2)}"/>`,
+      `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${(0.6 + rng() * 1.1).toFixed(2)}" fill="${c.fgSoft}" opacity="${(0.15 + rng() * 0.3).toFixed(2)}"/>`,
     )
   }
 
   // the ember moon — a phyllotaxis bloom at the golden point
   const moonX = W * INV_PHI
   const moonY = H * (1 - INV_PHI) * 0.72
-  const moonBands = [c.emberDeep, c.ember, c.emberBright]
+  const moonBands = [c.accentDeep, c.accent, c.accent]
   for (const d of phyllotaxis(seededRng('the-moon'), 144)) {
     parts.push(
       `<circle cx="${(moonX + d.x * 110).toFixed(1)}" cy="${(moonY + d.y * 110).toFixed(1)}" r="${(d.r * 110).toFixed(2)}" fill="${moonBands[d.band]}" opacity="${d.band === 2 ? 0.9 : 0.55}"/>`,
@@ -59,10 +59,10 @@ function buildWallpaper(): string {
 
   // ridgelines, far to near
   const layers: [number, number, string, number][] = [
-    [H * 0.62, 90, c.voidRaised, 0.75],
-    [H * 0.72, 110, c.voidRaised, 1],
-    [H * 0.84, 130, c.voidLine, 0.45],
-    [H * 0.95, 150, c.voidLine, 0.7],
+    [H * 0.62, 90, c.surface, 0.75],
+    [H * 0.72, 110, c.surface, 1],
+    [H * 0.84, 130, c.line, 0.45],
+    [H * 0.95, 150, c.line, 0.7],
   ]
   for (const [baseY, amp, fill, opacity] of layers) {
     parts.push(`<path d="${ridge(rng, baseY, amp)}" fill="${fill}" opacity="${opacity}"/>`)

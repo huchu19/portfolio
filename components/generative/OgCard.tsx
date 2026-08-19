@@ -3,7 +3,7 @@ import { phyllotaxis, seededRng } from '@/lib/generative'
 import { ogPalette as c } from '@/lib/palette'
 
 /**
- * The Open Graph card — void ground, title in Instrument Serif on the
+ * The Open Graph card — indigo ground, title in Bricolage Grotesque on the
  * major side of the golden split, a seeded phyllotaxis field on the
  * minor side. Rendered by satori, which can't read CSS variables and
  * whose SVG support is unreliable — hence lib/palette.ts hexes and
@@ -13,7 +13,7 @@ import { ogPalette as c } from '@/lib/palette'
  * (hard rule #4) — those cards show the field and the Latin site name.
  */
 
-const BANDS = [c.ash, c.wave, c.ember]
+const BANDS = [c.fgSoft, c.fgFaint, c.accent]
 
 // disc center sits right of the vertical golden line so the field
 // never crowds the title column
@@ -41,9 +41,9 @@ export default function OgCard({
         width: '100%',
         height: '100%',
         display: 'flex',
-        backgroundColor: c.void,
+        backgroundColor: c.bg,
         position: 'relative',
-        fontFamily: 'Instrument Serif',
+        fontFamily: 'Bricolage Grotesque',
       }}
     >
       {dots.map((d, i) => {
@@ -80,7 +80,7 @@ export default function OgCard({
             fontSize: 22,
             letterSpacing: 6,
             textTransform: 'uppercase',
-            color: c.ash,
+            color: c.fgSoft,
           }}
         >
           {kicker}
@@ -90,14 +90,14 @@ export default function OgCard({
             display: 'flex',
             fontSize: urdu || title.length > 60 ? 56 : 68,
             lineHeight: 1.08,
-            color: c.white,
+            color: c.fg,
           }}
         >
           {urdu ? siteName : title}
         </div>
         <div style={{ display: 'flex', alignItems: 'center' }}>
-          <div style={{ display: 'flex', width: 89, height: 3, backgroundColor: c.ember, marginRight: 24 }} />
-          <div style={{ display: 'flex', fontSize: 26, color: c.ash }}>{urdu ? 'khwabon ka bagh' : siteName}</div>
+          <div style={{ display: 'flex', width: 89, height: 3, backgroundColor: c.accent, marginRight: 24 }} />
+          <div style={{ display: 'flex', fontSize: 26, color: c.fgSoft }}>{urdu ? 'khwabon ka bagh' : siteName}</div>
         </div>
       </div>
     </div>
