@@ -12,6 +12,7 @@ import CommandPalette from '@/components/ui/CommandPalette'
 import EasterEggs from '@/components/ui/EasterEggs'
 import ConstructionLines from '@/components/golden/ConstructionLines'
 import { getFeed, toFeedItem } from '@/lib/posts'
+import { getLastPush } from '@/lib/github'
 import { site } from '@/lib/site'
 import './globals.css'
 
@@ -75,12 +76,13 @@ export const metadata: Metadata = {
   },
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
   const paletteItems = getFeed().map(toFeedItem)
+  const status = await getLastPush()
   return (
     <html
       lang="en"
@@ -98,7 +100,7 @@ export default function RootLayout({
         </a>
         <ConstructionLines />
         <div className="relative" style={{ zIndex: 2 }}>
-          <Header />
+          <Header status={status} />
           <main id="main">{children}</main>
           <Footer />
         </div>

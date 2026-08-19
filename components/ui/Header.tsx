@@ -10,7 +10,7 @@ import ThemeToggle from './ThemeToggle'
  * links — the command palette and the feed ARE the navigation. Compresses
  * to a thin bar on scroll.
  */
-export default function Header() {
+export default function Header({ status }: { status?: string | null }) {
   const [compressed, setCompressed] = useState(false)
   const [urduName, setUrduName] = useState(false)
   const [urduPinned, setUrduPinned] = useState(false)
@@ -42,22 +42,33 @@ export default function Header() {
         transitionTimingFunction: 'var(--ease)',
       }}
     >
-      {/* a small easter egg: the name remembers its mother tongue on hover */}
-      <Link
-        href="/"
-        className="display transition-colors"
-        style={{ fontSize: compressed ? 18 : 22, fontStyle: urduName || urduPinned ? 'normal' : 'italic' }}
-        onMouseEnter={() => setUrduName(true)}
-        onMouseLeave={() => setUrduName(false)}
-      >
-        {urduName || urduPinned ? (
-          <span lang="ur" dir="rtl" className="urdu" style={{ fontSize: '0.85em' }}>
-            حسین نقوی
+      <div className="flex min-w-0 flex-col" style={{ gap: 2 }}>
+        {/* a small easter egg: the name remembers its mother tongue on hover */}
+        <Link
+          href="/"
+          className="display transition-colors"
+          style={{ fontSize: compressed ? 18 : 22, fontStyle: urduName || urduPinned ? 'normal' : 'italic' }}
+          onMouseEnter={() => setUrduName(true)}
+          onMouseLeave={() => setUrduName(false)}
+        >
+          {urduName || urduPinned ? (
+            <span lang="ur" dir="rtl" className="urdu" style={{ fontSize: '0.85em' }}>
+              حسین نقوی
+            </span>
+          ) : (
+            site.name
+          )}
+        </Link>
+        {/* the desk reporting on itself — teal, because it is true right now */}
+        {status && !compressed && (
+          <span
+            className="mono-label truncate"
+            style={{ fontSize: 10.5, color: 'var(--color-signal)', textTransform: 'none', letterSpacing: '0.06em' }}
+          >
+            {status}
           </span>
-        ) : (
-          site.name
         )}
-      </Link>
+      </div>
       <div className="flex items-center" style={{ gap: 'var(--u)' }}>
         <ThemeToggle />
         <button

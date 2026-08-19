@@ -1,8 +1,10 @@
 import MDXContent from '@/components/MDXContent'
 import CoverArt from '@/components/generative/CoverArt'
 import ReadingGarden from '@/components/generative/ReadingGarden'
+import RepoFactsTable from './RepoFactsTable'
 import PostMeta from './PostMeta'
 import { formatDate, type Post } from '@/lib/posts'
+import type { RepoFacts } from '@/lib/github'
 
 const STATUS_LABEL: Record<string, { label: string; color: string }> = {
   live: { label: 'Live', color: 'var(--color-accent)' },
@@ -11,7 +13,13 @@ const STATUS_LABEL: Record<string, { label: string; color: string }> = {
 }
 
 /** Dense dossier energy: title, stack chips, status badge, live/repo links. */
-export default function ProjectLayout({ post }: { post: Post }) {
+export default function ProjectLayout({
+  post,
+  facts = null,
+}: {
+  post: Post
+  facts?: RepoFacts | null
+}) {
   const status = post.status ? STATUS_LABEL[post.status] : undefined
   return (
     <article className="mx-auto w-full" style={{ maxWidth: 760, padding: 'calc(var(--u) * 3)', paddingTop: 'calc(var(--u) * 8)' }}>
@@ -88,6 +96,7 @@ export default function ProjectLayout({ post }: { post: Post }) {
       ) : (
         <CoverArt seed={post.slug} type={post.type} height={240} className="cover-art-block" />
       )}
+      <RepoFactsTable facts={facts} />
       <div className="prose post-body">
         <MDXContent code={post.code} />
       </div>

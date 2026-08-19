@@ -11,9 +11,14 @@ export default function Footer() {
         marginTop: 'calc(var(--u) * 10)',
       }}
     >
-      <p className="urdu" lang="ur" dir="rtl" style={{ fontSize: 15, color: 'var(--color-fg-soft)' }}>
-        {site.ghazalUr}
-      </p>
+      <div className="flex flex-col" style={{ gap: 'var(--u)' }}>
+        <p className="urdu" lang="ur" dir="rtl" style={{ fontSize: 15, color: 'var(--color-fg-soft)' }}>
+          {site.ghazalUr}
+        </p>
+        <p className="mono-label" style={{ fontSize: 10.5, color: 'var(--color-fg-faint)' }}>
+          {site.version} — {site.versionNote}
+        </p>
+      </div>
       <nav className="mono-label flex gap-6" aria-label="Footer">
         <Link href="/about" className="transition-colors hover:text-(--color-fg)">About</Link>
         <Link href="/now" className="transition-colors hover:text-(--color-fg)">Now</Link>

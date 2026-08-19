@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-import { getAllPosts, getPostBySlug, type Post } from '@/lib/posts'
+import { getAllPosts, getPostBySlug } from '@/lib/posts'
+import { getRepoFacts } from '@/lib/github'
 import ProjectLayout from '@/components/layouts/ProjectLayout'
 import NoteLayout from '@/components/layouts/NoteLayout'
 import JournalLayout from '@/components/layouts/JournalLayout'
@@ -29,12 +30,6 @@ export async function generateMetadata({
   }
 }
 
-const LAYOUTS: Record<Post['type'], React.ComponentType<{ post: Post }>> = {
-  project: ProjectLayout,
-  note: NoteLayout,
-  journal: JournalLayout,
-}
-
 export default async function PostPage({
   params,
 }: {
@@ -43,6 +38,17 @@ export default async function PostPage({
   const { slug } = await params
   const post = getPostBySlug(slug)
   if (!post) notFound()
-  const Layout = LAYOUTS[post.type]
-  return <Layout post={post} />
+
+  switch (post.type) {
+    case 'project': {
+      // A dossier gains its live rows when the post names a repo; a
+      // failed lookup returns null and the static rows carry the page.
+      const facts = post.repo ? await getRepoFacts(post.repo) : null
+      return <ProjectLayout post={post} facts={facts} />
+    }
+    case 'journal':
+      return <JournalLayout post={post} />
+    default:
+      return <NoteLayout post={post} />
+  }
 }
