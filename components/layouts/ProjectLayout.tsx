@@ -1,4 +1,4 @@
-import MDXContent from '@/components/MDXContent'
+import PostBody from '@/components/unedited/PostBody'
 import CoverArt from '@/components/generative/CoverArt'
 import ReadingGarden from '@/components/generative/ReadingGarden'
 import RepoFactsTable from './RepoFactsTable'
@@ -16,9 +16,11 @@ const STATUS_LABEL: Record<string, { label: string; color: string }> = {
 export default function ProjectLayout({
   post,
   facts = null,
+  uneditedCode,
 }: {
   post: Post
   facts?: RepoFacts | null
+  uneditedCode?: string
 }) {
   const status = post.status ? STATUS_LABEL[post.status] : undefined
   return (
@@ -97,9 +99,7 @@ export default function ProjectLayout({
         <CoverArt seed={post.slug} type={post.type} height={240} className="cover-art-block" />
       )}
       <RepoFactsTable facts={facts} />
-      <div className="prose post-body">
-        <MDXContent code={post.code} />
-      </div>
+      <PostBody className="prose post-body" code={post.code} uneditedCode={uneditedCode} />
       <PostMeta entry={post} />
       <ReadingGarden seed={post.slug} />
     </article>

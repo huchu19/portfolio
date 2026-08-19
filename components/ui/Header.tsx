@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { site } from '@/lib/site'
 import ThemeToggle from './ThemeToggle'
+import UneditedToggle from '@/components/unedited/UneditedToggle'
 
 /**
  * Minimal header (VISION.md Part 8): site name + palette trigger. No nav
@@ -70,6 +71,7 @@ export default function Header({ status }: { status?: string | null }) {
         )}
       </div>
       <div className="flex items-center" style={{ gap: 'var(--u)' }}>
+        <UneditedToggle />
         <ThemeToggle />
         <button
           type="button"

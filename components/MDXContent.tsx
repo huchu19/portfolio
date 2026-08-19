@@ -4,6 +4,7 @@ import Footnote from '@/components/typography/Footnote'
 import Urdu from '@/components/typography/Urdu'
 import RouteStrip from '@/components/layouts/RouteStrip'
 import RouteArc from '@/components/layouts/RouteArc'
+import { Cut, Doubt } from '@/components/typography/Revision'
 
 /**
  * Route treatments are no longer fixtures of a travel-only layout — any
@@ -14,6 +15,8 @@ const sharedComponents = {
   Urdu,
   RouteStrip,
   RouteArc,
+  Cut,
+  Doubt,
   a: ({ href = '', ...props }: React.AnchorHTMLAttributes<HTMLAnchorElement>) =>
     href.startsWith('/') ? (
       <Link href={href} {...props} />

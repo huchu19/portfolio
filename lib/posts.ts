@@ -1,4 +1,4 @@
-import { posts, fragments } from '@/.velite'
+import { posts, fragments, unedited } from '@/.velite'
 
 export type Post = (typeof posts)[number]
 export type Fragment = (typeof fragments)[number]
@@ -35,6 +35,11 @@ export function getFragmentBySlug(slug: string): Fragment | undefined {
 
 export function isFragment(entry: Entry): entry is Fragment {
   return entry.type === 'fragment'
+}
+
+/** The compiled draft for a slug, when one survives. */
+export function getUneditedCode(slug: string): string | undefined {
+  return unedited.find((u) => u.slug === slug)?.code
 }
 
 /** Newest year first; entries inside each year newest first. */

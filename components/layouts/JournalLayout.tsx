@@ -1,10 +1,16 @@
-import MDXContent from '@/components/MDXContent'
+import PostBody from '@/components/unedited/PostBody'
 import ReadingGarden from '@/components/generative/ReadingGarden'
 import PostMeta from './PostMeta'
 import { formatStamp, type Post } from '@/lib/posts'
 
 /** A margin note to the rest of the site: date dominant, quieter palette. */
-export default function JournalLayout({ post }: { post: Post }) {
+export default function JournalLayout({
+  post,
+  uneditedCode,
+}: {
+  post: Post
+  uneditedCode?: string
+}) {
   return (
     <article
       className="mx-auto w-full"
@@ -22,11 +28,12 @@ export default function JournalLayout({ post }: { post: Post }) {
           {post.title}
         </h1>
       </header>
-      <div
-        className="prose journal-body post-body"
-        style={{ paddingLeft: 'calc(var(--u) * 3)', borderLeft: '1px solid var(--color-line)' }}
-      >
-        <MDXContent code={post.code} />
+      <div style={{ paddingLeft: 'calc(var(--u) * 3)', borderLeft: '1px solid var(--color-line)' }}>
+        <PostBody
+          className="prose journal-body post-body"
+          code={post.code}
+          uneditedCode={uneditedCode}
+        />
       </div>
       <PostMeta entry={post} />
       <ReadingGarden seed={post.slug} />

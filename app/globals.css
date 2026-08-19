@@ -715,3 +715,43 @@ body[data-dream] main {
     transform: none;
   }
 }
+
+/* ------------------------------------------------------------------ */
+/*  Unedited mode — the draft underneath                               */
+/* ------------------------------------------------------------------ */
+/* a sentence that didn't survive: struck, dimmed, still legible */
+.revision-cut {
+  display: block;
+  color: var(--color-fg-faint);
+  text-decoration: line-through;
+  text-decoration-color: color-mix(in srgb, var(--color-accent) 55%, transparent);
+  text-decoration-thickness: 1px;
+}
+
+/* the note in the margin arguing with it */
+.revision-doubt {
+  display: flex;
+  gap: var(--u);
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  line-height: 1.6;
+  color: var(--color-accent);
+  border-left: 1px solid color-mix(in srgb, var(--color-accent) 40%, transparent);
+  padding-left: calc(var(--u) * 2);
+}
+.revision-doubt-mark {
+  flex: none;
+  opacity: 0.75;
+}
+
+@media (min-width: 1280px) {
+  .revision-doubt {
+    float: right;
+    clear: right;
+    width: 232px;
+    margin-right: -288px;
+    margin-block: 0 var(--u);
+    border-left: 0;
+    padding-left: 0;
+  }
+}

@@ -1,4 +1,4 @@
-import MDXContent from '@/components/MDXContent'
+import PostBody from '@/components/unedited/PostBody'
 import CoverArt from '@/components/generative/CoverArt'
 import ReadingGarden from '@/components/generative/ReadingGarden'
 import AudioPlayer from '@/components/ui/AudioPlayer'
@@ -17,7 +17,13 @@ import { formatDate, type Post } from '@/lib/posts'
  * A route turns the header into the hop strip; audio hangs a recitation
  * player under the body. None of that needs a separate post type.
  */
-export default function NoteLayout({ post }: { post: Post }) {
+export default function NoteLayout({
+  post,
+  uneditedCode,
+}: {
+  post: Post
+  uneditedCode?: string
+}) {
   const isVerse = post.tags.includes('poetry')
   const urduOnly = post.lang === 'ur'
 
@@ -63,15 +69,16 @@ export default function NoteLayout({ post }: { post: Post }) {
         <CoverArt seed={post.slug} type={post.type} height={160} className="cover-art-block" />
       )}
 
-      <div
-        className={
-          isVerse
-            ? `poetry-body${urduOnly ? ' urdu' : ''}`
-            : 'prose note-body post-body'
-        }
-        {...(isVerse && urduOnly ? { lang: 'ur', dir: 'rtl' } : {})}
-      >
-        <MDXContent code={post.code} />
+      <div {...(isVerse && urduOnly ? { lang: 'ur', dir: 'rtl' } : {})}>
+        <PostBody
+          className={
+            isVerse
+              ? `poetry-body${urduOnly ? ' urdu' : ''}`
+              : 'prose note-body post-body'
+          }
+          code={post.code}
+          uneditedCode={uneditedCode}
+        />
       </div>
 
       {post.media && isAudioPath(post.media) && (

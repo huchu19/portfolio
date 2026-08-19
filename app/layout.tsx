@@ -13,6 +13,7 @@ import EasterEggs from '@/components/ui/EasterEggs'
 import ConstructionLines from '@/components/golden/ConstructionLines'
 import WatcherProvider from '@/components/watcher/WatcherProvider'
 import WatcherMargin from '@/components/watcher/WatcherMargin'
+import UneditedProvider from '@/components/unedited/UneditedProvider'
 import { getFeed, toFeedItem } from '@/lib/posts'
 import { getLastPush } from '@/lib/github'
 import { site } from '@/lib/site'
@@ -101,14 +102,16 @@ export default async function RootLayout({
           Skip to content
         </a>
         <ConstructionLines />
-        <WatcherProvider>
-          <div className="relative" style={{ zIndex: 2 }}>
-            <Header status={status} />
-            <main id="main">{children}</main>
-            <Footer />
-          </div>
-          <WatcherMargin />
-        </WatcherProvider>
+        <UneditedProvider>
+          <WatcherProvider>
+            <div className="relative" style={{ zIndex: 2 }}>
+              <Header status={status} />
+              <main id="main">{children}</main>
+              <Footer />
+            </div>
+            <WatcherMargin />
+          </WatcherProvider>
+        </UneditedProvider>
         <CommandPalette items={paletteItems} />
         <Cursor />
         <EasterEggs />

@@ -66,7 +66,26 @@ const fragments = defineCollection({
     }),
 })
 
+/**
+ * The draft underneath. One optional sibling per post —
+ * `content/unedited/{slug}.mdx` — carrying the sentences that were cut,
+ * the doubts, the strikethroughs. Posts without one say so honestly.
+ */
+const unedited = defineCollection({
+  name: 'Unedited',
+  pattern: 'unedited/**/*.mdx',
+  schema: s
+    .object({
+      slug: s.path(),
+      code: s.mdx(),
+    })
+    .transform((data) => ({
+      ...data,
+      slug: data.slug.split('/').pop()!,
+    })),
+})
+
 export default defineConfig({
   root: 'content',
-  collections: { posts, fragments },
+  collections: { posts, fragments, unedited },
 })
