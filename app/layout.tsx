@@ -1,8 +1,8 @@
 import type { Metadata } from 'next'
 import {
-  Instrument_Serif,
+  Bricolage_Grotesque,
   Inter,
-  Geist_Mono,
+  JetBrains_Mono,
   Noto_Nastaliq_Urdu,
 } from 'next/font/google'
 import Header from '@/components/ui/Header'
@@ -15,23 +15,23 @@ import { getFeed, toFeedItem } from '@/lib/posts'
 import { site } from '@/lib/site'
 import './globals.css'
 
-const instrument = Instrument_Serif({
-  weight: '400',
-  style: ['normal', 'italic'],
+const bricolage = Bricolage_Grotesque({
   subsets: ['latin'],
-  variable: '--font-instrument',
+  axes: ['opsz', 'wdth'],
+  variable: '--font-bricolage',
   display: 'swap',
 })
 
 const inter = Inter({
   subsets: ['latin'],
-  variable: '--font-inter',
+  variable: '--font-sans',
   display: 'swap',
 })
 
-const geistMono = Geist_Mono({
+const jetbrainsMono = JetBrains_Mono({
+  weight: ['400', '500', '700'],
   subsets: ['latin'],
-  variable: '--font-geist-mono',
+  variable: '--font-jetbrains',
   display: 'swap',
 })
 
@@ -47,19 +47,19 @@ const nastaliq = Noto_Nastaliq_Urdu({
 const themeScript = `
 try {
   const theme = localStorage.getItem('theme');
-  document.documentElement.dataset.theme = theme === 'light' ? 'light' : 'dark';
-  document.documentElement.style.backgroundColor = theme === 'light' ? '#f5f0e8' : '#0c0a08';
+  document.documentElement.dataset.theme = theme === 'daylight' ? 'daylight' : 'default';
+  document.documentElement.style.backgroundColor = theme === 'daylight' ? '#f5f0e8' : '#0b0e1f';
 } catch (_) {
-  document.documentElement.dataset.theme = 'dark';
-  document.documentElement.style.backgroundColor = '#0c0a08';
+  document.documentElement.dataset.theme = 'default';
+  document.documentElement.style.backgroundColor = '#0b0e1f';
 }
 `
 
 const bodyThemeScript = `
 try {
   const theme = document.documentElement.dataset.theme;
-  document.body.style.backgroundColor = theme === 'light' ? '#f5f0e8' : '#0c0a08';
-  document.body.style.color = theme === 'light' ? '#2a231d' : '#e8dfd0';
+  document.body.style.backgroundColor = theme === 'daylight' ? '#f5f0e8' : '#0b0e1f';
+  document.body.style.color = theme === 'daylight' ? '#2a231d' : '#f2ede3';
 } catch (_) {}
 `
 
@@ -84,14 +84,14 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      data-theme="dark"
+      data-theme="default"
       suppressHydrationWarning
-      className={`${instrument.variable} ${inter.variable} ${geistMono.variable} ${nastaliq.variable}`}
+      className={`${bricolage.variable} ${inter.variable} ${jetbrainsMono.variable} ${nastaliq.variable}`}
     >
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>
-      <body>
+      <body suppressHydrationWarning>
         <script dangerouslySetInnerHTML={{ __html: bodyThemeScript }} />
         <a href="#main" className="skip-link">
           Skip to content

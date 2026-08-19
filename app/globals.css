@@ -4,30 +4,35 @@
 /*  Tokens — VISION.md Part 4. No raw hex anywhere else.               */
 /* ------------------------------------------------------------------ */
 @theme {
-  /* the void — warm near-black ground */
-  --color-void: #0c0a08;
-  --color-void-raised: #161210;
-  --color-void-line: #2a2420;
-  --color-ash: #8c7e6e;
-  --color-bone: #e8dfd0;
-  --color-white: #f5f0e8;
-  --color-ember: #e07a2f;
-  --color-ember-bright: #f09940;
-  --color-ember-deep: #b85a1a;
-  --color-wave: #3a6b8c;
-  --color-moss: #6b8c5a;
-  --color-ink: #1a1714;
+  /* ground — the desk, mid-work. Dark is the default, not a toggle state. */
+  --color-bg: #0b0e1f;
+  --color-surface: #131834;
+  --color-raised: #1d2447;
+  --color-line: #2e3763;
+
+  /* figure */
+  --color-fg-soft: #a8afc9;
+  --color-fg: #f2ede3;
+  --color-fg-bright: #f2ede3;
+  --color-fg-faint: #6f779a;
+
+  /* accents — two-accent discipline. Marigold speaks for the site;
+     teal is reserved for the Watcher and genuinely live data only. */
+  --color-accent: #ffb020;
+  --color-accent-bright: #ffb020;
+  --color-accent-deep: #c77e00;
+  --color-signal: #2ee6c0;
 
   /* type */
   /* Nastaliq sits in every stack before the system fallback so Urdu
      glyphs can never render in a Latin-script font (hard rule #4). */
-  --font-display: var(--font-instrument), var(--font-noto-nastaliq), "Playfair Display", Georgia, serif;
-  --font-body: var(--font-inter), var(--font-noto-nastaliq), system-ui, sans-serif;
-  --font-mono: var(--font-geist-mono), var(--font-noto-nastaliq), ui-monospace, "SF Mono", monospace;
+  --font-display: var(--font-bricolage), var(--font-noto-nastaliq), "Helvetica Neue", system-ui, sans-serif;
+  --font-body: var(--font-sans), var(--font-noto-nastaliq), "Avenir Next", system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains), var(--font-noto-nastaliq), ui-monospace, "SF Mono", monospace;
   --font-nastaliq: var(--font-noto-nastaliq), serif;
 
   /* motion */
-  --ease-surface: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-soft: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 :root {
@@ -36,37 +41,35 @@
   --phi: 1.618;
   --lh: 1.7;
   /* type-dot colors — fragment/type indicators in feed + archive */
-  --dot-project: var(--color-ember);
-  --dot-essay: var(--color-bone);
-  --dot-poetry: var(--color-ember-bright);
-  --dot-journal: var(--color-ash);
-  --dot-adventure: var(--color-wave);
-  --dot-fragment: var(--color-moss); /* fragments are the garden's small growth */
-  /* fragment tag dots — ember for philosophy/religion, wave for tech, green for football */
-  --tag-philosophy: var(--color-ember);
-  --tag-religion: var(--color-ember);
-  --tag-tech: var(--color-wave);
-  --tag-football: var(--color-moss);
-  --tag-poetry: var(--color-ember-bright);
+  --dot-project: var(--color-accent);
+  --dot-note: var(--color-fg);
+  --dot-journal: var(--color-fg-soft);
+  --dot-fragment: var(--color-signal);
+  /* fragment tag dots */
+  --tag-philosophy: var(--color-accent);
+  --tag-religion: var(--color-accent);
+  --tag-tech: var(--color-signal);
+  --tag-football: #4f9e6e;
+  --tag-poetry: var(--color-accent-deep);
   --tag-comedy: #b08f3a;
-  --tag-manga: var(--color-ash);
+  --tag-manga: var(--color-fg-soft);
   --tag-music: #7a6b9e;
 }
 
-[data-theme="light"] {
+[data-theme="daylight"] {
   color-scheme: light;
-  --color-void: #f5f0e8;
-  --color-void-raised: #fffaf2;
-  --color-void-line: #d6c9b8;
-  --color-ash: #6f6254;
-  --color-bone: #2a231d;
-  --color-white: #1a1714;
-  --color-ember: #b85a1a;
-  --color-ember-bright: #d46a22;
-  --color-ember-deep: #8f4212;
-  --color-wave: #2f6488;
-  --color-moss: #4f7040;
-  --color-ink: #1a1714;
+  --color-bg: #f5f0e8;
+  --color-surface: #fffaf2;
+  --color-raised: #efe6d6;
+  --color-line: #d6c9b8;
+  --color-fg-soft: #6f6254;
+  --color-fg: #2a231d;
+  --color-fg-bright: #1a1714;
+  --color-fg-faint: #8c7e6e;
+  --color-accent: #c77e00;
+  --color-accent-bright: #c77e00;
+  --color-accent-deep: #8f4212;
+  --color-signal: #157a68;
 }
 
 /* generative cover art blocks share the coverImage rhythm */
@@ -78,19 +81,19 @@
 /*  Base                                                               */
 /* ------------------------------------------------------------------ */
 html {
-  background: var(--color-void);
+  background: var(--color-bg);
   color-scheme: dark;
   scroll-behavior: smooth;
 }
 
-html[data-theme="light"] {
+html[data-theme="daylight"] {
   color-scheme: light;
 }
 
-html[data-theme="light"],
-html[data-theme="light"] body {
-  background-color: #f5f0e8 !important;
-  color: #2a231d !important;
+html[data-theme="daylight"],
+html[data-theme="daylight"] body {
+  background-color: var(--color-bg) !important;
+  color: var(--color-fg) !important;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -100,8 +103,8 @@ html[data-theme="light"] body {
 }
 
 body {
-  background: var(--color-void);
-  color: var(--color-bone);
+  background: var(--color-bg);
+  color: var(--color-fg);
   font-family: var(--font-body);
   font-size: 17px;
   line-height: var(--lh);
@@ -115,9 +118,35 @@ body {
   transition: background-color 0.3s var(--ease), color 0.3s var(--ease);
 }
 
+/* film grain — sensor noise on the desk lamp's throw, not on paper */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0.025;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* lamplight falling on the desk from above */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: radial-gradient(130% 100% at 50% 0%, rgb(255 176 32 / 0.04), transparent 55%);
+}
+
+[data-theme="daylight"] body::after {
+  display: none;
+}
+
 ::selection {
-  background: var(--color-ember);
-  color: var(--color-void);
+  background: var(--color-accent);
+  color: var(--color-bg);
 }
 
 a {
@@ -127,7 +156,7 @@ a {
 
 /* focus discipline — visible, ember, never removed */
 :focus-visible {
-  outline: 2px solid var(--color-ember);
+  outline: 2px solid var(--color-accent);
   outline-offset: 2px;
   border-radius: 2px;
 }
@@ -143,8 +172,8 @@ a {
   left: calc(var(--u) * 2);
   z-index: 100;
   padding: var(--u) calc(var(--u) * 2);
-  background: var(--color-ember);
-  color: var(--color-void);
+  background: var(--color-accent);
+  color: var(--color-bg);
   font-family: var(--font-mono);
   font-size: 13px;
   transition: top 0.2s var(--ease);
@@ -155,14 +184,14 @@ a {
   place-items: center;
   width: calc(var(--u) * 4);
   height: calc(var(--u) * 4);
-  border: 1px solid var(--color-void-line);
+  border: 1px solid var(--color-line);
   border-radius: 4px;
-  color: var(--color-ash);
+  color: var(--color-fg-soft);
   transition: color 0.2s var(--ease), border-color 0.2s var(--ease), background 0.2s var(--ease);
 }
 .theme-toggle:hover {
-  color: var(--color-bone);
-  border-color: color-mix(in srgb, var(--color-ember) 45%, var(--color-void-line));
+  color: var(--color-fg);
+  border-color: color-mix(in srgb, var(--color-accent) 45%, var(--color-line));
 }
 .theme-toggle::before {
   content: "";
@@ -172,7 +201,7 @@ a {
   border-radius: 999px;
   box-shadow: inset -4px -3px 0 0 currentColor;
 }
-[data-theme="light"] .theme-toggle::before {
+[data-theme="daylight"] .theme-toggle::before {
   box-shadow: inset 0 0 0 4px transparent, 0 -6px 0 -5px currentColor, 0 6px 0 -5px currentColor,
     6px 0 0 -5px currentColor, -6px 0 0 -5px currentColor;
 }
@@ -186,7 +215,7 @@ a {
 .display {
   font-family: var(--font-display);
   font-weight: 400;
-  color: var(--color-white);
+  color: var(--color-fg-bright);
   line-height: 1.1;
   letter-spacing: -0.01em;
 }
@@ -198,7 +227,7 @@ a {
   text-transform: uppercase;
   letter-spacing: 0.12em;
   font-variant-numeric: tabular-nums;
-  color: var(--color-ash);
+  color: var(--color-fg-soft);
 }
 
 /* Urdu text — always Nastaliq, always RTL (set dir/lang in markup too) */
@@ -224,7 +253,7 @@ a {
 .prose h2,
 .prose h3 {
   font-family: var(--font-display);
-  color: var(--color-white);
+  color: var(--color-fg-bright);
   line-height: 1.2;
   margin-top: calc(var(--u) * 6);
 }
@@ -235,18 +264,18 @@ a {
   font-size: 22px;
 }
 .prose a {
-  color: var(--color-bone);
+  color: var(--color-fg);
   text-decoration: underline;
-  text-decoration-color: var(--color-wave);
+  text-decoration-color: var(--color-fg-soft);
   text-underline-offset: 3px;
   transition: color 0.2s var(--ease), text-decoration-color 0.2s var(--ease);
 }
 .prose a:hover {
-  color: var(--color-white);
-  text-decoration-color: var(--color-ember);
+  color: var(--color-fg-bright);
+  text-decoration-color: var(--color-accent);
 }
 .prose strong {
-  color: var(--color-white);
+  color: var(--color-fg-bright);
   font-weight: 600;
 }
 .prose em {
@@ -257,8 +286,8 @@ a {
   font-style: italic;
   font-size: 1.35em;
   line-height: 1.5;
-  color: var(--color-white);
-  border-left: 2px solid var(--color-ember);
+  color: var(--color-fg-bright);
+  border-left: 2px solid var(--color-accent);
   padding-left: calc(var(--u) * 3);
   margin-block: calc(var(--u) * 5);
 }
@@ -276,25 +305,25 @@ a {
   margin-top: var(--u);
 }
 .prose li::marker {
-  color: var(--color-ash);
+  color: var(--color-fg-soft);
 }
 .prose hr {
   border: 0;
-  border-top: 1px solid var(--color-void-line);
+  border-top: 1px solid var(--color-line);
   margin-block: calc(var(--u) * 6);
 }
 .prose code {
   font-family: var(--font-mono);
   font-size: 0.88em;
-  background: var(--color-void-raised);
-  border: 1px solid var(--color-void-line);
+  background: var(--color-surface);
+  border: 1px solid var(--color-line);
   border-radius: 4px;
   padding: 2px 6px;
-  color: var(--color-bone);
+  color: var(--color-fg);
 }
 .prose pre {
-  background: var(--color-void-raised);
-  border: 1px solid var(--color-void-line);
+  background: var(--color-surface);
+  border: 1px solid var(--color-line);
   border-radius: 8px;
   padding: calc(var(--u) * 3);
   overflow-x: auto;
@@ -309,12 +338,12 @@ a {
 .prose img {
   max-width: 100%;
   border-radius: 8px;
-  border: 1px solid var(--color-void-line);
+  border: 1px solid var(--color-line);
 }
 
 /* footnotes — outer gutter on wide screens, inline disclosure below it */
 .footnote-marker {
-  color: var(--color-ember);
+  color: var(--color-accent);
   font-family: var(--font-mono);
   font-size: 0.7em;
   margin-left: 2px;
@@ -323,14 +352,14 @@ a {
   display: block;
   font-size: 13px;
   line-height: 1.6;
-  color: var(--color-ash);
+  color: var(--color-fg-soft);
   margin-block: var(--u);
   padding-left: calc(var(--u) * 2);
-  border-left: 1px solid var(--color-void-line);
+  border-left: 1px solid var(--color-line);
 }
 .footnote-n {
   font-family: var(--font-mono);
-  color: var(--color-ember-deep);
+  color: var(--color-accent-deep);
 }
 /* Tufte-style sidenotes: float into the outer gutter when there's room */
 @media (min-width: 1280px) {
@@ -348,8 +377,8 @@ a {
 .draft-note {
   font-family: var(--font-mono);
   font-size: 13px;
-  color: var(--color-ash);
-  border: 1px dashed var(--color-void-line);
+  color: var(--color-fg-soft);
+  border: 1px dashed var(--color-line);
   border-radius: 6px;
   padding: var(--u) calc(var(--u) * 2);
 }
@@ -433,7 +462,7 @@ a {
     position: sticky;
     top: calc(var(--u) * 5);
     z-index: 20;
-    background: color-mix(in srgb, var(--color-void) 94%, transparent);
+    background: color-mix(in srgb, var(--color-bg) 94%, transparent);
     backdrop-filter: blur(12px);
   }
 }
@@ -444,22 +473,22 @@ a {
   font-size: 13px;
   letter-spacing: 0.08em;
   padding: 2px var(--u);
-  border: 1px solid var(--color-void-line);
+  border: 1px solid var(--color-line);
   border-radius: 4px;
-  background: var(--color-void-raised);
-  color: var(--color-ash);
+  background: var(--color-surface);
+  color: var(--color-fg-soft);
   transition: color 0.5s var(--ease), border-color 0.5s var(--ease);
 }
 .route-arc-node[data-passed] {
-  color: var(--color-ember-bright);
-  border-color: var(--color-ember-deep);
+  color: var(--color-accent-bright);
+  border-color: var(--color-accent-deep);
 }
 
 /* Recitation player seek line — a hairline with an ember thumb */
 .audio-seek {
   appearance: none;
   height: 2px;
-  background: var(--color-void-line);
+  background: var(--color-line);
   border-radius: 1px;
   cursor: pointer;
 }
@@ -468,21 +497,21 @@ a {
   width: 10px;
   height: 10px;
   border-radius: 50%;
-  background: var(--color-ember);
+  background: var(--color-accent);
 }
 .audio-seek::-moz-range-thumb {
   width: 10px;
   height: 10px;
   border: none;
   border-radius: 50%;
-  background: var(--color-ember);
+  background: var(--color-accent);
 }
 
 /* Route strip connector — draws left to right on load */
 .route-line {
   flex: 1;
   height: 1px;
-  background: var(--color-wave);
+  background: var(--color-fg-soft);
   transform-origin: left;
   animation: route-draw 0.6s var(--ease) both;
 }
@@ -500,7 +529,7 @@ a {
   font-family: var(--font-display);
   font-size: clamp(19px, 2.2vw, 25px);
   line-height: 1.8;
-  color: var(--color-white);
+  color: var(--color-fg-bright);
 }
 .poetry-body p + p {
   margin-top: calc(var(--u) * 4);
@@ -515,7 +544,7 @@ a {
   max-width: 55ch;
 }
 .journal-body strong {
-  color: var(--color-bone);
+  color: var(--color-fg);
 }
 
 /* Essay — justified with hyphens on desktop, ragged on mobile */
@@ -569,8 +598,8 @@ body[data-dream] main {
 /* Panels breathe: lift + ember edge-glow on hover */
 .panel {
   position: relative; /* paints above the absolutely-positioned spiral overlay */
-  background: var(--color-void-raised);
-  border: 1px solid var(--color-void-line);
+  background: var(--color-surface);
+  border: 1px solid var(--color-line);
   border-radius: 8px;
   transition:
     transform 0.3s var(--ease),
@@ -579,9 +608,9 @@ body[data-dream] main {
 }
 .panel:hover {
   transform: translateY(-2px);
-  border-color: color-mix(in srgb, var(--color-ember) 45%, var(--color-void-line));
-  box-shadow: 0 0 0 1px color-mix(in srgb, var(--color-ember) 18%, transparent),
-    0 8px 32px -16px color-mix(in srgb, var(--color-ember) 25%, transparent);
+  border-color: color-mix(in srgb, var(--color-accent) 45%, var(--color-line));
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--color-accent) 18%, transparent),
+    0 8px 32px -16px color-mix(in srgb, var(--color-accent) 25%, transparent);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -607,7 +636,7 @@ body[data-dream] main {
   width: 28px;
   height: 28px;
   margin: -14px 0 0 -14px;
-  border: 1px solid color-mix(in srgb, var(--color-ember) 55%, transparent);
+  border: 1px solid color-mix(in srgb, var(--color-accent) 55%, transparent);
   border-radius: 50%;
   pointer-events: none;
   z-index: 90;
@@ -622,7 +651,7 @@ body[data-dream] main {
   width: 2px;
   height: 2px;
   margin: -1px 0 0 -1px;
-  background: var(--color-ember);
+  background: var(--color-accent);
   border-radius: 50%;
 }
 .cursor-ring[data-active="true"] {
@@ -641,5 +670,5 @@ body[data-dream] main {
 /* ------------------------------------------------------------------ */
 * {
   scrollbar-width: thin;
-  scrollbar-color: var(--color-void-line) transparent;
+  scrollbar-color: var(--color-line) transparent;
 }

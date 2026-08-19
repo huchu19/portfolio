@@ -2,32 +2,32 @@
 
 import { useEffect, useState } from 'react'
 
-type Theme = 'dark' | 'light'
+type Theme = 'default' | 'daylight'
 
 const STORAGE_KEY = 'theme'
 
 function applyTheme(theme: Theme) {
   document.documentElement.dataset.theme = theme
   const paint =
-    theme === 'light'
+    theme === 'daylight'
       ? { background: '#f5f0e8', color: '#2a231d' }
-      : { background: '#0c0a08', color: '#e8dfd0' }
+      : { background: '#0b0e1f', color: '#f2ede3' }
   document.documentElement.style.backgroundColor = paint.background
   document.body.style.backgroundColor = paint.background
   document.body.style.color = paint.color
 }
 
 export default function ThemeToggle() {
-  const [theme, setTheme] = useState<Theme>('dark')
+  const [theme, setTheme] = useState<Theme>('default')
 
   useEffect(() => {
     const saved = window.localStorage.getItem(STORAGE_KEY)
-    const initial = saved === 'light' || saved === 'dark' ? saved : 'dark'
+    const initial = saved === 'daylight' ? 'daylight' : 'default'
     applyTheme(initial)
     setTheme(initial)
   }, [])
 
-  const next = theme === 'dark' ? 'light' : 'dark'
+  const next = theme === 'default' ? 'daylight' : 'default'
 
   return (
     <button

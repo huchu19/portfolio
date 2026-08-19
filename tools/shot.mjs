@@ -21,7 +21,7 @@ if (flags.includes('--reduced')) {
   await page.emulateMediaFeatures([{ name: 'prefers-reduced-motion', value: 'reduce' }])
 }
 if (flags.includes('--light')) {
-  await page.evaluateOnNewDocument(() => localStorage.setItem('theme', 'light'))
+  await page.evaluateOnNewDocument(() => localStorage.setItem('theme', 'daylight'))
 }
 const errors = []
 page.on('console', (m) => m.type() === 'error' && errors.push(m.text()))
