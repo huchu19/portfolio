@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { site, githubUrl } from '@/lib/site'
+import EmailLink from '@/components/watcher/EmailLink'
 
 export default function Footer() {
   return (
@@ -26,6 +27,7 @@ export default function Footer() {
         <Link href="/colophon" className="transition-colors hover:text-(--color-fg)">Colophon</Link>
         <Link href="/guide" className="transition-colors hover:text-(--color-fg)">Guide</Link>
         <a href={githubUrl} className="transition-colors hover:text-(--color-fg)">GitHub</a>
+        <EmailLink email={site.email} />
         <a href="/feed.xml" className="transition-colors hover:text-(--color-fg)">RSS</a>
       </nav>
     </footer>
