@@ -35,8 +35,12 @@ export default function Feed({ items }: { items: FeedItem[] }) {
       : []
 
   return (
-    <div className="flex h-full min-h-0 flex-col">
-      <nav aria-label="Filter feed" className="flex flex-wrap" style={{ gap: 'var(--u) calc(var(--u) * 2)', paddingBottom: 'calc(var(--u) * 2)' }}>
+    <div className="flex flex-col">
+      <nav
+        aria-label="Filter feed"
+        className="feed-filter-rail flex flex-wrap"
+        style={{ gap: 'var(--u) calc(var(--u) * 2)' }}
+      >
         {FILTERS.map((f) => {
           const active = type === f.value
           return (
@@ -79,18 +83,19 @@ export default function Feed({ items }: { items: FeedItem[] }) {
       )}
 
       <div
-        className="grid min-h-0 flex-1 grid-cols-1 overflow-y-auto sm:grid-cols-2"
-        style={{ gap: 'calc(var(--u) * 2)', gridAutoRows: 'minmax(96px, auto)', gridAutoFlow: 'dense' }}
+        className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
+        style={{ gap: 'calc(var(--u) * 2)', gridAutoRows: 'minmax(128px, auto)', gridAutoFlow: 'dense' }}
       >
         <AnimatePresence mode="popLayout" initial={false}>
           {filtered.map((item, i) => (
             <motion.div
               key={item.permalink}
+              data-entry-index={i}
               layout={!reduced}
               initial={reduced ? false : { opacity: 0, y: 16, scale: 0.98 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={reduced ? undefined : { opacity: 0, scale: 0.98 }}
-              transition={{ duration: 0.4, delay: i * 0.03, ease: [0.22, 1, 0.36, 1] }}
+              transition={{ duration: 0.4, delay: Math.min(i, 8) * 0.03, ease: [0.22, 1, 0.36, 1] }}
               className={`${panelShape(item)} max-sm:col-span-1`}
             >
               <FeedPanel item={item} />

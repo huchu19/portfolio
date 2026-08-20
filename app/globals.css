@@ -384,52 +384,66 @@ a {
 }
 
 /* ------------------------------------------------------------------ */
-/*  The Golden Grid homepage — 13×8 fibonacci rectangle (Option C)     */
-/*  intro 8² · feed 5² · featured 3² · now 2² · quick links 2×1        */
+/*  The homepage descent                                               */
+/*  masthead · feed · desk (pinned) · fragments · invitation           */
+/*                                                                     */
+/*  Replaced the 13×8 golden grid + ZoomStage, where the whole page     */
+/*  fitted in one viewport and ~460vh of scroll only moved a camera     */
+/*  across it. Sections are content boundaries now, not camera stops.   */
 /* ------------------------------------------------------------------ */
-.home-grid {
+.descent {
   position: relative;
-  display: grid;
-  grid-template-columns: repeat(13, minmax(0, 1fr));
-  grid-template-rows: repeat(8, minmax(0, 1fr));
-  gap: calc(var(--u) * 2);
-  aspect-ratio: 13 / 8;
-  width: min(100%, calc((100dvh - 96px) * 13 / 8));
+  width: 100%;
+  max-width: 1280px;
   margin-inline: auto;
+  padding-inline: calc(var(--u) * 3);
 }
-.cell-intro { grid-area: 1 / 1 / 9 / 9; }
-.cell-feed { grid-area: 1 / 9 / 6 / 14; min-height: 0; overflow: hidden; }
-.cell-quick { grid-area: 6 / 9 / 7 / 11; }
-.cell-now { grid-area: 7 / 9 / 9 / 11; }
-.cell-featured { grid-area: 6 / 11 / 9 / 14; }
 
-/* Option A: the stage pins to the viewport while the tall track scrolls */
-.zoom-sticky {
+/* hairlines between sections — the desk has edges, not gaps */
+.descent > section + section {
+  border-top: 1px solid var(--color-line);
+}
+
+/* The feed's filter rail stays reachable through the descent. It sits
+   directly beneath the compressed header and paints its own ground, so
+   panels scrolling under it don't show through the blur. */
+.feed-filter-rail {
   position: sticky;
-  top: 0;
-  height: 100dvh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  top: 52px;
+  z-index: 20;
+  background: var(--color-bg);
+  backdrop-filter: blur(12px);
+  padding-block: calc(var(--u) * 2);
+  margin-bottom: calc(var(--u) * 2);
 }
 
-/* Mobile: single column, fibonacci-proportioned heights, spiral → progress line */
+/* The mobile header stays taller than its desktop compressed state, so the
+   rail needs more clearance or it crops the first row of panels. */
 @media (max-width: 767px) {
-  .home-grid {
-    display: flex;
-    flex-direction: column;
-    aspect-ratio: auto;
-    width: 100%;
-    gap: calc(var(--u) * 3);
+  .feed-filter-rail {
+    top: 60px;
   }
-  .cell-intro {
-    min-height: calc(100dvh * 0.618);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-  }
-  .home-grid > .spiral-overlay {
-    display: none;
+}
+
+/* The ledger rides the outer gutter, outside the content column rather
+   than stealing width from it. `.descent` caps at 1280px, so the gutter
+   only exists once the viewport is wider than that plus the ledger. */
+.feed-with-ledger {
+  position: relative;
+}
+
+.entry-ledger {
+  display: none;
+}
+
+@media (min-width: 1440px) {
+  .entry-ledger {
+    display: block;
+    position: absolute;
+    right: 100%;
+    top: 0;
+    height: 100%;
+    margin-right: calc(var(--u) * 3);
   }
 }
 
@@ -673,7 +687,11 @@ body[data-dream] main {
 /* ------------------------------------------------------------------ */
 .watcher-margin {
   position: fixed;
-  left: calc(var(--u) * 2);
+  /* Sit in the gutter beside the 1280px content column, not against the
+     viewport edge — otherwise the note lands on top of the text once the
+     page actually has content down its whole length. Falls back to the
+     edge on narrower screens, where the media query below takes over. */
+  left: max(calc(var(--u) * 2), calc((100vw - 1280px) / 2 - 226px));
   bottom: calc(var(--u) * 10);
   z-index: 40;
   /* the gutter is reserved whether or not it speaks: no layout shift */
@@ -698,9 +716,10 @@ body[data-dream] main {
   transform: none;
 }
 
-/* the desk has no margin to write in on a phone — sit it above the fold
-   line instead, still out of the reading column */
-@media (max-width: 1100px) {
+/* Below ~1750px there is no gutter wide enough to write in beside the
+   1280px column, so the note stops floating and sits inline above the
+   footer instead — still out of the reading column, never over it. */
+@media (max-width: 1750px) {
   .watcher-margin {
     position: static;
     width: auto;

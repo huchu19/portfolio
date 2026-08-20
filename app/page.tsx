@@ -1,106 +1,59 @@
-import Link from 'next/link'
 import { Suspense } from 'react'
 import Feed from '@/components/feed/Feed'
-import GhazalLine from '@/components/golden/GhazalLine'
-import SpiralOverlay from '@/components/golden/SpiralOverlay'
-import ZoomStage from '@/components/golden/ZoomStage'
+import EntryLedger from '@/components/feed/EntryLedger'
+import Masthead from '@/components/home/Masthead'
+import DeskBand from '@/components/home/DeskBand'
+import FragmentStrip from '@/components/home/FragmentStrip'
+import Invitation from '@/components/home/Invitation'
+import Section from '@/components/home/Section'
 import ScrollProgress from '@/components/ui/ScrollProgress'
-import { getFeed, getAllPosts, toFeedItem } from '@/lib/posts'
-import { now } from '@/lib/now'
-import { site } from '@/lib/site'
+import { getFeed, getAllFragments, toFeedItem } from '@/lib/posts'
+import { getShipping } from '@/lib/github'
 
-const GHAZAL_LINES = [
-  'خوابوں کا یہ باغ جلتا بھی رہے تو کیا',
-  'راکھ سے بھی ایک نیا انقلاب پیدا ہوتا ہے',
-]
-
-export default function HomePage() {
+/**
+ * The descent. Five sections, each one carrying something the section above
+ * it did not — the previous homepage spent its entire scroll budget zooming
+ * around a single viewport-sized grid, so scrolling revealed nothing new.
+ */
+export default async function HomePage() {
   const items = getFeed().map(toFeedItem)
-  const featured = getAllPosts().find((p) => p.type === 'project')
+  const fragments = getAllFragments().map(toFeedItem)
+  const shipping = await getShipping()
 
   return (
-    <div style={{ padding: 'calc(var(--u) * 3)' }}>
+    <div className="descent">
       <ScrollProgress />
-      <ZoomStage>
-        <SpiralOverlay />
 
-        {/* 8² — the intro rectangle */}
-        <section className="cell-intro flex flex-col justify-center" style={{ padding: 'calc(var(--u) * 4)' }}>
-          <p className="mono-label" style={{ marginBottom: 'calc(var(--u) * 2)' }}>
-            Khwabon ka Bagh — a universe, not a portfolio
+      <Masthead />
+
+      <Section label="Feed" style={{ paddingBlock: 'calc(var(--u) * 8)' }}>
+        <div style={{ marginBottom: 'calc(var(--u) * 4)' }}>
+          <p className="mono-label" style={{ color: 'var(--color-accent)' }}>
+            The work
           </p>
-          <h1 className="display" style={{ fontSize: 'clamp(52px, 7.5vw, 112px)', lineHeight: 1 }}>
-            Hussain
-            <br />
-            <em>Naqvi</em>
-          </h1>
-          <div style={{ marginTop: 'calc(var(--u) * 4)', maxWidth: 520 }}>
-            <GhazalLine lines={GHAZAL_LINES} />
-            <p style={{ marginTop: 'var(--u)', fontSize: 14, color: 'var(--color-fg-soft)', maxWidth: '44ch' }}>
-              {site.ghazalEn}
-            </p>
-          </div>
-          <p
-            className="mono-label"
-            style={{ marginTop: 'calc(var(--u) * 5)', color: 'var(--color-fg)', fontSize: 13 }}
+          <h2
+            className="display"
+            style={{ fontSize: 'clamp(28px, 3.5vw, 44px)', marginTop: 'var(--u)' }}
           >
-            Software engineer<span style={{ color: 'var(--color-accent)' }}> · </span>
-            Urdu poet<span style={{ color: 'var(--color-accent)' }}> · </span>
-            Delusional optimist
-          </p>
-        </section>
+            Everything, newest first
+          </h2>
+        </div>
 
-        {/* 5² — the feed */}
-        <section className="cell-feed flex flex-col" aria-label="Feed" style={{ padding: 'calc(var(--u) * 2)' }}>
+        <div className="feed-with-ledger">
+          <Suspense fallback={null}>
+            <EntryLedger total={items.length} />
+          </Suspense>
           <Suspense fallback={null}>
             <Feed items={items} />
           </Suspense>
-        </section>
+        </div>
+      </Section>
 
-        {/* 2×1 — quick links */}
-        <nav className="cell-quick flex flex-wrap items-center" aria-label="Quick links" style={{ gap: 'calc(var(--u) * 2)', padding: 'calc(var(--u) * 2)' }}>
-          {[
-            ['About', '/about'],
-            ['Archive', '/archive'],
-            ['Colophon', '/colophon'],
-          ].map(([label, href]) => (
-            <Link key={href} href={href} className="mono-label transition-colors hover:text-(--color-fg)">
-              {label}
-            </Link>
-          ))}
-        </nav>
+      <DeskBand shipping={shipping} />
 
-        {/* 2² — /now telemetry */}
-        <Link href="/now" className="cell-now panel flex flex-col justify-between overflow-hidden" style={{ padding: 'calc(var(--u) * 2)' }}>
-          <div className="mono-label" style={{ color: 'var(--color-accent)' }}>Now</div>
-          <div className="flex flex-col gap-1" style={{ fontSize: 12.5, color: 'var(--color-fg-soft)' }}>
-            <span className="line-clamp-1">
-              <span style={{ color: 'var(--color-fg)' }}>Building</span> {now.building[0].name}
-            </span>
-            <span className="line-clamp-1">
-              <span style={{ color: 'var(--color-fg)' }}>Reading</span> {now.reading.title}
-            </span>
-            <span className="line-clamp-1">{now.location}</span>
-          </div>
-        </Link>
+      <FragmentStrip items={fragments} />
 
-        {/* 3² — featured */}
-        {featured && (
-          <Link href={featured.permalink} className="cell-featured panel flex flex-col justify-between overflow-hidden" style={{ padding: 'calc(var(--u) * 3)', borderLeft: '2px solid var(--color-accent)' }}>
-            <div>
-              <div className="mono-label" style={{ color: 'var(--color-accent)', marginBottom: 'var(--u)' }}>
-                Featured
-              </div>
-              <h2 className="display line-clamp-3" style={{ fontSize: 'clamp(20px, 1.8vw, 28px)' }}>
-                {featured.title}
-              </h2>
-            </div>
-            <p className="line-clamp-2" style={{ fontSize: 13.5, color: 'var(--color-fg-soft)' }}>
-              {featured.excerpt}
-            </p>
-          </Link>
-        )}
-      </ZoomStage>
+      <Invitation />
     </div>
   )
 }

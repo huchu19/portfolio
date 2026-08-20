@@ -11,8 +11,8 @@ export const site = {
   githubUser: 'huchu19',
   email: 'hussainnaqvi2004@gmail.com',
   /* bump on any visible change, and say what changed in three words */
-  version: 'v1.0.0',
-  versionNote: 'the desk',
+  version: 'v1.1.0',
+  versionNote: 'a real descent',
   /* the ghazal line that opens the universe */
   ghazalUr: 'خوابوں کا یہ باغ جلتا بھی رہے تو کیا',
   ghazalEn: 'Even if this garden of dreams keeps burning — from ashes too, a new revolution is born.',
