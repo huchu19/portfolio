@@ -179,3 +179,55 @@ light-mode contracts are screenshot-proven, not promised.
   `media:` field and the recitation player wakes up.
 - Rewrite the /guide prose — it is about you, in my words.
 - Keep planting fragments — the model is 3 lines of frontmatter away.
+
+## The desk scene (see DESK-SCENE.md, DECISIONS.md)
+
+**Built:** the homepage's list-based Feed replaced with a literal desk —
+an abstract line-art avatar at a standing desk, back to the viewer, with
+every project/note/journal post floating on the wall behind them as a
+real, clickable object leading to its writeup.
+
+- `lib/wall.ts`: deterministic wall-object placement, seeded per post slug,
+  reusing the site's existing seeded-RNG and fibonacci primitives.
+- `components/home/desk/`: `DeskScene` (server, computes layout),
+  `WallScene` (client, owns the one open-preview state + Escape/click-away/
+  focus-out close), `ScatteredWall` + `WallGrid` (the CSS-gated
+  wide-viewport and fallback renderings), `WallBackdrop` and `DeskFigure`
+  (decorative SVG, the latter with seated and standing pose variants that
+  crossfade on a slow timer), `DeskScreen` (absorbs `DeskBand`'s
+  Building/Shipping/Elsewhere telemetry, now timer- rather than
+  scroll-driven), `WallObject` + `WallObjectPreview` (the interactive
+  layer — real `<Link>`s, not SVG anchors).
+- Deleted: `DeskBand.tsx`, `Feed.tsx`, `FeedPanel.tsx`, `EntryLedger.tsx`.
+- `REVAMP.md`'s "do not build" list updated: permits this scene's 2D
+  layered motion, stops citing the deleted `Parallax.tsx`, and defers real
+  3D to a documented future phase.
+
+**Caught by the loop this phase:**
+1. `WallBackdrop`'s golden-subdivision echo passed a 16:9 box into
+   `goldenSubdivision`, which only holds for a true golden rectangle —
+   produced negative rect dimensions (visible console errors) once the
+   cut sequence ran past what the mismatched aspect ratio could support.
+   Fixed by computing the subdivision in its own golden-ratio viewBox and
+   slicing it to fill the scene, the same technique `ConstructionLines`
+   already uses.
+2. The in-scene monitor's Building/Shipping/Elsewhere content overflowed
+   its box at the scene's actual rendered size — not a sizing-chain bug
+   (verified the percentage-height cascade resolves correctly end to end)
+   but genuinely too much content for the space. Trimmed to one Building
+   item and tightened the type scale.
+3. `Section.tsx` left every homepage block permanently invisible under
+   reduced motion — `initial={false}` doesn't survive past the first
+   mount, and nothing was left to carry the section to `opacity: 1` once
+   the reduced-motion preference resolved a render later. Fixed by
+   driving the resting state through `animate` instead of leaning on
+   `initial`/`whileInView` alone; written up in DECISIONS.md since it
+   affects every `Section`, not just this one.
+
+**Verified**: `npm run build` clean; `tools/shot.mjs` at 1440×900 and
+390×844, default/`--reduced`/`--light`, console `[]` in every shot;
+keyboard flow scripted end to end (Tab reaches every wall object, focus
+reveals its preview, Enter navigates, Escape closes, Tab order runs
+trigger → preview → next trigger); the seated/standing crossfade and its
+`SCREEN_RECT` repositioning confirmed by measuring both poses' DOM
+geometry directly, not just by eye.

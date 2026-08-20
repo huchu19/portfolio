@@ -125,3 +125,54 @@ Each decision was made to be maximally consistent with VISION.md Part 10
   indicator (nearest stop lights ember).
 - Mobile and `prefers-reduced-motion` are unchanged: track height goes
   `auto`, no sticky, no transform — Option C exactly as before.
+
+## The desk scene (see DESK-SCENE.md)
+
+Judgment calls made building the literal desk — an illustrated avatar at a
+standing desk, projects floating on the wall behind them, replacing the old
+list-based Feed as the homepage's primary navigation.
+
+- **`DeskBand` folded into the new screen, not kept separate.** Two "desk"
+  metaphors on one page — one literal, one typographic — would have been
+  confusing, and `Masthead.tsx`'s own comment ("the ghazal keeps its
+  screen — everything below it is the desk") was already asking for this.
+  `DeskBand.tsx` is deleted; its Building/Shipping/Elsewhere content lives
+  on in `DeskScreen.tsx`, reused both inside the scene's monitor and as the
+  compact card atop the mobile/reduced-motion fallback.
+- **Fragments stay off the wall.** 8 posts float; the 4 fragments stay in
+  `FragmentStrip` below. Twelve scattered objects read as clutter in early
+  passes; revisit if the fragment count grows enough to matter.
+- **Wall objects are real HTML `<Link>`s layered over decorative SVG, never
+  SVG-native anchors.** SVG anchors have inconsistent focus-ring and
+  hit-target behavior across browsers; this was non-negotiable once the
+  scene became primary navigation rather than decoration.
+- **Hover/focus opens the preview; click/Enter (which always follows hover
+  or focus for mouse and keyboard alike) commits to the writeup.** The
+  brief called for "click opens preview, click again navigates," but since
+  hover/focus precedes every realistic click or Enter press, the preview
+  is already open by the time either fires — so activating an
+  already-open trigger navigates for real, and the `!isOpen` branch that
+  would open it first is a defensive fallback for the rare activation
+  that isn't preceded by focus, not the common path.
+- **The wall's placement algorithm reuses `lib/generative.ts`'s seeded RNG
+  and `lib/golden.ts`'s fibonacci weighting** rather than inventing a new
+  system — seeded by each post's slug, so adding or removing a post never
+  reshuffles anyone else's spot.
+- **Mobile and reduced-motion share one fallback component** (`WallGrid`),
+  which is also what a no-JS visitor sees, since wall-object positions are
+  server-rendered inline styles with no mount animation gating their
+  visibility.
+- **Found and fixed a pre-existing bug in `Section.tsx`** while verifying
+  the reduced-motion fallback: `initial={reduced ? false : {...}}` only
+  governs the very first mount, so a visitor whose reduced-motion
+  preference resolves *after* that first render (the hook starts `false`
+  by design, to keep server and client in agreement) got permanently
+  stuck at `opacity: 0` — the section that had already mounted was never
+  told to become visible again. Fixed by always setting `initial` and
+  driving the resting state through `animate` when reduced, since unlike
+  `initial`, framer keeps `animate` live across re-renders. This affects
+  every `Section`-wrapped homepage block, not just the desk scene.
+- **Real 3D (React Three Fiber) is deliberately deferred**, not designed
+  against — see `DESK-SCENE.md`'s "Future phase" note. `REVAMP.md`'s
+  "do not build" list is updated to permit this scene's 2D layered motion
+  and to stop citing the now-deleted `Parallax.tsx` as its ceiling.

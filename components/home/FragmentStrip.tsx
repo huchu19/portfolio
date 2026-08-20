@@ -29,7 +29,7 @@ export default function FragmentStrip({ items }: { items: FeedItem[] }) {
           </h2>
         </div>
         <Link
-          href="/?type=fragment"
+          href="/archive"
           className="mono-label transition-colors hover:text-(--color-fg)"
           style={{ fontSize: 11 }}
         >

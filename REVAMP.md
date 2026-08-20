@@ -375,8 +375,13 @@ the site talking about itself, not live data.
 
 Explicitly out of scope. Adding these will undo the coherence the phases above buy:
 
-- A page-transition library, cursor trails, 3D, scroll-jacking, parallax beyond what
-  already exists in `Parallax.tsx`.
+- A page-transition library, cursor trails, real 3D/WebGL (see `DESK-SCENE.md` —
+  deferred, explicitly out of scope for now), scroll-jacking.
+- 2D layered SVG/CSS motion via Framer Motion — including the desk scene's
+  wall-object placement, hover/focus preview transitions, and the
+  seated/standing pose crossfade documented in `DESK-SCENE.md` — is permitted.
+  `Parallax.tsx` was removed in `8ead042` and is no longer the ceiling for
+  what's allowed here.
 - A third accent colour.
 - Any new post type.
 - A CMS or database. MDX in the repo remains the content store.

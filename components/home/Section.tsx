@@ -12,6 +12,15 @@ import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion'
  * The hook is ours, not framer's: framer's useReducedMotion has reported false
  * on route chunks where matchMedia said reduce, and the reduced-motion contract
  * here is screenshot-verified.
+ *
+ * `initial` only governs the very first mount, and the hook starts `reduced`
+ * at false so server and client agree on that first frame — so the first
+ * paint always sets opacity:0 via `initial`, even for a reduced-motion
+ * visitor. Once the hook resolves true a render later, `initial` is no
+ * longer consulted, and `whileInView` isn't either without a scroll event to
+ * trigger it, so nothing ever tells framer to move off that opacity:0 — it
+ * has to be actively animated back, not just left alone. `animate` does
+ * that: unlike `initial`, framer keeps it live across re-renders.
  */
 export default function Section({
   id,
@@ -35,10 +44,11 @@ export default function Section({
       aria-label={label}
       className={className}
       style={style}
-      initial={reduced ? false : { opacity: 0, y: 24 }}
+      initial={{ opacity: 0, y: 24 }}
+      animate={reduced ? { opacity: 1, y: 0 } : undefined}
       whileInView={reduced ? undefined : { opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-15%' }}
-      transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+      transition={{ duration: reduced ? 0 : 0.5, ease: [0.22, 1, 0.36, 1] }}
     >
       {children}
     </motion.section>

@@ -8,8 +8,8 @@ import UneditedToggle from '@/components/unedited/UneditedToggle'
 
 /**
  * Minimal header (VISION.md Part 8): site name + palette trigger. No nav
- * links — the command palette and the feed ARE the navigation. Compresses
- * to a thin bar on scroll.
+ * links — the command palette and the desk scene ARE the navigation.
+ * Compresses to a thin bar on scroll.
  */
 export default function Header({ status }: { status?: string | null }) {
   const [compressed, setCompressed] = useState(false)
