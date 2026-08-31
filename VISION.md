@@ -1,5 +1,9 @@
 # VISION.md — Khwabon ka Bagh: A Universe, Not a Portfolio
 
+> Historical direction. `ART-DIRECTION-2026.md` is the current visual source of
+> truth and supersedes this document wherever the two conflict. Preserve this
+> file as design history and for its content/identity principles.
+
 > خوابوں کا یہ باغ جلتا بھی رہے تو کیا
 > راکھ سے بھی ایک نیا انقلاب پیدا ہوتا ہے
 >

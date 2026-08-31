@@ -1,5 +1,9 @@
 # REVAMP.md — direction change for `hussain-field-notes`
 
+> Historical direction. `ART-DIRECTION-2026.md` now supersedes the palette,
+> typography, homepage, and visible-system rules below. The engineering and
+> accessibility decisions remain useful context.
+
 This document supersedes `BRIEFS.md` where the two conflict. Work through the phases
 in order. Do not skip ahead: the palette and type system must land before any new
 feature is built, otherwise the new features get tuned against a look that is about

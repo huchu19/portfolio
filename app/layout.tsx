@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import {
   Bricolage_Grotesque,
   Inter,
@@ -7,13 +7,9 @@ import {
 } from 'next/font/google'
 import Header from '@/components/ui/Header'
 import Footer from '@/components/ui/Footer'
-import Cursor from '@/components/ui/Cursor'
 import CommandPalette from '@/components/ui/CommandPalette'
-import EasterEggs from '@/components/ui/EasterEggs'
-import ConstructionLines from '@/components/golden/ConstructionLines'
-import WatcherProvider from '@/components/watcher/WatcherProvider'
-import WatcherMargin from '@/components/watcher/WatcherMargin'
-import UneditedProvider from '@/components/unedited/UneditedProvider'
+import InteractionLayer from '@/components/ui/InteractionLayer'
+import PageTransitions from '@/components/ui/PageTransitions'
 import { getFeed, toFeedItem } from '@/lib/posts'
 import { getLastPush } from '@/lib/github'
 import { site } from '@/lib/site'
@@ -51,19 +47,19 @@ const nastaliq = Noto_Nastaliq_Urdu({
 const themeScript = `
 try {
   const theme = localStorage.getItem('theme');
-  document.documentElement.dataset.theme = theme === 'daylight' ? 'daylight' : 'default';
-  document.documentElement.style.backgroundColor = theme === 'daylight' ? '#f5f0e8' : '#0b0e1f';
+  document.documentElement.dataset.theme = theme === 'night' ? 'night' : 'daylight';
+  document.documentElement.style.backgroundColor = theme === 'night' ? '#28231f' : '#eee4d2';
 } catch (_) {
-  document.documentElement.dataset.theme = 'default';
-  document.documentElement.style.backgroundColor = '#0b0e1f';
+  document.documentElement.dataset.theme = 'daylight';
+  document.documentElement.style.backgroundColor = '#eee4d2';
 }
 `
 
 const bodyThemeScript = `
 try {
   const theme = document.documentElement.dataset.theme;
-  document.body.style.backgroundColor = theme === 'daylight' ? '#f5f0e8' : '#0b0e1f';
-  document.body.style.color = theme === 'daylight' ? '#2a231d' : '#f2ede3';
+  document.body.style.backgroundColor = theme === 'night' ? '#28231f' : '#eee4d2';
+  document.body.style.color = theme === 'night' ? '#f1e8da' : '#302923';
 } catch (_) {}
 `
 
@@ -74,9 +70,26 @@ export const metadata: Metadata = {
     template: `%s · ${site.name}`,
   },
   description: site.description,
-  alternates: {
-    types: { 'application/rss+xml': `${site.url}/feed.xml` },
+  applicationName: site.name,
+  authors: [{ name: site.name }],
+  creator: site.name,
+  publisher: site.name,
+  icons: {
+    icon: [
+      { url: '/icon.svg', type: 'image/svg+xml' },
+      { url: '/icons/favicon-16.png', sizes: '16x16', type: 'image/png' },
+      { url: '/icons/favicon-32.png', sizes: '32x32', type: 'image/png' },
+      { url: '/icons/favicon-64.png', sizes: '64x64', type: 'image/png' },
+    ],
+    shortcut: '/favicon.ico',
+    apple: [{ url: '/apple-icon.png', sizes: '192x192', type: 'image/png' }],
   },
+  manifest: '/manifest.webmanifest',
+}
+
+export const viewport: Viewport = {
+  colorScheme: 'light dark',
+  themeColor: '#1e5b43',
 }
 
 export default async function RootLayout({
@@ -89,7 +102,7 @@ export default async function RootLayout({
   return (
     <html
       lang="en"
-      data-theme="default"
+      data-theme="daylight"
       suppressHydrationWarning
       className={`${bricolage.variable} ${inter.variable} ${jetbrainsMono.variable} ${nastaliq.variable}`}
     >
@@ -101,20 +114,14 @@ export default async function RootLayout({
         <a href="#main" className="skip-link">
           Skip to content
         </a>
-        <ConstructionLines />
-        <UneditedProvider>
-          <WatcherProvider>
-            <div className="relative" style={{ zIndex: 2 }}>
-              <Header status={status} />
-              <main id="main">{children}</main>
-              <Footer />
-            </div>
-            <WatcherMargin />
-          </WatcherProvider>
-        </UneditedProvider>
+        <div className="relative" style={{ zIndex: 2 }}>
+          <Header status={status} />
+          <main id="main">{children}</main>
+          <Footer />
+        </div>
         <CommandPalette items={paletteItems} />
-        <Cursor />
-        <EasterEggs />
+        <InteractionLayer />
+        <PageTransitions />
       </body>
     </html>
   )

@@ -3,7 +3,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
-import { fragmentDot } from '@/components/feed/tagColors'
 import type { FeedItem, FeedItemType } from '@/components/feed/types'
 
 const TYPE_ORDER: FeedItemType[] = ['project', 'note', 'journal', 'fragment']
@@ -23,12 +22,11 @@ const TYPE_DOT: Record<FeedItemType, string> = {
 }
 
 const QUICK_LINKS = [
-  { label: 'Home — the desk', href: '/' },
-  { label: 'About', href: '/about' },
-  { label: 'Now', href: '/now' },
-  { label: 'Archive', href: '/archive' },
-  { label: 'Colophon', href: '/colophon' },
-  { label: 'Guide — the making of', href: '/guide' },
+  { label: 'Home', href: '/' },
+  { label: 'Projects', href: '/#projects' },
+  { label: 'Blog', href: '/blog' },
+  { label: 'Khwabon Ka Bagh', href: '/blog/khwabon-ka-bagh' },
+  { label: 'Contact', href: '/#contact' },
 ]
 
 type Result = {
@@ -36,37 +34,7 @@ type Result = {
   sub?: string
   href: string
   dot: string
-  /** terminal commands run instead of routing */
-  action?: () => void
-  /** help/whoami print in place — the palette stays open */
-  keepOpen?: boolean
 }
-
-/* The terminal — typed with `>`. Exactly five commands; no sudo, no
-   fake filesystem. Effects fire the egg events EasterEggs.tsx hears. */
-const TERMINAL: { cmd: string; sub: string; run?: () => void; keepOpen?: boolean }[] = [
-  { cmd: 'help', sub: 'spiral · garden · urdu · whoami — the garden listens', keepOpen: true },
-  {
-    cmd: 'whoami',
-    sub: 'Software engineer · Urdu poet · Delusional optimist — حسین نقوی',
-    keepOpen: true,
-  },
-  {
-    cmd: 'spiral',
-    sub: 'redraw the golden spiral, bright, once (home)',
-    run: () => window.dispatchEvent(new CustomEvent('egg:spiral')),
-  },
-  {
-    cmd: 'garden',
-    sub: 'six seconds of the dream state',
-    run: () => window.dispatchEvent(new CustomEvent('egg:dream')),
-  },
-  {
-    cmd: 'urdu',
-    sub: 'the name remembers its mother tongue',
-    run: () => window.dispatchEvent(new CustomEvent('egg:urdu')),
-  },
-]
 
 /**
  * The command palette — primary navigation (VISION Part 8). ⌘K opens it;
@@ -109,22 +77,6 @@ export default function CommandPalette({ items }: { items: FeedItem[] }) {
 
   const groups = useMemo((): { label: string; results: Result[] }[] => {
     const q = query.trim().toLowerCase()
-    if (q.startsWith('>')) {
-      const cmd = q.slice(1).trim()
-      return [
-        {
-          label: 'Terminal',
-          results: TERMINAL.filter((t) => t.cmd.startsWith(cmd)).map((t) => ({
-            label: `>${t.cmd}`,
-            sub: t.sub,
-            href: '',
-            dot: 'var(--color-fg-faint)',
-            action: t.run,
-            keepOpen: t.keepOpen,
-          })),
-        },
-      ]
-    }
     if (!q) {
       return [
         { label: 'Go to', results: QUICK_LINKS.map((l) => ({ label: l.label, href: l.href, dot: 'var(--color-accent)' })) },
@@ -155,10 +107,8 @@ export default function CommandPalette({ items }: { items: FeedItem[] }) {
 
   const go = useCallback(
     (r: Result) => {
-      r.action?.()
-      if (r.keepOpen) return
       setOpen(false)
-      if (!r.action && r.href) router.push(r.href)
+      if (r.href) router.push(r.href)
     },
     [router],
   )
@@ -206,7 +156,7 @@ export default function CommandPalette({ items }: { items: FeedItem[] }) {
             role="dialog"
             aria-modal="true"
             aria-label="Command palette"
-            className="flex w-full flex-col overflow-hidden rounded-lg"
+            className="command-blotter flex w-full flex-col overflow-hidden"
             style={{
               maxWidth: 600,
               maxHeight: '62vh',
@@ -215,9 +165,9 @@ export default function CommandPalette({ items }: { items: FeedItem[] }) {
               border: '1px solid var(--color-line)',
               boxShadow: '0 24px 80px -24px rgba(0,0,0,0.8)',
             }}
-            initial={reduced ? false : { opacity: 0, y: 12, scale: 0.98 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={reduced ? undefined : { opacity: 0, y: 8, scale: 0.98 }}
+            initial={reduced ? false : { opacity: 0, y: 18, scale: 0.97, rotate: -0.6 }}
+            animate={{ opacity: 1, y: 0, scale: 1, rotate: 0 }}
+            exit={reduced ? undefined : { opacity: 0, y: 10, scale: 0.98, rotate: 0.35 }}
             transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
           >
             <input
@@ -225,8 +175,8 @@ export default function CommandPalette({ items }: { items: FeedItem[] }) {
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               onKeyDown={onInputKey}
-              placeholder="Search the universe…"
-              aria-label="Search all posts and fragments"
+              placeholder="Search projects…"
+              aria-label="Search projects"
               className="palette-input w-full bg-transparent"
               style={{
                 padding: 'calc(var(--u) * 2) calc(var(--u) * 3)',
@@ -239,7 +189,7 @@ export default function CommandPalette({ items }: { items: FeedItem[] }) {
             <div ref={listRef} className="overflow-y-auto" style={{ padding: 'var(--u) 0' }}>
               {flat.length === 0 && (
                 <p className="mono-label" style={{ padding: 'calc(var(--u) * 3)' }}>
-                  Nothing found — the garden holds no such flower.
+                  No project found.
                 </p>
               )}
               {groups.map((group) => (
@@ -282,7 +232,6 @@ export default function CommandPalette({ items }: { items: FeedItem[] }) {
               <span>↑↓ navigate</span>
               <span>↵ open</span>
               <span>esc close</span>
-              <span style={{ marginLeft: 'auto', color: 'var(--color-line)' }}>&gt; terminal</span>
             </div>
           </motion.div>
         </motion.div>
@@ -296,6 +245,6 @@ function toResult(i: FeedItem): Result {
     label: i.title ?? i.excerpt,
     sub: i.stamp,
     href: i.permalink,
-    dot: i.type === 'fragment' ? fragmentDot(i.tags) : TYPE_DOT[i.type],
+    dot: TYPE_DOT[i.type],
   }
 }

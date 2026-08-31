@@ -3,14 +3,14 @@ title: "EduNexus: an adaptive learning platform as a final-year project"
 slug: edunexus-fyp
 date: 2026-06-06
 type: project
-excerpt: My QMUL final-year project — teachers generate lessons and quizzes from prompts; students take adaptive assessments, earn XP, and explore a knowledge graph of what they actually understand.
+excerpt: "My QMUL final-year project: an adaptive learning platform with AI-assisted lesson authoring, quizzes, learner analytics, and concept maps."
 tags:
   - edunexus
   - education
   - ai
 stack:
-  - Next.js
-  - React
+  - Next.js 16
+  - React 19
   - FastAPI
   - PostgreSQL
   - Gemini 2.5 Flash
@@ -21,20 +21,25 @@ projectLinks:
   repo: "https://github.com/huchu19/FYP"
 ---
 
-<p className="draft-note">Draft — rewrite me. The facts below are real; put your voice on them.</p>
+## Overview
 
-EduNexus is my final-year project at Queen Mary — an answer to the fragmentation problem in digital education. Teachers today live across a CMS, a quiz tool, and a grade spreadsheet with no data flowing between them; students get one-size-fits-all content and no picture of what they actually understand.
+EduNexus is my final-year project at Queen Mary University of London. It combines lesson authoring, assessment, progress tracking, and learner analytics in one platform for teachers and students.
 
-## What it does
+## Features
 
-A teacher types a prompt; Gemini 2.5 Flash generates lesson slides, flashcards, and quiz questions the teacher can review and edit before anything reaches a student. Quizzes adapt difficulty per student, and the metacognitive question types — explain your reasoning, analyse this error, transfer this idea — capture *how* someone thinks, not just whether they clicked the right radio button.
+- AI-assisted generation of lesson slides, flashcards, reports, and quiz questions
+- Adaptive quizzes with reasoning, error-analysis, and knowledge-transfer question types
+- A force-directed concept graph showing prerequisites, mastery, and knowledge gaps
+- Student dashboards with XP, streaks, badges, score trends, and confidence tracking
+- Teacher dashboards with individual and class-level analytics
+- Dark and light themes, semantic navigation, skip links, and browser text-to-speech
 
-On the other side, the AI extracts concepts and prerequisites from lessons into a force-directed knowledge graph that shows per-student mastery and flags blind spots. XP, streaks, badges, and an open learner model give students a dashboard of their own understanding — score trends, topic mastery, confidence calibration.
+## Architecture
 
-## The part I care about
+The monorepo contains a Next.js 16 and React 19 frontend, a FastAPI backend, and project documentation. SQLAlchemy manages the PostgreSQL data model, Alembic handles migrations, and JWTs support cookie- or header-based authentication.
 
-The feature that reframed the project is **Teach Mode**: the student explains a concept to an AI playing a confused learner, and the system listens instead of lecturing. I wrote about what that did to my thinking in [the EduNexus essay](/writing/what-i-learned-building-edunexus).
+Gemini 2.5 Flash is the primary model for content generation, with GPT-4o-mini available as a fallback. Backend tests use pytest and the end-to-end browser tests use Playwright.
 
-## Under the hood
+## Current limitations
 
-Next.js App Router frontend, FastAPI + SQLAlchemy backend on PostgreSQL, JWT auth, pytest and Playwright for tests. Gemini 2.5 Flash is the primary model with GPT-4o-mini as fallback — the abstraction that made model-swapping boring was worth every hour it cost.
+The teach-back conversation loop is scaffolded but not fully implemented. Adaptive difficulty currently uses threshold rules rather than Item Response Theory, the lesson editing loop is partial, and French interface strings remain placeholders. The current deployment targets free hosting tiers and a single backend worker.

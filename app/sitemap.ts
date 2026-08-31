@@ -3,7 +3,7 @@ import { getFeed } from '@/lib/posts'
 import { site } from '@/lib/site'
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const pages = ['', '/archive', '/about', '/now', '/colophon', '/guide'].map((p) => ({
+  const pages = ['', '/blog', '/blog/khwabon-ka-bagh'].map((p) => ({
     url: `${site.url}${p}`,
     lastModified: new Date(),
   }))

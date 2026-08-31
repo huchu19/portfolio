@@ -34,7 +34,7 @@ const posts = defineCollection({
       metadata: s.metadata(), // readingTime (minutes) + wordCount, auto-computed
       code: s.mdx(),
     })
-    .transform((data) => ({ ...data, permalink: `/writing/${data.slug}` })),
+    .transform((data) => ({ ...data, permalink: `/projects/${data.slug}` })),
 })
 
 // Fragments: micro-content. Frictionless frontmatter — title optional,

@@ -1,21 +1,13 @@
 /** One place for identity — swap the placeholder handle and every surface follows. */
 export const site = {
   name: 'Hussain Naqvi',
-  /* the universe's name — from the ghazal: خوابوں کا باغ, the garden of dreams */
-  bagh: 'خوابوں کا باغ',
-  title: 'Hussain Naqvi — Khwabon ka Bagh',
+  title: 'Hussain Naqvi — Software Engineer',
   description:
-    'A universe, not a portfolio — code, ghazals in Urdu and English, philosophy, football, and fragments of everything in between.',
+    'Software projects by Hussain Naqvi, with detailed project documentation and an original ghazal.',
   /* draft — set the real domain before going live (used by RSS, sitemap, OG) */
   url: 'https://khwabonkabagh.example',
   githubUser: 'huchu19',
   email: 'hussainnaqvi2004@gmail.com',
-  /* bump on any visible change, and say what changed in three words */
-  version: 'v1.1.0',
-  versionNote: 'a real descent',
-  /* the ghazal line that opens the universe */
-  ghazalUr: 'خوابوں کا یہ باغ جلتا بھی رہے تو کیا',
-  ghazalEn: 'Even if this garden of dreams keeps burning — from ashes too, a new revolution is born.',
 }
 
 export const githubUrl = `https://github.com/${site.githubUser}`

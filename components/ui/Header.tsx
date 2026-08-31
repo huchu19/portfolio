@@ -4,13 +4,8 @@ import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { site } from '@/lib/site'
 import ThemeToggle from './ThemeToggle'
-import UneditedToggle from '@/components/unedited/UneditedToggle'
+import SignatureLogo from './SignatureLogo'
 
-/**
- * Minimal header (VISION.md Part 8): site name + palette trigger. No nav
- * links — the command palette and the desk scene ARE the navigation.
- * Compresses to a thin bar on scroll.
- */
 export default function Header({ status }: { status?: string | null }) {
   const [compressed, setCompressed] = useState(false)
   const [urduName, setUrduName] = useState(false)
@@ -31,23 +26,22 @@ export default function Header({ status }: { status?: string | null }) {
 
   return (
     <header
-      className="sticky top-0 z-50 flex items-center justify-between border-b transition-all duration-300"
+      className="site-header sticky top-0 z-50 flex items-center justify-between border-b transition-all duration-300"
       style={{
         paddingInline: 'calc(var(--u) * 3)',
         paddingBlock: compressed ? 'var(--u)' : 'calc(var(--u) * 2)',
         borderColor: compressed ? 'var(--color-line)' : 'transparent',
-        background: compressed
-          ? 'color-mix(in srgb, var(--color-bg) 88%, transparent)'
-          : 'transparent',
-        backdropFilter: compressed ? 'blur(12px)' : 'none',
         transitionTimingFunction: 'var(--ease)',
       }}
     >
-      <div className="flex min-w-0 flex-col" style={{ gap: 2 }}>
+      <div className="site-mark flex min-w-0 flex-col" style={{ gap: 2 }}>
         {/* a small easter egg: the name remembers its mother tongue on hover */}
         <Link
           href="/"
-          className="display transition-colors"
+          data-tactile
+          data-magnetic
+          aria-label={`${site.name} — home`}
+          className="site-mark-link transition-colors"
           style={{ fontSize: compressed ? 18 : 22, fontStyle: urduName || urduPinned ? 'normal' : 'italic' }}
           onMouseEnter={() => setUrduName(true)}
           onMouseLeave={() => setUrduName(false)}
@@ -57,27 +51,29 @@ export default function Header({ status }: { status?: string | null }) {
               حسین نقوی
             </span>
           ) : (
-            site.name
+            <SignatureLogo className={compressed ? 'site-signature is-compressed' : 'site-signature'} />
           )}
         </Link>
-        {/* the desk reporting on itself — teal, because it is true right now */}
         {status && !compressed && (
-          <span
-            className="mono-label truncate"
-            style={{ fontSize: 10.5, color: 'var(--color-signal)', textTransform: 'none', letterSpacing: '0.06em' }}
-          >
+          <span className="header-status truncate">
             {status}
           </span>
         )}
       </div>
-      <div className="flex items-center" style={{ gap: 'var(--u)' }}>
-        <UneditedToggle />
+      <div className="header-actions flex items-center" style={{ gap: 'var(--u)' }}>
+        <nav className="header-nav" aria-label="Primary navigation">
+          <Link href="/#projects" data-tactile data-magnetic>Projects</Link>
+          <Link href="/blog" data-tactile data-magnetic>Blog</Link>
+          <Link href="/#contact" data-tactile data-magnetic>Contact</Link>
+        </nav>
         <ThemeToggle />
         <button
           type="button"
+          data-magnetic
+          data-feedback="strong"
           aria-label="Open command palette"
           onClick={() => window.dispatchEvent(new CustomEvent('palette:open'))}
-          className="mono-label cursor-pointer rounded border px-2 py-1 transition-colors hover:text-(--color-fg)"
+          className="command-trigger cursor-pointer border px-2 py-1 transition-colors hover:text-(--color-fg)"
           style={{ borderColor: 'var(--color-line)' }}
         >
           ⌘K

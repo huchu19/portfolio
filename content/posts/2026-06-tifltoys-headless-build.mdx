@@ -1,18 +1,19 @@
 ---
-title: "TiflToys: rebuilding a toy store headless"
+title: "TiflToys: a headless Shopify storefront"
 slug: tifltoys-headless-build
 date: 2026-06-18
 type: project
-excerpt: How I rebuilt TiflToys as a headless storefront with Next.js — what broke, what got faster, and why the cart taught me more than the checkout.
+excerpt: A Next.js 16 toy storefront using Shopify for products, inventory, carts, and hosted checkout.
 tags:
   - tifltoys
   - nextjs
   - commerce
 stack:
-  - Next.js
+  - Next.js 16
+  - React 19
   - TypeScript
   - Shopify Storefront API
-  - Tailwind
+  - Tailwind CSS 4
 status: live
 repo: "huchu19/TiflToysFrontend"
 coverImage: /media/projects/tifltoys.jpg
@@ -21,28 +22,26 @@ projectLinks:
   repo: "https://github.com/huchu19/TiflToysFrontend"
 ---
 
-*Draft — rewrite me. Placeholder build note; swap in the real architecture, numbers, and links.*
+## Overview
 
-TiflToys started as a favor and became a curriculum. The brief was simple — a toy storefront that didn't feel like a template — and the honest way to get there was to go headless: commerce platform at the back, Next.js at the front, and every pixel mine to answer for.
+TiflToys is a headless Shopify storefront built with Next.js 16. Shopify remains the commerce backend while the custom frontend controls the catalogue, product pages, cart, content pages, and visual design.
 
-## The shape of it
+## Features
 
-The stack is deliberately boring where it should be and opinionated where it counts. Product data lives behind a typed client; pages are statically generated and revalidated on demand, so the catalogue is fast without being stale.
+- Product, collection, and sector browsing
+- Product detail pages with galleries, variants, availability, and preorder support
+- A persistent cart with add, update, and remove actions
+- Inventory-aware quantity limits with a fallback when inventory scope is unavailable
+- Shopify-hosted checkout
+- Contact, delivery, refund, privacy, and terms pages
+- Sitemap, robots, manifest, loading, error, and not-found routes
 
-```ts
-// lib/products.ts — the whole data contract in one place
-export async function getProduct(handle: string): Promise<Product> {
-  const res = await client.query(PRODUCT_QUERY, { handle })
-  return normalizeProduct(res.product) // one shape, everywhere
-}
-```
+## Architecture
 
-The rule that saved me weeks: **normalize at the boundary**. Everything past that function believes in exactly one `Product` shape. When the backend changed its mind about variant images, one file changed with it.
+The storefront reads product and collection data through Shopify's Storefront GraphQL API. Read queries use revalidation while cart reads and mutations bypass the cache.
 
-## What the cart taught me
+The Shopify cart is the source of truth. Server Actions perform cart mutations, and the cart ID is stored in an HTTP-only, same-site cookie for 30 days. Product and cart responses are normalised into TypeScript types before reaching the interface.
 
-Checkout is a solved problem; carts are not. A cart is state that must survive refreshes, tab-hopping, and a toddler slamming the keyboard (target audience). Optimistic updates with server reconciliation looked fancy in the demo and lied in production — the fix was duller and better: mutate, await, render truth.
+## Running locally
 
-## What got faster
-
-Largest Contentful Paint went from "eventually" to under a second on the product pages, mostly by treating images like the budget they are. The lesson I keep relearning: performance isn't a feature you add, it's the absence of ones you didn't need.
+The app requires a Shopify store domain and Storefront API token. After adding them to `.env.local`, install dependencies and run `npm run dev`.

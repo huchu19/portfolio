@@ -1,5 +1,9 @@
 # DESK-SCENE.md — literalizing the desk
 
+> Historical 2D implementation brief. `ART-DIRECTION-2026.md` activates the
+> real-3D phase and makes the studio the homepage hero. The interaction and
+> fallback contracts below remain requirements where they still apply.
+
 This document supersedes the homepage-navigation parts of `REVAMP.md` where the
 two conflict, the same way `REVAMP.md` supersedes `VISION.md`. `REVAMP.md`'s
 palette, typography, content model, GitHub wiring, and the Watcher all remain

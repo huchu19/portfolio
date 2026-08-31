@@ -11,6 +11,8 @@ export default function UneditedToggle() {
   return (
     <button
       type="button"
+      data-magnetic
+      data-feedback="strong"
       onClick={toggle}
       aria-pressed={unedited}
       title={

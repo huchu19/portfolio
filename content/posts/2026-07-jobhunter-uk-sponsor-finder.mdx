@@ -3,7 +3,7 @@ title: "JobHunter: a visa-sponsor finder built out of necessity"
 slug: jobhunter-uk-sponsor-finder
 date: 2026-07-01
 type: project
-excerpt: 141k rows of gov.uk sponsor data, fuzzy search, and a kanban tracker — the job-hunt tool I needed as an international graduate, so I built it.
+excerpt: A job application tracker with fuzzy search over the UK register of licensed Skilled Worker sponsors.
 tags:
   - jobhunter
   - data
@@ -21,16 +21,24 @@ projectLinks:
   repo: "https://github.com/huchu19/JobHunter"
 ---
 
-<p className="draft-note">Draft — rewrite me. The facts below are real; put your voice on them.</p>
+## Overview
 
-The most honest project brief I've ever written: I graduate in July 2026, I need a Skilled Worker visa, and the official Register of Licensed Sponsors is a 141,567-row CSV. So JobHunter is two tools that should always have been one — a sponsor search over the live gov.uk feed, and a kanban board that tracks every application from wishlist to offer.
+JobHunter combines a UK visa sponsor search with a job application tracker. It is designed for international graduates who need to verify sponsorship eligibility while managing applications.
 
-## The data pipeline
+## Sponsor finder
 
-The gov.uk register updates daily. JobHunter pulls the raw CSV, filters 141k rows down to ~34k unique London A-rated Skilled Worker sponsors, and caches the result for 24 hours behind an API route. Fuse.js handles the fuzzy search, and a heuristic classifier flags the tech companies, because scrolling past 30,000 care homes to find Wayve is not a search experience.
+The app reads the gov.uk Register of Licensed Sponsors CSV, which is updated daily. Its data pipeline filters roughly 141,000 rows to about 34,000 unique, London-based, A-rated Skilled Worker sponsors and caches the result for 24 hours.
 
-## The tracker
+Fuse.js provides fuzzy company search. Additional filters cover London postcode areas and a heuristic classifier identifies likely technology companies.
 
-Applications move across a kanban board — wishlist, applied, interview, offer, rejected — with optimistic UI on every drag and delete. The feature I use most is auto-verification: add a company and it fuzzy-matches against the live sponsor register, so I know before I write the cover letter whether they can actually hire me.
+## Application tracker
 
-Prisma over SQLite locally and PostgreSQL in production, 22 unit tests passing, and a growing sense that the best portfolio project is the one you open every morning because you need it.
+- Kanban stages for wishlist, applied, interview, offer, and rejected applications
+- Drag-and-drop updates with optimistic interface feedback
+- Automatic company verification against the sponsor register
+- Dashboard metrics for tracked applications, weekly applications, interview rate, and offers
+- Company and role extraction from job URLs
+
+## Architecture
+
+The application uses Next.js API routes for sponsor data and application CRUD operations. Prisma connects to SQLite during local development and PostgreSQL in production. The repository includes 22 unit tests plus a live CSV-fetch verification script.

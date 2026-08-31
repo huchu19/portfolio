@@ -231,3 +231,77 @@ reveals its preview, Enter navigates, Escape closes, Tab order runs
 trigger → preview → next trigger); the seated/standing crossfade and its
 `SCREEN_RECT` repositioning confirmed by measuring both poses' DOM
 geometry directly, not just by eye.
+
+## Phase 9 — the inhabited studio reset
+
+**Built:** the former indigo line-art desk has become a warm, tactile
+miniature room. The first frame is now a useful semantic DOM composition,
+then capable desktop browsers progressively add the custom React Three
+Fiber scene: a modelled room, wooden desk, monitor, lamp, plant, chair,
+character, shelves, paper notes, and four project-specific objects. The
+JobHunter pin stack, EduNexus knowledge graph, Bamboo plant, and TiflToys
+train are deliberately different artefacts rather than repeated cards.
+
+The homepage below the room continues the physical language with taped
+project dossiers, a corkboard of paper fragments, and a personal letter.
+About, Now, Archive, and project pages now read as documents, boards, and
+drawers from the same room. Daylight is the default; night changes the
+lighting in the same room instead of swapping to a different visual world.
+
+**Progressive enhancement:** mobile, reduced-motion, and unavailable-WebGL
+paths render a complete CSS diorama with the same copy and links. The 3D
+canvas is decorative and dynamically loaded, uses capped DPR and modest
+geometry, and stops rendering while the tab is hidden. Project navigation
+remains ordinary keyboard-accessible links above the canvas.
+
+The production dependency pass also moved Next to 16.3.1, clearing the
+production `npm audit` report while retaining the same static route output.
+
+**Source of truth:** `ART-DIRECTION-2026.md` supersedes the visual rules in
+the earlier VISION, REVAMP, and DESK-SCENE documents; those remain as
+labelled project history. DECISIONS records why the reset happened.
+
+## Phase 10 — leave the room
+
+**Built:** the hero now chooses exactly one renderer. WebGL-capable desktop
+browsers get the miniature 3D studio; mobile, reduced-motion, unavailable, and
+lost-context cases get the semantic CSS room. There is no hidden second desk
+underneath the canvas. The figure now has a full cropped hairstyle and a white
+kurta with Pakistan-green waistcoat and trousers.
+
+The homepage scroll is spatial: studio doors open, the room recedes, and the
+visitor enters a garden before reaching work, fragments, and the closing note.
+Karachi and London appear as a two-city route with coordinates. Garden foliage,
+steam, dust, cursor, breathing, plant, and camera motion keep the world alive at
+different tempos, with static reduced-motion equivalents.
+
+A site-wide interaction layer gives real controls press depth, ripples,
+magnetic pointer response, locally synthesized click sounds, and vibration on
+supporting devices. Visitors can turn sound and haptics off. The opt-in
+turntable supports local files, direct audio sources, Spotify shares, and Apple
+Music shares; it does not autoplay and does not upload local files.
+
+## Phase 11 — one illustrated world
+
+**Built:** the opening studio is now a single responsive 2D composition. The
+3D canvas, modelled character, WebGL boundary, loading state, and separate CSS
+fallback are gone. An empty desk of personal objects sits beneath a large open
+window; the window previews the same trees, clouds, and path that take over in
+the garden threshold.
+
+The flat shapes, restrained offset shadows, cream/green/mustard palette, and
+mobile crop now stay consistent from the first frame through the garden. Day
+and night are palette shifts of the same illustration. The removed Three.js,
+React Three Fiber, and Drei packages also reduce the runtime and dependency
+surface.
+
+**Verified:** `npm run build` passes; desktop day/night, mobile, the closed-door
+threshold, and garden arrival were captured with zero browser console errors.
+
+### Night garden
+
+Dark mode now follows the visitor outside. The studio window, opening doorway,
+and long garden share layered stars; the threshold also gains a softly glowing
+moon. Trees, path, canopy, boards, and foliage use a dedicated moonlit palette
+rather than a blanket brightness reduction. Reduced motion keeps the star
+fields static.

@@ -7,7 +7,7 @@ export type Entry = Post | Fragment
 export type EntryType = Entry['type']
 export type Lang = Entry['lang']
 
-const publishedPosts = posts.filter((p) => !p.draft)
+const publishedPosts = posts.filter((p) => !p.draft && p.type === 'project')
 const publishedFragments = fragments.filter((f) => !f.draft)
 
 const desc = (a: Entry, b: Entry) => b.date.localeCompare(a.date)
@@ -20,9 +20,9 @@ export function getAllFragments(): Fragment[] {
   return [...publishedFragments].sort(desc)
 }
 
-/** The feed: posts and fragments interleaved, newest first. */
+/** Public index: project documentation only. */
 export function getFeed(): Entry[] {
-  return [...publishedPosts, ...publishedFragments].sort(desc)
+  return [...publishedPosts].sort(desc)
 }
 
 export function getPostBySlug(slug: string): Post | undefined {

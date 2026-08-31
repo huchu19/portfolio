@@ -1,5 +1,24 @@
 # DECISIONS.md — judgment calls made while you slept
 
+> Current precedence: `ART-DIRECTION-2026.md`. Entries below record earlier
+> iterations and are not instructions to restore indigo, marigold, visible
+> Fibonacci geometry, or the line-art desk.
+
+## 2026 studio art-direction reset
+
+- The earlier aesthetic was coherent but read as a design system demonstrating
+  a concept rather than a place inhabited by a person.
+- Warm daylight is now the default; night mode changes the light inside the same
+  room. Color comes from plaster, wood, paper, ceramics, books, plants, and
+  project objects.
+- The miniature studio is the hero, the character is rebuilt as a bespoke 3D
+  figurine, and the old 2D wall becomes the accessible fallback rather than the
+  primary visual identity.
+- Golden-ratio geometry remains in proportions and placement but is no longer
+  visibly drawn across the interface.
+- Real content, semantic navigation, GitHub data, the Watcher, reduced motion,
+  and the conventional archive are retained.
+
 Each decision was made to be maximally consistent with VISION.md Part 10
 (the non-negotiable rules). Revisit any of them freely.
 
@@ -176,3 +195,19 @@ list-based Feed as the homepage's primary navigation.
   against — see `DESK-SCENE.md`'s "Future phase" note. `REVAMP.md`'s
   "do not build" list is updated to permit this scene's 2D layered motion
   and to stop citing the now-deleted `Parallax.tsx` as its ceiling.
+
+## One illustrated world
+
+- **The 3D studio is removed rather than restyled.** Its miniature lighting,
+  modelled depth, and literal character made the garden below feel like a
+  different site. The opening now uses the garden's own flat silhouettes,
+  simple color fields, and short cut-paper shadows.
+- **Human presence is implied, not depicted.** The active monitor, open
+  notebook, mug, books, pinned work, and plant make the room feel occupied
+  without asking a character to carry the identity.
+- **The window is the visual handoff.** It contains the same tree, cloud, and
+  path vocabulary used by the threshold, making the later garden feel like a
+  place already visible from the first frame.
+- **There is one renderer on every device.** Removing React Three Fiber,
+  Three.js, and the WebGL/fallback controller makes the art direction stable
+  across desktop, mobile, themes, reduced motion, and graphics capabilities.

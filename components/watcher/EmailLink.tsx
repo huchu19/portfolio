@@ -11,6 +11,8 @@ export default function EmailLink({ email }: { email: string }) {
   return (
     <a
       href={`mailto:${email}`}
+      data-tactile
+      data-magnetic
       className="transition-colors hover:text-(--color-fg)"
       onMouseEnter={markEmailHover}
       onFocus={markEmailHover}

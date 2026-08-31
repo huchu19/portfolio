@@ -1,40 +1,60 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import { emitFeedback } from '@/lib/feedback'
 
-type Theme = 'default' | 'daylight'
+type Theme = 'daylight' | 'night'
 
 const STORAGE_KEY = 'theme'
 
-function applyTheme(theme: Theme) {
+function applyTheme(theme: Theme, animate = true) {
   document.documentElement.dataset.theme = theme
-  const paint =
-    theme === 'daylight'
-      ? { background: '#f5f0e8', color: '#2a231d' }
-      : { background: '#0b0e1f', color: '#f2ede3' }
-  document.documentElement.style.backgroundColor = paint.background
-  document.body.style.backgroundColor = paint.background
-  document.body.style.color = paint.color
+  if (animate) document.documentElement.dataset.themeTurning = 'true'
+  document.documentElement.style.removeProperty('background-color')
+  document.body.style.removeProperty('background-color')
+  document.body.style.removeProperty('color')
+  if (animate) window.setTimeout(() => delete document.documentElement.dataset.themeTurning, 720)
 }
 
 export default function ThemeToggle() {
-  const [theme, setTheme] = useState<Theme>('default')
+  const [theme, setTheme] = useState<Theme>('daylight')
+  const themeRef = useRef<Theme>('daylight')
+
+  const commitTheme = (value: Theme, withFeedback = false) => {
+    if (withFeedback) emitFeedback('strong')
+    themeRef.current = value
+    applyTheme(value)
+    window.localStorage.setItem(STORAGE_KEY, value)
+    setTheme(value)
+  }
 
   useEffect(() => {
     const saved = window.localStorage.getItem(STORAGE_KEY)
-    const initial = saved === 'daylight' ? 'daylight' : 'default'
-    applyTheme(initial)
+    const initial = saved === 'night' ? 'night' : 'daylight'
+    applyTheme(initial, false)
+    themeRef.current = initial
     setTheme(initial)
   }, [])
 
-  const next = theme === 'default' ? 'daylight' : 'default'
+  useEffect(() => {
+    const toggle = () => {
+      const value: Theme = themeRef.current === 'daylight' ? 'night' : 'daylight'
+      commitTheme(value, true)
+    }
+    window.addEventListener('studio:toggle-theme', toggle)
+    return () => window.removeEventListener('studio:toggle-theme', toggle)
+  }, [])
+
+  const next = theme === 'daylight' ? 'night' : 'daylight'
 
   return (
     <button
       type="button"
+      data-magnetic
+      data-feedback="strong"
       className="theme-toggle cursor-pointer"
-      aria-label={`Switch to ${next} mode`}
-      title={`Switch to ${next} mode`}
+      aria-label={`Turn the studio lights ${next === 'night' ? 'down' : 'up'}`}
+      title={`${next === 'night' ? 'Night' : 'Day'} studio`}
       style={{
         display: 'inline-grid',
         placeItems: 'center',
@@ -42,9 +62,7 @@ export default function ThemeToggle() {
         height: 'calc(var(--u) * 4)',
       }}
       onClick={() => {
-        applyTheme(next)
-        window.localStorage.setItem(STORAGE_KEY, next)
-        setTheme(next)
+        commitTheme(next)
       }}
     />
   )

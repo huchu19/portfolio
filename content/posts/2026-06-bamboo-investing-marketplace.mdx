@@ -3,7 +3,7 @@ title: "Bamboo: a two-sided marketplace for pitches and portfolios"
 slug: bamboo-investing-marketplace
 date: 2026-06-13
 type: project
-excerpt: Plant your seed, grow your portfolio — a marketplace where inventors upload 60-second pitch videos and investors back the ideas they believe in. Web and mobile, one shared type system.
+excerpt: A web and mobile marketplace where inventors publish short pitches and investors discover, track, and back ideas.
 tags:
   - bamboo
   - marketplace
@@ -21,16 +21,29 @@ projectLinks:
   repo: "https://github.com/huchu19/Bamboo"
 ---
 
-<p className="draft-note">Draft — rewrite me. The facts below are real; put your voice on them.</p>
+## Overview
 
-Bamboo is the fastest-growing organism on earth, and the name stuck because the product is about growth on both sides of a marketplace: inventors plant a pitch, investors grow a portfolio, and the platform's job is to keep the two honest with each other.
+Bamboo is a two-sided investing marketplace for inventors and investors. Inventors can publish 60-second pitch videos with supporting business and financial documents. Investors can browse pitches, maintain a watchlist, submit investments, and monitor funding progress.
 
-## The shape of it
+## Features
 
-Inventors upload a 60-second pitch video and their supporting documents — business plans, financials — and pay a listing fee ($49, or $199 with a verified badge). Investors browse the grove, watch pitches, and submit investments against real-time funding progress.
+- Inventor and investor accounts with role-specific dashboards
+- Pitch video and supporting-document uploads
+- Pitch discovery, detail, watchlist, and portfolio screens
+- Investment submissions and real-time funding progress
+- Listing-fee and verified-badge payment flows
+- Web and iOS/Android clients
 
-The repo is a monorepo with three residents: a `shared` package of TypeScript types and constants, a Next.js 14 web app, and an Expo React Native app. The shared types are the whole trick — web and mobile argue with the same compiler, so a schema change breaks loudly in both places instead of quietly in one.
+## Architecture
 
-## What building two clients taught me
+The repository is organised as a monorepo:
 
-Firebase carries auth, Firestore, and storage; Stripe is stubbed but shaped for real integration. The discipline that paid off was designing the data model once, in `shared`, before either client existed. Every time I was tempted to let the mobile app have "its own version" of a type, I was really being tempted to have two products.
+- `web` — Next.js 14 App Router application
+- `mobile` — Expo React Native application
+- `shared` — TypeScript models, constants, and utilities used by both clients
+
+Firebase provides authentication, Firestore data storage, and file storage. Sharing the domain types between the web and mobile clients keeps user, pitch, investment, and payment data consistent across both applications.
+
+## Current status
+
+The MVP is deployed. The payment layer currently uses mock Stripe transactions; live Stripe processing remains a post-MVP integration.

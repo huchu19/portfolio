@@ -1,5 +1,5 @@
 /**
- * OG-ONLY mirror of the app/globals.css @theme block.
+ * OG-ONLY mirror of the daylight studio tokens in app/globals.css.
  *
  * satori (next/og ImageResponse) cannot resolve CSS custom properties,
  * so Open Graph images need literal values. These are the ONLY
@@ -11,14 +11,18 @@
  * only — never from a component that renders into the page.
  */
 export const ogPalette = {
-  bg: '#0b0e1f',
-  surface: '#131834',
-  raised: '#1d2447',
-  line: '#2e3763',
-  fg: '#f2ede3',
-  fgSoft: '#a8afc9',
-  fgFaint: '#6f779a',
-  accent: '#ffb020',
-  accentDeep: '#c77e00',
-  signal: '#2ee6c0',
+  bg: '#eee4d2',
+  surface: '#f8f1e5',
+  raised: '#e2d2bb',
+  line: '#c8b79f',
+  fg: '#302923',
+  fgSoft: '#6f6257',
+  fgFaint: '#8b7b6d',
+  accent: '#c76345',
+  accentDeep: '#8a3f31',
+  signal: '#52745f',
+  mustard: '#d6a43b',
+  sage: '#789078',
+  blue: '#6f8fa7',
+  wood: '#8a5738',
 } as const

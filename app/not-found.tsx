@@ -1,6 +1,5 @@
 import Link from 'next/link'
 
-/** A pause in the journey, not an error. Vast empty dark space. */
 export default function NotFound() {
   return (
     <div
@@ -10,22 +9,13 @@ export default function NotFound() {
       <p className="mono-label" style={{ marginBottom: 'calc(var(--u) * 4)' }}>
         404 — not found
       </p>
-      <blockquote
-        className="display italic"
-        style={{ fontSize: 'clamp(22px, 3vw, 30px)', lineHeight: 1.5, color: 'var(--color-fg-bright)' }}
-      >
-        The place you&apos;re looking for is farther off than this. So it&apos;s all right —
-        you&apos;ll stand up, and you&apos;ll keep walking.
-      </blockquote>
-      <p style={{ marginTop: 'calc(var(--u) * 2)', fontSize: 13, color: 'var(--color-fg-soft)' }}>
-        (after a certain swordsman&apos;s long night)
-      </p>
+      <h1 className="display" style={{ fontSize: 'clamp(30px, 4vw, 44px)' }}>Page not found</h1>
       <Link
         href="/"
         className="mono-label transition-colors hover:text-(--color-fg)"
         style={{ marginTop: 'calc(var(--u) * 8)', color: 'var(--color-accent)' }}
       >
-        ← Back to the garden
+        ← Back to projects
       </Link>
     </div>
   )
