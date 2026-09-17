@@ -62,6 +62,7 @@ export default function Header({ status }: { status?: string | null }) {
       </div>
       <div className="header-actions flex items-center" style={{ gap: 'var(--u)' }}>
         <nav className="header-nav" aria-label="Primary navigation">
+          <Link href="/about" data-tactile data-magnetic>About</Link>
           <Link href="/#projects" data-tactile data-magnetic>Projects</Link>
           <Link href="/blog" data-tactile data-magnetic>Blog</Link>
           <Link href="/#contact" data-tactile data-magnetic>Contact</Link>

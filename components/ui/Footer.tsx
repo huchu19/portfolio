@@ -19,10 +19,13 @@ export default function Footer() {
         </Link>
       </div>
       <nav className="mono-label flex flex-wrap gap-x-6 gap-y-3" aria-label="Footer">
+        <Link href="/about" className="transition-colors hover:text-(--color-fg)">About</Link>
         <Link href="/#projects" className="transition-colors hover:text-(--color-fg)">Projects</Link>
         <Link href="/blog" className="transition-colors hover:text-(--color-fg)">Blog</Link>
         <Link href="/#contact" className="transition-colors hover:text-(--color-fg)">Contact</Link>
         <a href={githubUrl} className="transition-colors hover:text-(--color-fg)">GitHub</a>
+        <a href={site.linkedinUrl} className="transition-colors hover:text-(--color-fg)">LinkedIn</a>
+        <a href="/downloads/resume.pdf" download className="transition-colors hover:text-(--color-fg)">Résumé</a>
         <EmailLink email={site.email} />
       </nav>
     </footer>
