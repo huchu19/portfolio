@@ -1530,12 +1530,12 @@ body::after {
 /* The work becomes a pile of opened objects, not a card grid. */
 .project-shelf-section,
 .descent > section:not(.studio-hero) {
-  width: min(1180px, calc(100% - 40px));
-  margin-inline: auto;
+  width: 100%;
+  margin-inline: 0;
 }
 
 .project-shelf-section {
-  padding: clamp(72px, 9vw, 130px) 0;
+  padding: clamp(72px, 9vw, 130px) clamp(20px, 4vw, 64px);
 }
 
 .shelf-heading {
@@ -1601,9 +1601,11 @@ body::after {
 .project-sheet-copy { padding: clamp(22px, 3vw, 38px); }
 .project-sheet-meta { display: flex; justify-content: space-between; color: var(--color-accent-deep); font-size: 10px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; }
 .project-sheet h3 { margin-top: 12px; font-family: var(--font-display); font-size: clamp(27px, 3vw, 42px); font-weight: 650; letter-spacing: -0.04em; line-height: 1; }
+[data-theme="night"] .project-sheet h3 { color: var(--color-fg); }
 .project-sheet p { margin-top: 15px; color: var(--color-fg-soft); font-size: 14px; line-height: 1.6; }
 .project-sheet small { display: block; margin-top: 22px; color: var(--color-fg-faint); font-size: 10px; }
 .project-sheet-open { display: inline-block; margin-top: 18px; font-size: 12px; font-weight: 700; }
+[data-theme="night"] .project-sheet-open { color: var(--color-fg); }
 
 .fragment-board {
   position: relative;
@@ -1781,7 +1783,7 @@ body::after {
   .illustration-notebook { left: 15%; }
   .studio-fallback-note { display: none; }
   .project-shelf-section,
-  .descent > section:not(.studio-hero) { width: min(100% - 32px, 680px); }
+  .descent > section:not(.studio-hero) { width: 100%; }
   .shelf-heading { grid-template-columns: 1fr; margin-bottom: 42px; }
   .project-shelf { display: flex; flex-direction: column; gap: 32px; }
   .project-sheet,
@@ -2974,7 +2976,7 @@ html[data-page-leaving="letter"] .route-transition-curtain { animation-name: cur
 [data-theme="night"] .ghazal-landscape-field { background: linear-gradient(180deg, #214b38, #102f25 78%); }
 
 /* Contact garden ---------------------------------------------------------- */
-.contact-garden { width: min(1180px, calc(100% - 40px)); margin: 0 auto; padding: clamp(90px, 12vw, 170px) 0; color: #f1eadc; }
+.contact-garden { width: 100%; margin: 0; padding: clamp(90px, 12vw, 170px) clamp(20px, 4vw, 64px); color: #f1eadc; }
 .contact-heading { display: grid; max-width: 760px; gap: calc(var(--u) * 2); margin-bottom: clamp(42px, 7vw, 82px); }
 .contact-heading .section-hand { color: #e1bd4c; }
 .contact-heading h2 { font-family: var(--font-display); font-size: clamp(42px, 7vw, 78px); letter-spacing: -0.045em; line-height: 0.94; }
@@ -3029,7 +3031,7 @@ html[data-page-leaving="letter"] .route-transition-curtain { animation-name: cur
   .header-actions > :first-child { display: flex; }
   .blog-index { width: min(100% - 32px, 680px); }
   .ghazal-page-shell .ghazal-page { width: calc(100% - 20px); padding-inline: 18px !important; }
-  .contact-garden { width: min(100% - 32px, 680px); }
+  .contact-garden { width: 100%; }
   .contact-heading h2 { font-size: clamp(40px, 13vw, 64px); }
   .contact-letter { min-height: 600px; padding: 28px 20px; }
 }
