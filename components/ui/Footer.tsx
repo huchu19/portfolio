@@ -6,9 +6,8 @@ import SignatureLogo from './SignatureLogo'
 export default function Footer() {
   return (
     <footer
-      className="site-footer mx-auto flex w-full max-w-[1280px] flex-wrap items-baseline justify-between gap-4 border-t"
+      className="site-footer mx-auto flex w-full max-w-[1280px] flex-wrap items-baseline justify-between gap-4"
       style={{
-        borderColor: 'var(--color-line)',
         padding: 'calc(var(--u) * 4) calc(var(--u) * 3) calc(var(--u) * 6)',
         marginTop: 'calc(var(--u) * 10)',
       }}

@@ -38,6 +38,7 @@ export default async function HomePage() {
         <div className="garden-canopy" aria-hidden>
           <i /><i /><i /><i /><i /><i />
         </div>
+        <div className="garden-edge-blend" aria-hidden />
         <ProjectShelf posts={posts} />
       </div>
 

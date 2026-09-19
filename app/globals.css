@@ -557,11 +557,6 @@ a {
   padding-inline: calc(var(--u) * 3);
 }
 
-/* hairlines between sections — the desk has edges, not gaps */
-.descent > section + section {
-  border-top: 1px solid var(--color-line);
-}
-
 /* The feed's filter rail stays reachable through the descent. It sits
    directly beneath the compressed header and paints its own ground, so
    panels scrolling under it don't show through the blur. */
@@ -990,12 +985,18 @@ body::after {
 }
 
 .descent {
+  --journey-fade: clamp(120px, 24svh, 260px);
+  --garden-entry: #254f37;
+  --garden-exit: #102f22;
+  --sky-entry: #527fa7;
   max-width: none;
   padding-inline: 0;
 }
 
-.descent > section + section {
-  border-top: 0;
+[data-theme="night"] .descent {
+  --garden-entry: #0c1425;
+  --garden-exit: #081c16;
+  --sky-entry: #10172b;
 }
 
 .site-header {
@@ -1120,15 +1121,11 @@ body::after {
   isolation: isolate;
   background: #dccdb7;
   border: 1px solid color-mix(in srgb, var(--color-line) 82%, transparent);
-  border-top: 0;
-  box-shadow:
-    0 26px 60px -42px rgb(65 42 27 / 0.56),
-    inset 0 -1px 0 rgb(73 43 28 / 0.2);
+  border-block: 0;
 }
 
 [data-theme="night"] .studio-stage {
   background: #332d29;
-  box-shadow: 0 30px 70px -38px rgb(0 0 0 / 0.7);
 }
 
 /* The opening is a flat illustration, sharing the garden's cut-paper shapes.
@@ -1881,15 +1878,10 @@ body::after {
 .studio-stage::after {
   content: "";
   position: absolute;
-  z-index: 12;
+  z-index: 4;
   inset: auto 0 0;
-  height: 7px;
-  background:
-    linear-gradient(90deg,
-      #155b3b 0 11%, #f3e7cf 11% 17%, #2f7182 17% 28%, #d7a73b 28% 35%,
-      #a64238 35% 43%, #f3e7cf 43% 50%, #155b3b 50% 62%, #d7a73b 62% 70%,
-      #2f7182 70% 82%, #f3e7cf 82% 88%, #a64238 88% 100%);
-  box-shadow: 0 -1px 0 rgb(48 41 35 / 0.18);
+  height: clamp(64px, 10svh, 100px);
+  background: linear-gradient(to bottom, transparent, var(--color-bg));
   pointer-events: none;
 }
 
@@ -2076,7 +2068,7 @@ html[data-drawer-open="true"] .soundtrack-dock { translate: 0 20px; opacity: 0; 
   background:
     radial-gradient(circle at 10% 8%, rgb(224 191 71 / 0.14) 0 2px, transparent 3px),
     radial-gradient(circle at 87% 13%, rgb(218 230 205 / 0.12) 0 2px, transparent 3px),
-    linear-gradient(180deg, #254f37 0%, #173c2a 52%, #102f22 100%);
+    linear-gradient(180deg, var(--garden-entry) 0%, #173c2a 52%, var(--garden-exit) 100%);
   background-size: 58px 61px, 73px 67px, auto;
   color: #f1eadc;
 }
@@ -2131,7 +2123,7 @@ html[data-drawer-open="true"] .soundtrack-dock { translate: 0 20px; opacity: 0; 
   z-index: 4;
   height: 230svh;
   margin-top: -1px;
-  background: #7cb0c3;
+  background: var(--garden-exit);
   color: #f8f1e5;
 }
 
@@ -2254,9 +2246,9 @@ html[data-drawer-open="true"] .soundtrack-dock { translate: 0 20px; opacity: 0; 
   margin-top: -1px;
   background:
     radial-gradient(circle at 50% 118%, rgb(236 213 145 / 0.3), transparent 35%),
-    linear-gradient(180deg, #527fa7 0%, #6e9eb6 56%, #a9c5bf 100%);
+    linear-gradient(180deg, var(--sky-entry) 0%, #6e9eb6 56%, #a9c5bf 100%);
 }
-.sky-world-stars { z-index: 0; inset: 0; opacity: 0.82; mask-image: linear-gradient(180deg, #000, rgb(0 0 0 / 0.72) 68%, transparent); animation: stars-breathe 5.5s ease-in-out infinite alternate; }
+.sky-world-stars { z-index: 0; inset: 0; opacity: 0.82; mask-image: linear-gradient(180deg, transparent, #000 120px, rgb(0 0 0 / 0.72) 68%, transparent); animation: stars-breathe 5.5s ease-in-out infinite alternate; }
 .sky-world > *:not(.sky-world-stars) { position: relative; z-index: 2; }
 .sky-world .contact-garden { color: #f8f1e5; }
 .sky-world .contact-heading > p:last-child { color: rgb(247 244 224 / 0.86); }
@@ -2278,7 +2270,7 @@ html[data-drawer-open="true"] .soundtrack-dock { translate: 0 20px; opacity: 0; 
 [data-theme="night"] .ascent-clouds i { background: rgb(102 122 151 / 0.2); filter: blur(5px); }
 [data-theme="night"] .ascent-land { background: linear-gradient(180deg, #183b34, #0b241d 58%, #071b16); }
 [data-theme="night"] .ascent-land i { background: #12362d; }
-[data-theme="night"] .sky-world { background: linear-gradient(180deg, #10172b 0%, #172740 60%, #233e3b 100%); }
+[data-theme="night"] .sky-world { background: linear-gradient(180deg, var(--sky-entry) 0%, #172740 60%, #233e3b 100%); }
 [data-theme="night"] .sky-world .contact-scene { background: linear-gradient(180deg, #172338 0 54%, #244a35 54% 72%, #183523 72%); }
 [data-theme="night"] .sky-world .contact-moon { background: #f0e6c4; box-shadow: 0 0 55px rgb(224 231 207 / 0.24); }
 
@@ -2355,7 +2347,7 @@ html[data-drawer-open="true"] .soundtrack-dock { translate: 0 20px; opacity: 0; 
 [data-theme="night"] .threshold-copy--leave { color: #f1e8da; }
 
 [data-theme="night"] .garden-world {
-  background: linear-gradient(180deg, #0c1425 0%, #101c2b 16%, #102b24 52%, #081c16 100%);
+  background: linear-gradient(180deg, var(--garden-entry) 0%, #101c2b 16%, #102b24 52%, var(--garden-exit) 100%);
 }
 [data-theme="night"] .garden-world > .garden-stars {
   display: block;
@@ -2381,6 +2373,59 @@ html[data-drawer-open="true"] .soundtrack-dock { translate: 0 20px; opacity: 0; 
 [data-theme="night"] .garden-world .fragment-board { box-shadow: 0 0 0 18px rgb(7 26 24 / 0.9), 0 28px 70px rgb(0 0 0 / 0.48); }
 
 @keyframes stars-breathe { to { filter: brightness(0.72); } }
+
+/* Meet each scene at the same color, with atmosphere hiding the join.
+   Keep these veils below copy and controls; they never capture input. */
+.garden-threshold-sticky::before,
+.garden-threshold-sticky::after,
+.sky-ascent-sticky::before,
+.sky-ascent-sticky::after,
+.sky-world::after {
+  content: "";
+  position: absolute;
+  z-index: 4;
+  inset-inline: 0;
+  height: var(--journey-fade);
+  pointer-events: none;
+}
+
+.garden-threshold-sticky::before {
+  top: 0;
+  background: linear-gradient(to bottom, var(--color-bg), transparent);
+  opacity: clamp(0, calc(1 - var(--garden-progress) * 3), 1);
+}
+
+.garden-threshold-sticky::after {
+  bottom: 0;
+  background: linear-gradient(to bottom, transparent, var(--garden-entry));
+}
+
+.garden-world > .garden-edge-blend {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(to bottom, var(--garden-entry), transparent) top / 100% clamp(80px, 12vw, 160px) no-repeat,
+    linear-gradient(to top, var(--garden-exit), transparent) bottom / 100% clamp(64px, 8vw, 110px) no-repeat;
+}
+
+.sky-ascent-sticky::before {
+  top: 0;
+  background: linear-gradient(to bottom, var(--garden-exit), transparent);
+  opacity: clamp(0, calc(1 - var(--ascent-progress) * 3), 1);
+}
+
+.sky-ascent-sticky::after {
+  bottom: 0;
+  background: linear-gradient(to bottom, transparent, var(--sky-entry));
+}
+
+.sky-world::after {
+  bottom: 0;
+  height: clamp(64px, 10vw, 140px);
+  background: linear-gradient(to bottom, transparent, var(--color-bg));
+}
 
 @media (max-width: 759px) {
   .soundtrack-dock { right: 13px; bottom: 13px; }
