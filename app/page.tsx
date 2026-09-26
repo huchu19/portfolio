@@ -4,12 +4,12 @@ import ScrollProgress from '@/components/ui/ScrollProgress'
 import GardenFireflies from '@/components/home/GardenFireflies'
 import ContactGarden from '@/components/home/ContactGarden'
 import { GardenThreshold, SkyAscent } from '@/components/home/GardenJourney'
-import { getAllPosts } from '@/lib/posts'
+import { getProjects } from '@/lib/projects'
 import { getShipping } from '@/lib/github'
 import { site } from '@/lib/site'
 
 export default async function HomePage() {
-  const posts = getAllPosts()
+  const projects = await getProjects()
   const shipping = await getShipping()
 
   return (
@@ -17,7 +17,7 @@ export default async function HomePage() {
       <ScrollProgress />
 
       <StudioHero
-        posts={posts.map((post) => ({
+        posts={projects.map((post) => ({
           slug: post.slug,
           title: post.title,
           excerpt: post.excerpt,
@@ -39,7 +39,7 @@ export default async function HomePage() {
           <i /><i /><i /><i /><i /><i />
         </div>
         <div className="garden-edge-blend" aria-hidden />
-        <ProjectShelf posts={posts} />
+        <ProjectShelf projects={projects} />
       </div>
 
       <SkyAscent />

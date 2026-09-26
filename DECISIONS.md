@@ -211,3 +211,25 @@ list-based Feed as the homepage's primary navigation.
 - **There is one renderer on every device.** Removing React Three Fiber,
   Three.js, and the WebGL/fallback controller makes the art direction stable
   across desktop, mobile, themes, reduced motion, and graphics capabilities.
+
+## Projects come from GitHub
+
+- **Every public, non-fork repo is a project; nothing is hand-written.**
+  `lib/projects.ts` lists the repos, uses GitHub's own README render as the
+  write-up, the repo homepage as the live link, and `package.json` /
+  `requirements.txt` for the stack chips. Pages revalidate hourly, so a new
+  repo appears without a deploy. The old MDX project posts were removed and
+  their slugs redirect to the repo-named ones (`next.config.mjs`).
+- **A README is the write-up, so fixing a page means fixing the README.**
+  Title is the README's first `# heading`, the card blurb its first real
+  paragraph. Tag a repo `hide-from-portfolio` to keep it off the site.
+- **Covers are screenshots of the live site, taken by CI.** The daily
+  `project-covers` workflow re-shoots a repo's homepage only after it has
+  been pushed to, and records that push in `content/project-covers.json`.
+  Repos without a homepage fall back to the first README image, then to
+  seeded `CoverArt`.
+- **GitHub failures throw instead of degrading.** A throw during
+  revalidation keeps the last good page; a throw during build keeps the
+  last good deployment. Returning an empty list would publish a site with
+  no projects. This makes `GITHUB_TOKEN` effectively required: a build
+  makes ~20 requests per worker, and anonymous access allows 60 an hour.

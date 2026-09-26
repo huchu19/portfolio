@@ -1,11 +1,13 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-import { getAllPosts, getPostBySlug } from '@/lib/posts'
-import { getRepoFacts } from '@/lib/github'
+import { getProject, getProjects } from '@/lib/projects'
 import ProjectLayout from '@/components/layouts/ProjectLayout'
 
-export function generateStaticParams() {
-  return getAllPosts().map((project) => ({ slug: project.slug }))
+// Repos created after the last build render on first visit.
+export const revalidate = 3600
+
+export async function generateStaticParams() {
+  return (await getProjects()).map((project) => ({ slug: project.slug }))
 }
 
 export async function generateMetadata({
@@ -14,7 +16,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>
 }): Promise<Metadata> {
   const { slug } = await params
-  const project = getPostBySlug(slug)
+  const project = await getProject(slug)
   if (!project) return {}
 
   return {
@@ -35,9 +37,8 @@ export default async function ProjectPage({
   params: Promise<{ slug: string }>
 }) {
   const { slug } = await params
-  const project = getPostBySlug(slug)
-  if (!project || project.type !== 'project') notFound()
+  const project = await getProject(slug)
+  if (!project) notFound()
 
-  const facts = project.repo ? await getRepoFacts(project.repo) : null
-  return <ProjectLayout post={project} facts={facts} />
+  return <ProjectLayout project={project} />
 }

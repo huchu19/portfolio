@@ -12,6 +12,22 @@ if (!process.env.VELITE_STARTED) {
 }
 
 /** @type {import('next').NextConfig} */
-const nextConfig = {}
+const nextConfig = {
+  // Project pages used to be hand-written MDX with their own slugs; they now
+  // come from GitHub and are named after the repo. Keep the old links alive.
+  async redirects() {
+    return [
+      ['bamboo-investing-marketplace', 'bamboo'],
+      ['edunexus-fyp', 'fyp'],
+      ['jobhunter-uk-sponsor-finder', 'jobhunter'],
+      ['rizqad-eor-platform', 'eor'],
+      ['tifltoys-headless-build', 'tifltoysfrontend'],
+    ].map(([from, to]) => ({
+      source: `/projects/${from}`,
+      destination: `/projects/${to}`,
+      permanent: true,
+    }))
+  },
+}
 
 export default nextConfig

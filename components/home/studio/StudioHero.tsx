@@ -4,13 +4,9 @@ import StudioIllustration from './StudioIllustration'
 import StudioProjectPins from './StudioProjectPins'
 import type { StudioPost } from './types'
 
-const PROJECT_ORDER = ['jobhunter', 'edunexus', 'bamboo', 'tifltoys']
-
+/** `posts` arrive most recently worked on first; the four newest get pins. */
 export default function StudioHero({ posts, shipping }: { posts: StudioPost[]; shipping: Shipping | null }) {
-  const projects = posts
-    .filter((post) => post.type === 'project')
-    .sort((a, b) => PROJECT_ORDER.findIndex((name) => a.slug.includes(name)) - PROJECT_ORDER.findIndex((name) => b.slug.includes(name)))
-    .slice(0, 4)
+  const projects = posts.filter((post) => post.type === 'project').slice(0, 4)
 
   const lastPush = shipping?.pushes[0]
 
@@ -36,7 +32,7 @@ export default function StudioHero({ posts, shipping }: { posts: StudioPost[]; s
         <div className="studio-live-note" data-live={lastPush ? 'true' : 'false'}>
           <span className="studio-live-dot" aria-hidden />
           <span>
-            {lastPush ? `Last pushed to ${lastPush.repo} · ${lastPush.when}` : 'Four documented projects'}
+            {lastPush ? `Last pushed to ${lastPush.repo} · ${lastPush.when}` : `${posts.length} projects on GitHub`}
           </span>
           <a href="https://github.com/huchu19" data-tactile>GitHub ↗</a>
         </div>

@@ -896,6 +896,19 @@ main > article::before {
 .project-cover { border-radius: 2px !important; box-shadow: 10px 14px 0 color-mix(in srgb, var(--color-wood) 12%, transparent); }
 .project-document .post-body { max-width: 68ch; margin-inline: auto; }
 
+/* README bodies arrive as GitHub's HTML: tables, task lists, deeper headings. */
+.readme-body h1 { font-family: var(--font-display); color: var(--color-fg-bright); font-size: 32px; line-height: 1.15; margin-top: calc(var(--u) * 7); }
+.readme-body h4,
+.readme-body h5,
+.readme-body h6 { font-family: var(--font-display); color: var(--color-fg-bright); font-size: 18px; margin-top: calc(var(--u) * 5); }
+.readme-body table { display: block; max-width: 100%; overflow-x: auto; border-collapse: collapse; font-size: 14px; }
+.readme-body th,
+.readme-body td { border: 1px solid var(--color-line); padding: 6px 12px; text-align: left; vertical-align: top; }
+.readme-body th { background: var(--color-surface); color: var(--color-fg-bright); font-weight: 600; }
+.readme-body li:has(> .task-list-item-checkbox) { list-style: none; }
+.readme-body .task-list-item-checkbox { margin-right: 8px; accent-color: var(--color-accent); }
+.readme-body details > summary { cursor: pointer; font-weight: 600; }
+
 .now-board { align-items: start; }
 .now-note { min-height: 150px; border: 0 !important; }
 .now-note:nth-child(2n) { rotate: 0.45deg; background: color-mix(in srgb, var(--color-chalk-blue) 12%, var(--color-surface)); }
@@ -1572,9 +1585,9 @@ body::after {
 
 [data-theme="night"] .project-sheet { background: var(--color-surface); }
 
-.project-sheet:nth-child(2) { transform: translateY(42px) rotate(0.5deg); }
-.project-sheet:nth-child(3) { transform: translateY(-5px) rotate(-0.45deg); }
-.project-sheet:nth-child(4) { transform: translateY(34px) rotate(0.35deg); }
+.project-sheet:nth-child(4n+2) { transform: translateY(42px) rotate(0.5deg); }
+.project-sheet:nth-child(4n+3) { transform: translateY(-5px) rotate(-0.45deg); }
+.project-sheet:nth-child(4n+4) { transform: translateY(34px) rotate(0.35deg); }
 .project-sheet:hover { transform: translateY(-5px) rotate(0deg); box-shadow: 14px 20px 0 color-mix(in srgb, var(--color-wood) 19%, transparent), 0 30px 55px -34px rgb(69 45 29 / 0.58); }
 
 .project-sheet::before {
@@ -1593,7 +1606,8 @@ body::after {
 }
 
 .project-sheet-image { position: relative; aspect-ratio: 16 / 8.8; overflow: hidden; background: var(--color-raised); }
-.project-sheet-image img { object-fit: cover; filter: saturate(0.8) contrast(0.95); transition: transform 0.6s var(--ease), filter 0.4s var(--ease); }
+/* Covers are site screenshots: crop from the bottom, never the site's header. */
+.project-sheet-image img { object-fit: cover; object-position: top; transform-origin: top; filter: saturate(0.8) contrast(0.95); transition: transform 0.6s var(--ease), filter 0.4s var(--ease); }
 .project-sheet:hover .project-sheet-image img { transform: scale(1.025); filter: saturate(1) contrast(1); }
 .project-sheet-copy { padding: clamp(22px, 3vw, 38px); }
 .project-sheet-meta { display: flex; justify-content: space-between; color: var(--color-accent-deep); font-size: 10px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; }

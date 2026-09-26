@@ -1,0 +1,40 @@
+name: Project covers
+
+# Screenshot each project's live site after its repo changes, so new and
+# updated projects get a current cover without anyone taking one by hand.
+# The commit this makes redeploys the site on Vercel.
+on:
+  schedule:
+    - cron: '0 5 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: project-covers
+
+jobs:
+  covers:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: node tools/covers.mjs
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Commit changed covers
+        run: |
+          git add content/project-covers.json public/media/projects
+          if git diff --cached --quiet; then
+            echo "Covers are current."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "Refresh project covers"
+          git push

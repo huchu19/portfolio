@@ -10,7 +10,7 @@ import Footer from '@/components/ui/Footer'
 import CommandPalette from '@/components/ui/CommandPalette'
 import InteractionLayer from '@/components/ui/InteractionLayer'
 import PageTransitions from '@/components/ui/PageTransitions'
-import { getFeed, toFeedItem } from '@/lib/posts'
+import { getProjects, toFeedItem } from '@/lib/projects'
 import { getLastPush } from '@/lib/github'
 import { site } from '@/lib/site'
 import './globals.css'
@@ -97,7 +97,7 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode
 }) {
-  const paletteItems = getFeed().map(toFeedItem)
+  const paletteItems = (await getProjects()).map(toFeedItem)
   const status = await getLastPush()
   return (
     <html

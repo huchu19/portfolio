@@ -131,9 +131,9 @@ function StatePanel({ name, shipping }: { name: StateName; shipping: Shipping | 
     return (
       <div>
         <div className="flex items-baseline" style={{ gap: 'var(--u)' }}>
-          <span style={{ fontSize: 20, color: 'var(--color-signal)' }}>{shipping.weekCommits}</span>
+          <span style={{ fontSize: 20, color: 'var(--color-signal)' }}>{shipping.weekPushes}</span>
           <span className="mono-label" style={{ fontSize: 8 }}>
-            commits this week
+            pushes this week
           </span>
         </div>
         <ul className="flex flex-col" style={{ gap: 2, marginTop: 'var(--u)' }}>
@@ -143,7 +143,7 @@ function StatePanel({ name, shipping }: { name: StateName; shipping: Shipping | 
               className="mono-label line-clamp-1"
               style={{ fontSize: 8, textTransform: 'none', letterSpacing: '0.04em', color: 'var(--color-fg-soft)' }}
             >
-              <span style={{ color: 'var(--color-signal)' }}>{p.repo}</span> {p.message}
+              <span style={{ color: 'var(--color-signal)' }}>{p.repo}</span> {p.when}
             </li>
           ))}
         </ul>

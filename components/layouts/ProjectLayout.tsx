@@ -1,9 +1,8 @@
-import PostBody from '@/components/unedited/PostBody'
 import CoverArt from '@/components/generative/CoverArt'
 import RepoFactsTable from './RepoFactsTable'
 import PostMeta from './PostMeta'
-import { formatDate, type Post } from '@/lib/posts'
-import type { RepoFacts } from '@/lib/github'
+import { formatDate } from '@/lib/posts'
+import type { Project } from '@/lib/projects'
 
 const STATUS_LABEL: Record<string, { label: string; color: string }> = {
   live: { label: 'Live', color: 'var(--color-accent)' },
@@ -11,15 +10,12 @@ const STATUS_LABEL: Record<string, { label: string; color: string }> = {
   archived: { label: 'Archived', color: 'var(--color-fg-soft)' },
 }
 
-/** Dense dossier energy: title, stack chips, status badge, live/repo links. */
-export default function ProjectLayout({
-  post,
-  facts = null,
-}: {
-  post: Post
-  facts?: RepoFacts | null
-}) {
-  const status = post.status ? STATUS_LABEL[post.status] : undefined
+/**
+ * Dense dossier energy: title, stack chips, status badge, live/repo links.
+ * Everything below the header is the repo's README, as GitHub renders it.
+ */
+export default function ProjectLayout({ project: post }: { project: Project }) {
+  const status = STATUS_LABEL[post.status]
   return (
     <article className="project-document mx-auto w-full" style={{ maxWidth: 880, padding: 'calc(var(--u) * 3)', paddingTop: 'calc(var(--u) * 8)' }}>
       <header style={{ marginBottom: 'calc(var(--u) * 6)', borderBottom: '1px solid var(--color-line)', paddingBottom: 'calc(var(--u) * 4)' }}>
@@ -34,7 +30,7 @@ export default function ProjectLayout({
           )}
         </div>
         <h1 className="display" style={{ fontSize: 'clamp(32px, 4.4vw, 48px)' }}>{post.title}</h1>
-        {post.stack && (
+        {post.stack.length > 0 && (
           <div className="flex flex-wrap" style={{ gap: 'var(--u)', marginTop: 'calc(var(--u) * 3)' }}>
             {post.stack.map((s) => (
               <span
@@ -54,11 +50,10 @@ export default function ProjectLayout({
             ))}
           </div>
         )}
-        {(post.projectLinks?.live || post.projectLinks?.repo) && (
-          <div className="flex flex-wrap" style={{ gap: 'calc(var(--u) * 2)', marginTop: 'calc(var(--u) * 3)' }}>
-            {post.projectLinks.live && (
+        <div className="flex flex-wrap" style={{ gap: 'calc(var(--u) * 2)', marginTop: 'calc(var(--u) * 3)' }}>
+            {post.links.live && (
               <a
-                href={post.projectLinks.live}
+                href={post.links.live}
                 rel="noopener"
                 data-external-paper
                 data-tactile
@@ -73,20 +68,17 @@ export default function ProjectLayout({
                 Live ↗
               </a>
             )}
-            {post.projectLinks.repo && (
-              <a
-                href={post.projectLinks.repo}
-                rel="noopener"
-                data-external-paper
-                data-tactile
-                className="project-action mono-label transition-colors hover:text-(--color-fg)"
-                style={{ padding: 'var(--u) calc(var(--u) * 2)', border: '1px solid var(--color-line)', borderRadius: 4 }}
-              >
-                Repository ↗
-              </a>
-            )}
-          </div>
-        )}
+            <a
+              href={post.links.repo}
+              rel="noopener"
+              data-external-paper
+              data-tactile
+              className="project-action mono-label transition-colors hover:text-(--color-fg)"
+              style={{ padding: 'var(--u) calc(var(--u) * 2)', border: '1px solid var(--color-line)', borderRadius: 4 }}
+            >
+              Repository ↗
+            </a>
+        </div>
       </header>
       {post.coverImage ? (
         // eslint-disable-next-line @next/next/no-img-element
@@ -99,8 +91,14 @@ export default function ProjectLayout({
       ) : (
         <CoverArt seed={post.slug} type={post.type} height={240} className="cover-art-block" />
       )}
-      <RepoFactsTable facts={facts} />
-      <PostBody className="prose post-body" code={post.code} />
+      <RepoFactsTable facts={post.facts} />
+      {post.html ? (
+        <div className="prose post-body readme-body" dangerouslySetInnerHTML={{ __html: post.html }} />
+      ) : (
+        <p className="prose post-body">
+          This repository has no README yet — <a href={post.links.repo}>see it on GitHub</a>.
+        </p>
+      )}
       <PostMeta entry={post} />
     </article>
   )

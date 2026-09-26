@@ -2,7 +2,7 @@ import { ImageResponse } from 'next/og'
 import OgCard from '@/components/generative/OgCard'
 import { ogFont } from '@/lib/ogFont'
 import { getSignatureDataUrl } from '@/lib/brand'
-import { getPostBySlug } from '@/lib/posts'
+import { getProject } from '@/lib/projects'
 import { site } from '@/lib/site'
 
 export const dynamic = 'force-static'
@@ -12,7 +12,7 @@ export const alt = 'Project card'
 
 export default async function Image({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
-  const project = getPostBySlug(slug)
+  const project = await getProject(slug)
   const signatureSrc = await getSignatureDataUrl()
 
   return new ImageResponse(

@@ -1,7 +1,7 @@
 import { formatDate, type Entry } from '@/lib/posts'
 
 /** Date + tags, barely there in ash — sits at the very bottom of layouts. */
-export default function PostMeta({ entry }: { entry: Entry }) {
+export default function PostMeta({ entry }: { entry: Pick<Entry, 'date' | 'tags'> }) {
   return (
     <div
       className="mono-label flex flex-wrap items-baseline gap-x-4 gap-y-1"
