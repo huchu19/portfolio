@@ -75,6 +75,9 @@ async function gh(path: string, accept?: string): Promise<Response> {
     headers: accept ? { ...h, Accept: accept } : h,
     next: { revalidate: REVALIDATE },
   })
+  if (res.status === 401) {
+    throw new Error('GitHub rejected GITHUB_TOKEN (401): it is mistyped, expired, or revoked')
+  }
   // Rate limits and outages throw; "not found" / "empty repo" are answers.
   if (res.status === 403 || res.status === 429 || res.status >= 500) {
     const hint = process.env.GITHUB_TOKEN ? '' : ' (set GITHUB_TOKEN: unauthenticated requests are capped at 60/hour)'

@@ -28,9 +28,9 @@ export function relative(iso: string): string {
 /** A token lifts the rate ceiling from 60 to 5,000 requests/hour. */
 export function headers(): HeadersInit {
   const h: Record<string, string> = { Accept: 'application/vnd.github+json' }
-  if (process.env.GITHUB_TOKEN) {
-    h.Authorization = `Bearer ${process.env.GITHUB_TOKEN}`
-  }
+  // Pasted secrets often carry a trailing newline, which fetch rejects.
+  const token = process.env.GITHUB_TOKEN?.trim()
+  if (token) h.Authorization = `Bearer ${token}`
   return h
 }
 
